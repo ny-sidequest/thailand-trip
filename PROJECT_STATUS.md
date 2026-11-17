@@ -156,3 +156,19 @@ records and handles numbers/booleans. Migration `0009`: `reorder_activities` (at
 **Pending:** apply `0009`; `admin-users` function is already deployed (Phase 1) but never executed against live data, so
 "Add traveller / Reset password / Roles / Remove" are the first real exercise of it. Nothing pushed.
 **Known:** day numbers are never reused after delete (unique constraint includes soft-deleted rows); days sort by date.
+
+## Phase 8 — Hardening, offline, PWA, docs  ⚠️ built; live verification pending (2026-11-17)
+**Done:** independent Opus security audit (`docs/SECURITY_AUDIT.md`): 3 High, 2 Medium, 4 Low findings; each reproduced
+with a failing test first, then fixed in migration `0010` (settlements via validated functions, FX bounds 50-200 % of trip
+default, storage pointer-forgery fixes, column-level update grants, helper functions closed to anon, checklist realtime
+DELETE leak replaced by content-free `checklist_pings`, MIME allow-lists). Random sign-in emails for new accounts +
+`scripts/rotate-emails.mjs` for existing ones. CSP (production build only). Route-level code splitting (initial JS
+~527 kB -> ~305 kB). Offline: read-only itinerary + activity copy per user (cleared on sign-out) and an offline banner.
+Docs: README rewritten, `docs/ADMIN_GUIDE.md`, `docs/TEST_PLAN.md` (Phases 4-8), `docs/SECURITY_AUDIT.md`.
+**Tests:** unit 59; DB 159 (adds audit regression tests); real-browser smoke test (mocked backend, 24 routes x 5 viewports,
+CSP/console/overflow/crash checks) run from the scratchpad (not part of the repo).
+**Migrations to apply live, in order:** 0008, 0009, 0010 (0006 and 0007 already applied).
+**Edge function to redeploy:** `admin-users` (random emails). Then run `node scripts/rotate-emails.mjs` once.
+**Dashboard setting:** Auth -> Email -> "Secure password change" ON.
+**Not done / accepted:** custom login throttling (lock-out risk; relies on Supabase Auth limits), trip switcher UI,
+"save documents for offline", Playwright end-to-end tests against the live project (needs credentials; manual TEST_PLAN instead).
