@@ -99,3 +99,12 @@ export interface ExpenseAuditRow {
   id: number; action: 'insert' | 'update' | 'delete'; changed_by: string | null; changed_at: string
   old_row: Record<string, unknown> | null; new_row: Record<string, unknown> | null
 }
+export interface FeedPost {
+  id: string; verb: string; summary: string; body: string | null; photo_path: string | null
+  entity_type: string | null; entity_id: string | null; actor_id: string | null; created_at: string
+  actor: Pick<Profile, 'id' | 'display_name' | 'avatar_path'> | null
+}
+export interface AnnouncementFull extends Announcement { created_by: string }
+export interface PollRow { id: string; question: string; multiple_choice: boolean; closes_at: string | null; closed_at: string | null; created_by: string; created_at: string }
+export interface PollOption { id: string; poll_id: string; label: string; sort_order: number }
+export interface PollVote { poll_id: string; option_id: string; user_id: string }

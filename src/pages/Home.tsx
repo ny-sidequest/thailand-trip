@@ -4,10 +4,12 @@ import { supabase, unwrap } from '@/lib/supabase'
 import { useAuth } from '@/context/AuthContext'
 import { useTrip } from '@/context/TripContext'
 import { useAsync } from '@/hooks/useAsync'
+import { useAnnouncements } from '@/hooks/useSocial'
+import { AnnouncementCard } from '@/components/social/Announcements'
 import { useRealtime } from '@/hooks/useRealtime'
 import { Avatar, Card, EmptyState, ErrorState, ProgressBar, SectionTitle, Skeleton, StatusBadge } from '@/components/ui'
 import { cityRuns, daysUntil, fmtDate, fmtDateLong, fmtTime, mapsDirectionsUrl, safeUrl, timeAgo } from '@/lib/format'
-import type { Accommodation, Activity, Announcement, Day, FeedItem, Transport } from '@/lib/types'
+import type { Accommodation, Activity, Day, FeedItem, Transport } from '@/lib/types'
 
 interface Progress { user_id: string; completed: number; total: number }
 
@@ -19,23 +21,22 @@ export default function Home() {
   const tripId = trip!.id
 
   const q = useAsync(async () => {
-    const [days, acts, acc, tr, ann, feed, prog] = await Promise.all([
+    const [days, acts, acc, tr, feed, prog] = await Promise.all([
       supabase.from('itinerary_days').select('*').eq('trip_id', tripId).is('deleted_at', null).order('day_number'),
       supabase.from('itinerary_activities').select('*').eq('trip_id', tripId).is('deleted_at', null).order('sort_order'),
       supabase.from('accommodation_bookings').select('id,name,city,check_in,check_out,status,maps_url').eq('trip_id', tripId).is('deleted_at', null).order('check_in'),
       supabase.from('transport_bookings').select('id,mode,operator,origin,destination,travel_date,time_note,status').eq('trip_id', tripId).is('deleted_at', null).order('travel_date'),
-      supabase.from('announcements').select('id,title,body,importance,pinned,created_at').eq('trip_id', tripId).is('deleted_at', null).order('pinned', { ascending: false }).order('created_at', { ascending: false }).limit(3),
       supabase.from('activity_feed').select('id,verb,summary,body,created_at,actor:profiles!actor_id(id,display_name,avatar_path)').eq('trip_id', tripId).is('deleted_at', null).order('created_at', { ascending: false }).limit(6),
       supabase.rpc('checklist_progress', { t: tripId }),
     ])
     return {
       days: unwrap(days) as Day[], acts: unwrap(acts) as Activity[], acc: unwrap(acc) as Accommodation[],
-      tr: unwrap(tr) as Transport[], ann: unwrap(ann) as Announcement[], feed: unwrap(feed) as unknown as FeedItem[],
+      tr: unwrap(tr) as Transport[], feed: unwrap(feed) as unknown as FeedItem[],
       prog: (unwrap(prog) ?? []) as Progress[],
     }
   }, [tripId])
 
-  useRealtime(tripId, ['itinerary_activities', 'itinerary_days', 'accommodation_bookings', 'transport_bookings', 'announcements', 'activity_feed', 'checklist_completions', 'checklist_items'], q.reload)
+  useRealtime(tripId, ['itinerary_activities', 'itinerary_days', 'accommodation_bookings', 'transport_bookings', 'activity_feed', 'checklist_completions', 'checklist_items'], q.reload)
 
   const left = daysUntil(trip!.start_date)
   const over = daysUntil(trip!.end_date) < 0
@@ -68,9 +69,10 @@ export default function Home() {
   )
 }
 
-function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodation[]; tr: Transport[]; ann: Announcement[]; feed: FeedItem[]; prog: Progress[] } }) {
+function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodation[]; tr: Transport[]; feed: FeedItem[]; prog: Progress[] } }) {
   const { session } = useAuth()
   const { trip } = useTrip()
+  const ann = useAnnouncements(trip!.id)
   const runs = cityRuns(d.days)
   const stops = trip!.route_stops.length ? trip!.route_stops : runs.map((r) => r.city)
   const dayById = new Map(d.days.map((x) => [x.id, x]))
@@ -179,16 +181,9 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
 
       {/* Announcements */}
       <section>
-        <SectionTitle><span className="inline-flex items-center gap-2"><Bell className="h-5 w-5 text-ember-500" />Announcements</span></SectionTitle>
-        {d.ann.length === 0 ? <Card><EmptyState title="No announcements" hint="Important updates from the admin appear here." /></Card> : (
-          <div className="space-y-3">
-            {d.ann.map((a) => (
-              <Card key={a.id} className={`p-5 ${a.importance === 'urgent' ? 'border-red-300 bg-red-50' : a.importance === 'important' ? 'border-ember-300 bg-ember-50' : ''}`}>
-                <div className="flex justify-between gap-3"><h3 className="font-bold text-navy-800">{a.title}</h3><span className="text-sm text-navy-400 shrink-0">{timeAgo(a.created_at)}</span></div>
-                <p className="text-navy-700 mt-1 whitespace-pre-wrap">{a.body}</p>
-              </Card>
-            ))}
-          </div>
+        <SectionTitle action={<Link to="/feed/announcements" className="text-jungle-700 font-semibold min-h-[44px] inline-flex items-center">All</Link>}><span className="inline-flex items-center gap-2"><Bell className="h-5 w-5 text-ember-500" />Announcements</span></SectionTitle>
+        {!ann.data ? <Skeleton className="h-24" /> : ann.data.items.length === 0 ? <Card><EmptyState title="No announcements" hint="Important updates from the admin appear here." /></Card> : (
+          <div className="space-y-3">{ann.data.items.slice(0, 3).map((a) => <AnnouncementCard key={a.id} a={a} data={ann.data!} reload={ann.reload} compact />)}</div>
         )}
       </section>
 

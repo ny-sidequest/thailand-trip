@@ -15,10 +15,11 @@ import Notifications from '@/pages/Notifications'
 import { NotificationsProvider } from '@/context/NotificationsContext'
 import Wallet from '@/pages/Wallet'
 import Expenses from '@/pages/Expenses'
+import Feed from '@/pages/Feed'
 import Itinerary from '@/pages/Itinerary'
 import ActivityDetail from '@/pages/ActivityDetail'
 import SetupNotice from '@/pages/SetupNotice'
-import { MessagesSquare, ShieldCheck } from 'lucide-react'
+import { ShieldCheck } from 'lucide-react'
 
 function Protected() {
   const { session, loading } = useAuth()
@@ -57,7 +58,7 @@ export default function App() {
             <Route path="notifications" element={<Notifications />} />
             <Route path="wallet/*" element={<Wallet />} />
             <Route path="expenses/*" element={<Expenses />} />
-            <Route path="feed" element={<ComingSoon title="Social Feed" phase={6} icon={<MessagesSquare className="h-8 w-8" />} />} />
+            <Route path="feed/*" element={<Feed />} />
             <Route path="group" element={<Group />} />
             <Route path="profile" element={<Profile />} />
             <Route path="admin/*" element={<AdminOnly><ComingSoon title="Admin" phase={7} icon={<ShieldCheck className="h-8 w-8" />} /></AdminOnly>} />

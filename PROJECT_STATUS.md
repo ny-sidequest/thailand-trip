@@ -130,3 +130,15 @@ DB 93 (adds validation, rate handling, direct-write blocking, audit, personal pr
 **Pending:** user applies `0006` THEN `0007` in SQL Editor, then verifies Phases 4 + 5 together; nothing pushed yet.
 **Rules recorded:** balances computed in base currency (INR) from each expense's stored rate; personal expenses
 never affect balances and are invisible to everyone else incl. admin.
+
+## Phase 6 — Social  ⚠️ built, NOT yet verified live (2026-11-17)
+**Done:** `/feed` with three tabs. Feed: text + photo posts (photos downscaled client-side, private `photos` bucket,
+signed URLs), system events with deep links, emoji reactions, per-post comment threads, delete own (admin any).
+Polls: admin creates (2-10 options, single/multiple, optional deadline) via `create_poll`; members vote/change/clear
+via atomic `set_poll_votes`; live results with voter avatars; admin close/delete. Announcements: admin post, pin,
+edit, delete; importance styling; read receipts (members mark read; admin sees who has not). Home shows announcements
+with read state. Reactions also on itinerary activities. Migration `0008` (polls RPCs, announcement + feed-comment
+triggers, announcement notifications now link to /feed/announcements).
+**Tests:** unit 56; DB 114 (poll rules incl. deadline, atomic vote change, closed polls, outsider access, feed-comment
+notification recipients, reaction rules).
+**Pending:** apply `0008`, then run the Phase 6 section of docs/TEST_PLAN.md (together with 4, 5, 7). Nothing pushed.

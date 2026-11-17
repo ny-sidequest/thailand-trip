@@ -8,6 +8,7 @@ import { useRealtime } from '@/hooks/useRealtime'
 import { Button, Card, ErrorState, Skeleton, StatusBadge } from '@/components/ui'
 import { KindIcon } from '@/components/KindIcon'
 import CommentThread from '@/components/CommentThread'
+import ReactionBar from '@/components/ReactionBar'
 import EditActivitySheet from '@/components/EditActivitySheet'
 import { fmtDateLong, fmtTime } from '@/lib/format'
 import { activityDirectionsUrl } from '@/lib/maps'
@@ -103,6 +104,7 @@ export default function ActivityDetail() {
         </Card>
       )}
 
+      <ReactionBar targetType="activity" targetId={a.id} />
       <Card className="p-5"><CommentThread targetType="activity" targetId={a.id} /></Card>
 
       {editing && <EditActivitySheet activity={a} onClose={() => setEditing(false)} onSaved={q.reload} />}

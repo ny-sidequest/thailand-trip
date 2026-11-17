@@ -33,5 +33,19 @@ Before testing, confirm every migration up to the latest one has been applied (s
 11. Undo (remove) a recorded payment; balances revert.
 12. Deleting an expense removes it from balances and keeps it in the audit trail.
 
+## Phase 6: Social  (migration 0008)
+1. Feed tab: member posts text; admin sees it live. Member posts a photo (caption optional); it appears with the image.
+2. React with 👍 🔥 etc. on the post from both accounts; counts update live; tapping again removes your reaction.
+3. Comment on a post from the second account; the post's author gets a notification ("commented on a post").
+4. A comment on an itinerary activity also shows in the feed; reactions work on the activity page too.
+5. Admin deletes a post; member can delete only their own.
+6. Polls: admin creates a single-choice poll (3 options) and a multiple-choice poll with a closing time.
+7. Member votes, changes their vote (single choice keeps exactly one), clears a vote; results and voter avatars update live.
+8. Member cannot create/close polls (no buttons). Admin closes a poll: voting stops, winner marked.
+9. Announcements: admin posts an "Important" one; member is notified and sees an unread dot + tab badge.
+10. Member taps Mark as read; dot clears; admin sees "Read by N of 5" and who is still pending.
+11. Home dashboard shows the latest announcements with unread state; "Mark as read" works there too.
+12. Admin pins an announcement: it moves to the top; admin can edit and delete it.
+
 ## Later phases
-Phase 6 (social), Phase 7 (admin), Phase 8 (security/PWA/offline) checks are appended as those phases are built.
+Phase 7 (admin) and Phase 8 (security/PWA/offline) checks are appended as those phases are built.

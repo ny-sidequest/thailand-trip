@@ -9,7 +9,7 @@ import { Avatar, Button, EmptyState, ErrorState, Spinner, inputCls } from '@/com
 import { timeAgo } from '@/lib/format'
 import type { ActivityComment } from '@/lib/types'
 
-export default function CommentThread({ targetType, targetId }: { targetType: 'activity'; targetId: string }) {
+export default function CommentThread({ targetType, targetId }: { targetType: 'activity' | 'feed' | 'announcement' | 'poll'; targetId: string }) {
   const { session, profile } = useAuth()
   const { trip, isAdmin } = useTrip()
   const tripId = trip!.id

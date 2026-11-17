@@ -32,6 +32,7 @@ await db.exec(read('migrations/0004_itinerary_events.sql'))
 await db.exec(read('migrations/0005_notifications_checklist.sql'))
 await db.exec(read('migrations/0006_wallet.sql'))
 await db.exec(read('migrations/0007_expenses.sql'))
+await db.exec(read('migrations/0008_social.sql'))
 await db.exec(read('seed.sql'))
 
 const T = '00000000-0000-4000-8000-000000000001'
@@ -316,6 +317,65 @@ await ok('activity edit of time/location/meeting point notifies others; no-op ed
   eq(r.rows.length, 4, 'rows'); console.log('     ', r.rows[0].title, '|', r.rows[0].body)
   await as('admin', `update itinerary_activities set booking_ref='B1' where title like 'Phi Phi%'`)
   eq((await db.query(`select count(*)::int n from notifications where type='booking'`)).rows[0].n, 4, 'unchanged') })
+
+console.log('Phase 6: social')
+const mkPoll = (user, o = {}) => as(user, `select create_poll('${T}', $1, $2, $3, $4) as id`, [o.q ?? 'Where to eat?', o.multi ?? false, o.closes ?? null, o.opts ?? ['Thai', 'Pizza', 'Sushi']])
+const optIds = async (poll) => (await db.query(`select id, label from poll_options where poll_id='${poll}' order by sort_order`)).rows.map((r) => r.id)
+const vote = (user, poll, opts) => as(user, `select set_poll_votes('${poll}', $1::uuid[])`, [`{${opts.join(',')}}`])
+let sp, mp
+await ok('admin creates a poll atomically; options ordered; feed + notifications', async () => {
+  await db.exec(`delete from notifications where type='poll'`)
+  sp = (await mkPoll('admin')).rows[0].id
+  eq((await optIds(sp)).length, 3, 'options')
+  eq((await db.query(`select count(*)::int n from activity_feed where verb='poll' and entity_id='${sp}'`)).rows[0].n, 1, 'feed')
+  eq((await db.query(`select count(*)::int n from notifications where type='poll'`)).rows[0].n, 4, 'notified') })
+await denied('member cannot create a poll', () => mkPoll('ravi'))
+await denied('poll needs at least 2 distinct options', () => mkPoll('admin', { opts: ['Only one', '  '] }))
+await denied('duplicate options rejected (case-insensitive)', () => mkPoll('admin', { opts: ['Thai', 'thai'] }))
+await denied('closing time in the past rejected', () => mkPoll('admin', { closes: '2020-01-01T00:00:00Z' }))
+await ok('single-choice: vote, then CHANGE vote atomically (one vote remains)', async () => {
+  const [a, b] = await optIds(sp)
+  await vote('ravi', sp, [a]); await vote('ravi', sp, [b])
+  const r = await db.query(`select option_id from poll_votes where poll_id='${sp}' and user_id='${ids.ravi}'`)
+  eq(r.rows.length, 1, 'votes'); eq(r.rows[0].option_id, b, 'moved') })
+await denied('single-choice poll rejects two options at once', async () => { const [a, b] = await optIds(sp); return vote('sam', sp, [a, b]) })
+await denied('option from another poll rejected', async () => { const [x] = await optIds(sp); const other = (await mkPoll('admin', { q: 'Other?', opts: ['A', 'B'] })).rows[0].id; return vote('sam', other, [x]) })
+await ok('multiple-choice poll accepts several options; empty array clears', async () => {
+  mp = (await mkPoll('admin', { q: 'Activities?', multi: true, opts: ['Kayak', 'Dive', 'Climb'] })).rows[0].id
+  const o = await optIds(mp)
+  await vote('sam', mp, [o[0], o[2]]); eq((await db.query(`select count(*)::int n from poll_votes where poll_id='${mp}' and user_id='${ids.sam}'`)).rows[0].n, 2, 'two')
+  await vote('sam', mp, []); eq((await db.query(`select count(*)::int n from poll_votes where poll_id='${mp}' and user_id='${ids.sam}'`)).rows[0].n, 0, 'cleared') })
+await ok('everyone sees results; outsider cannot vote or see', async () => {
+  eq((await as('kiran', `select count(*)::int n from poll_votes where poll_id='${sp}'`)).rows[0].n, 1, 'kiran sees')
+  eq((await as('outsider', `select count(*)::int n from poll_votes`)).rows[0].n, 0, 'outsider sees')
+  await denied('outsider votes', async () => vote('outsider', sp, [(await optIds(sp))[0]])) })
+await ok('closed poll rejects voting changes; vote survives', async () => {
+  await as('admin', `update polls set closed_at=now() where id='${sp}'`)
+  await denied('vote on closed poll', async () => vote('ravi', sp, [(await optIds(sp))[0]]))
+  eq((await db.query(`select count(*)::int n from poll_votes where poll_id='${sp}'`)).rows[0].n, 1, 'vote kept') })
+await ok('poll past its closing time is closed even if closed_at is null', async () => {
+  const id = (await mkPoll('admin', { q: 'Soon?', closes: new Date(Date.now() + 3600e3).toISOString(), opts: ['Yes', 'No'] })).rows[0].id
+  await db.exec(`update polls set closes_at = now() - interval '1 minute' where id='${id}'`)
+  await denied('vote after deadline', async () => vote('ravi', id, [(await optIds(id))[0]])) })
+await ok('announcement writes a feed event', async () => {
+  const n = (await db.query(`select count(*)::int n from activity_feed where verb='announcement'`)).rows[0].n
+  if (n < 1) throw new Error('no announcement feed row') })
+await ok('comment on a feed post notifies the author and earlier commenters, never the commenter', async () => {
+  await db.exec(`delete from notifications where type='comment'`)
+  const post = (await db.query(`select id from activity_feed where verb='post' and actor_id='${ids.dev}' limit 1`)).rows[0].id
+  await as('sam', `insert into comments(trip_id,target_type,target_id,author_id,body) values ('${T}','feed','${post}','${ids.sam}','nice')`)
+  eq((await db.query(`select user_id from notifications where type='comment'`)).rows.map((r) => r.user_id).join(), ids.dev, 'first comment -> author only')
+  await as('ravi', `insert into comments(trip_id,target_type,target_id,author_id,body) values ('${T}','feed','${post}','${ids.ravi}','agree')`)
+  const rec = (await db.query(`select user_id from notifications where type='comment'`)).rows.map((r) => r.user_id).sort()
+  eq(rec.join(), [ids.dev, ids.dev, ids.sam].sort().join(), 'second comment -> author + sam')
+  if (rec.includes(ids.ravi)) throw new Error('commenter notified') })
+await ok('reactions: one per emoji per user; unknown emoji rejected', async () => {
+  const post = (await db.query(`select id from activity_feed where verb='post' limit 1`)).rows[0].id
+  await as('sam', `insert into reactions(trip_id,target_type,target_id,user_id,emoji) values ('${T}','feed','${post}','${ids.sam}','🔥')`)
+  await denied('duplicate reaction', () => as('sam', `insert into reactions(trip_id,target_type,target_id,user_id,emoji) values ('${T}','feed','${post}','${ids.sam}','🔥')`))
+  await denied('unknown emoji', () => as('sam', `insert into reactions(trip_id,target_type,target_id,user_id,emoji) values ('${T}','feed','${post}','${ids.sam}','💩')`))
+  await denied('react as someone else', () => as('sam', `insert into reactions(trip_id,target_type,target_id,user_id,emoji) values ('${T}','feed','${post}','${ids.ravi}','❤️')`))
+  eq((await as('sam', `delete from reactions where user_id='${ids.sam}'`)).affectedRows, 1, 'remove own') })
 
 console.log('Storage policies')
 await db.exec(`insert into storage.objects(bucket_id,name,owner) values
