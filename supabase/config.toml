@@ -1,0 +1,13 @@
+# Used by the Supabase CLI (local dev + `supabase functions deploy`). Hosted-project settings
+# (disable sign-ups etc.) are in the dashboard: see README.
+project_id = "thailand-trip-hq"
+
+[auth]
+enable_signup = false
+minimum_password_length = 10
+
+[functions.username-login]
+verify_jwt = false   # called before the user has a session; it validates credentials itself
+
+[functions.admin-users]
+verify_jwt = true

@@ -1,0 +1,10 @@
+{
+  "trip_slug": "thailand-2026",
+  "users": [
+    { "username": "traveller1", "display_name": "Traveller One", "role": "admin" },
+    { "username": "traveller2", "display_name": "Traveller Two", "role": "member" },
+    { "username": "traveller3", "display_name": "Traveller Three", "role": "member" },
+    { "username": "traveller4", "display_name": "Traveller Four", "role": "member" },
+    { "username": "traveller5", "display_name": "Traveller Five", "role": "member" }
+  ]
+}
