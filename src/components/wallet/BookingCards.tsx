@@ -22,7 +22,7 @@ function Docs({ docs, onOpen, onAdd }: { docs: DocumentRow[]; onOpen: (d: Docume
   )
 }
 
-const STAY_FIELDS: FieldSpec[] = [
+export const STAY_FIELDS: FieldSpec[] = [
   { key: 'status', label: 'Booking status', type: 'select', required: true, options: statusOptions, hint: 'Only mark Confirmed when it is actually booked.' },
   { key: 'name', label: 'Property name', type: 'text', required: true, max: 160 },
   { key: 'city', label: 'City', type: 'text' }, { key: 'address', label: 'Address', type: 'textarea', max: 500 },
@@ -33,7 +33,7 @@ const STAY_FIELDS: FieldSpec[] = [
   { key: 'maps_url', label: 'Google Maps link', type: 'url', hint: 'Optional. Otherwise a search link is built from the address.' },
   { key: 'notes', label: 'Notes', type: 'textarea' },
 ]
-const TRANSPORT_FIELDS: FieldSpec[] = [
+export const TRANSPORT_FIELDS: FieldSpec[] = [
   { key: 'status', label: 'Booking status', type: 'select', required: true, options: statusOptions, hint: 'Only mark Confirmed when it is actually booked.' },
   { key: 'mode', label: 'Mode', type: 'select', required: true, options: ['flight', 'bus', 'ferry', 'speedboat', 'taxi', 'train', 'other'].map((m) => ({ value: m, label: m[0].toUpperCase() + m.slice(1) })) },
   { key: 'operator', label: 'Operator', type: 'text' },

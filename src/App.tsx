@@ -9,17 +9,16 @@ import Login from '@/pages/Login'
 import Home from '@/pages/Home'
 import Group from '@/pages/Group'
 import Profile from '@/pages/Profile'
-import ComingSoon from '@/pages/ComingSoon'
 import Checklist from '@/pages/Checklist'
 import Notifications from '@/pages/Notifications'
 import { NotificationsProvider } from '@/context/NotificationsContext'
 import Wallet from '@/pages/Wallet'
 import Expenses from '@/pages/Expenses'
 import Feed from '@/pages/Feed'
+import Admin from '@/pages/Admin'
 import Itinerary from '@/pages/Itinerary'
 import ActivityDetail from '@/pages/ActivityDetail'
 import SetupNotice from '@/pages/SetupNotice'
-import { ShieldCheck } from 'lucide-react'
 
 function Protected() {
   const { session, loading } = useAuth()
@@ -61,7 +60,7 @@ export default function App() {
             <Route path="feed/*" element={<Feed />} />
             <Route path="group" element={<Group />} />
             <Route path="profile" element={<Profile />} />
-            <Route path="admin/*" element={<AdminOnly><ComingSoon title="Admin" phase={7} icon={<ShieldCheck className="h-8 w-8" />} /></AdminOnly>} />
+            <Route path="admin/*" element={<AdminOnly><Admin /></AdminOnly>} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

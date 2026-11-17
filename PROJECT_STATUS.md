@@ -142,3 +142,17 @@ triggers, announcement notifications now link to /feed/announcements).
 **Tests:** unit 56; DB 114 (poll rules incl. deadline, atomic vote change, closed polls, outsider access, feed-comment
 notification recipients, reaction rules).
 **Pending:** apply `0008`, then run the Phase 6 section of docs/TEST_PLAN.md (together with 4, 5, 7). Nothing pushed.
+
+## Phase 7 — Admin  ⚠️ built, NOT yet verified live (2026-11-17)
+**Done:** `/admin` (admin-only route + RLS/function enforcement): overview with "needs attention" list; Trip settings
+(name, tagline, dates, default THB->INR rate, route, hero image); People & access (add traveller, reset password,
+promote/demote, remove from trip via the `admin-users` edge function; one-time credentials dialog; per-member checklist
+progress with item-level drill-down); Itinerary (add/edit/delete days; add/edit/delete/reorder activities with all fields,
+map links, timings, costs); Bookings (stays, transport, activity bookings: add/edit/status/delete, link activity bookings to
+activities); Checklist (add/edit/remove shared items + deadlines, new categories). Generic `EditRecordSheet` now also creates
+records and handles numbers/booleans. Migration `0009`: `reorder_activities` (atomic, validates exact set), `delete_day`
+(cascade soft delete), feed + notifications on stay/transport/activity-booking status changes.
+**Tests:** unit 56; DB 126 (reorder validation, admin-only writes, cascade delete, booking events, admin visibility).
+**Pending:** apply `0009`; `admin-users` function is already deployed (Phase 1) but never executed against live data, so
+"Add traveller / Reset password / Roles / Remove" are the first real exercise of it. Nothing pushed.
+**Known:** day numbers are never reused after delete (unique constraint includes soft-deleted rows); days sort by date.

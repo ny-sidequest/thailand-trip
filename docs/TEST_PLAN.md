@@ -47,5 +47,21 @@ Before testing, confirm every migration up to the latest one has been applied (s
 11. Home dashboard shows the latest announcements with unread state; "Mark as read" works there too.
 12. Admin pins an announcement: it moves to the top; admin can edit and delete it.
 
+## Phase 7: Admin  (migration 0009; edge function admin-users must be deployed)
+1. Admin sees **Admin** in the menu; the member does not, and typing /admin as the member bounces to Home.
+2. Admin → Trip settings: change the tagline and the default rate; Home hero and the Add-expense default rate follow.
+3. Admin → People → Add traveller (test username). A one-time password appears. Sign in as that user in a third window.
+4. Reset that user's password: the old one stops working, the new one works. Make them admin, then member again. Remove them: they lose access at once.
+5. Admin cannot demote or remove themselves (error shown).
+6. People shows each member's checklist %; expand a member to see which items they have/have not ticked.
+7. Itinerary → Add day; open it; Add an activity (title, type, time, map link); it appears on the member's Itinerary live.
+8. Move activities up/down: the order changes for the member live. Edit a time: member is notified.
+9. Delete the test day: it disappears with its activities.
+10. Bookings → Stays / Transport / Activities: add, edit status (member gets a feed entry + notification), delete.
+11. Link an activity booking to an itinerary activity: it shows on that activity's page.
+12. Checklist → add an item with a deadline in a new category; the member sees it unticked with a due badge; remove it.
+13. Needs attention on the Admin home lists pending/needs-verification items and links to them.
+14. As the member, try the admin pages' actions via the app: no buttons; direct database writes are refused (covered by DB tests).
+
 ## Later phases
-Phase 7 (admin) and Phase 8 (security/PWA/offline) checks are appended as those phases are built.
+Phase 8 (security audit, PWA install, offline, performance, final docs) checks are appended when built.

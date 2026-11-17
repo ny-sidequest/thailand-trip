@@ -33,6 +33,7 @@ await db.exec(read('migrations/0005_notifications_checklist.sql'))
 await db.exec(read('migrations/0006_wallet.sql'))
 await db.exec(read('migrations/0007_expenses.sql'))
 await db.exec(read('migrations/0008_social.sql'))
+await db.exec(read('migrations/0009_admin.sql'))
 await db.exec(read('seed.sql'))
 
 const T = '00000000-0000-4000-8000-000000000001'
@@ -376,6 +377,40 @@ await ok('reactions: one per emoji per user; unknown emoji rejected', async () =
   await denied('unknown emoji', () => as('sam', `insert into reactions(trip_id,target_type,target_id,user_id,emoji) values ('${T}','feed','${post}','${ids.sam}','💩')`))
   await denied('react as someone else', () => as('sam', `insert into reactions(trip_id,target_type,target_id,user_id,emoji) values ('${T}','feed','${post}','${ids.ravi}','❤️')`))
   eq((await as('sam', `delete from reactions where user_id='${ids.sam}'`)).affectedRows, 1, 'remove own') })
+
+console.log('Phase 7: admin tooling')
+const day3 = (await db.query(`select id from itinerary_days where day_number=3`)).rows[0].id
+const dayActs = async (d) => (await db.query(`select id from itinerary_activities where day_id='${d}' and deleted_at is null order by sort_order`)).rows.map((r) => r.id)
+const reorder = (user, d, list) => as(user, `select reorder_activities('${d}', $1::uuid[])`, [`{${list.join(',')}}`])
+await ok('admin reorders activities atomically', async () => {
+  const before = await dayActs(day3); const rev = [...before].reverse()
+  await reorder('admin', day3, rev)
+  eq((await dayActs(day3)).join(), rev.join(), 'order applied') })
+await denied('member cannot reorder', async () => reorder('sam', day3, await dayActs(day3)))
+await denied('reorder rejects a missing activity', async () => reorder('admin', day3, (await dayActs(day3)).slice(1)))
+await denied('reorder rejects a foreign activity', async () => { const l = await dayActs(day3); const other = (await db.query(`select id from itinerary_activities where day_id <> '${day3}' limit 1`)).rows[0].id; return reorder('admin', day3, [...l.slice(1), other]) })
+await denied('reorder rejects duplicates', async () => { const l = await dayActs(day3); return reorder('admin', day3, [l[0], l[0], ...l.slice(2)]) })
+await ok('admin can add a day and an activity; member cannot', async () => {
+  const d = (await as('admin', `insert into itinerary_days(trip_id,day_number,day_date,city,title) values ('${T}',12,'2027-01-08','Bangkok','Extra day') returning id`)).rows[0].id
+  await as('admin', `insert into itinerary_activities(trip_id,day_id,title,kind,created_by) values ('${T}','${d}','Brunch','food','${ids.admin}')`)
+  await denied('member adds activity', () => as('sam', `insert into itinerary_activities(trip_id,day_id,title) values ('${T}','${d}','x')`)) })
+await ok('delete_day soft-deletes the day and its activities; member cannot', async () => {
+  const d = (await db.query(`select id from itinerary_days where day_number=12`)).rows[0].id
+  await denied('member delete_day', () => as('sam', `select delete_day('${d}')`))
+  await as('admin', `select delete_day('${d}')`)
+  eq((await db.query(`select count(*)::int n from itinerary_activities where day_id='${d}' and deleted_at is null`)).rows[0].n, 0, 'activities')
+  eq((await db.query(`select deleted_at is not null d from itinerary_days where id='${d}'`)).rows[0].d, true, 'day') })
+await ok('stay / transport status change writes feed + notifies others', async () => {
+  await db.exec(`delete from notifications where type='booking'`)
+  await as('admin', `update accommodation_bookings set status='confirmed' where name like 'Accommodation — Patong%'`)
+  await as('admin', `update transport_bookings set status='confirmed', booking_ref='B7' where mode='ferry'`)
+  eq((await db.query(`select count(*)::int n from notifications where type='booking'`)).rows[0].n, 8, 'notifications')
+  eq((await db.query(`select count(*)::int n from activity_feed where entity_type in ('accommodation_bookings','transport_bookings')`)).rows[0].n, 2, 'feed') })
+await denied('member cannot edit a booking', () => as('sam', `update transport_bookings set status='cancelled'`))
+await ok('admin can read every member\'s checklist completions; trip settings are admin-only', async () => {
+  eq((await as('admin', `select count(distinct user_id)::int n from checklist_completions`)).rows[0].n >= 1, true, 'admin sees')
+  eq((await as('admin', `update trips set default_thb_to_inr=2.7 where id='${T}'`)).affectedRows, 1, 'admin update')
+  eq((await as('sam', `update trips set default_thb_to_inr=9 where id='${T}'`)).affectedRows, 0, 'member update') })
 
 console.log('Storage policies')
 await db.exec(`insert into storage.objects(bucket_id,name,owner) values
