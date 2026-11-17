@@ -152,7 +152,7 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
             {next ? (
               <>
                 <div className="flex items-center gap-2 text-sm font-semibold text-ember-600"><CalendarClock className="h-4 w-4" />Day {next.day.day_number} · {fmtDateLong(next.day.day_date)}</div>
-                <h3 className="font-display text-2xl font-bold text-navy-800 mt-1">{next.a.title}</h3>
+                <Link to={`/itinerary/activity/${next.a.id}`}><h3 className="font-display text-2xl font-bold text-navy-800 mt-1 hover:underline">{next.a.title}</h3></Link>
                 <p className="text-navy-600 mt-1">{[fmtTime(next.a.start_time) ?? next.a.time_note, next.a.location_name].filter(Boolean).join(' · ')}</p>
                 <div className="mt-3 flex items-center gap-3 flex-wrap">
                   <StatusBadge status={next.a.status} />

@@ -28,6 +28,7 @@ await db.exec(`
 await db.exec(read('migrations/0001_schema.sql').replace('create extension if not exists pgcrypto;', ''))
 await db.exec(read('migrations/0002_rls.sql'))
 await db.exec(read('migrations/0003_storage_realtime.sql'))
+await db.exec(read('migrations/0004_itinerary_events.sql'))
 await db.exec(read('seed.sql'))
 
 const T = '00000000-0000-4000-8000-000000000001'
@@ -157,6 +158,19 @@ await ok('comment + reaction', async () => {
   await as('ravi', `insert into reactions(trip_id,target_type,target_id,user_id,emoji) values ('${T}','comment','${c.rows[0].id}','${ids.ravi}','🔥')`) })
 await denied('cannot edit others\' comment', () => as('ravi', `update comments set body='edited'`))
 await denied('outsider cannot comment', () => as('outsider', `insert into comments(trip_id,target_type,target_id,author_id,body) values ('${T}','feed',gen_random_uuid(),'${out}','hi')`))
+
+console.log('Itinerary events')
+await ok('activity comment writes a feed event attributed to the commenter', async () => {
+  const r = await db.query(`select actor_id, summary, body from activity_feed where verb='comment'`)
+  eq(r.rows.length, 1, 'rows'); eq(r.rows[0].actor_id, ids.sam, 'actor'); eq(r.rows[0].body, 'Love it', 'body') })
+await ok('status change writes a feed event; non-status edit does not', async () => {
+  const n0 = (await db.query(`select count(*)::int n from activity_feed where verb='booking'`)).rows[0].n
+  await as('admin', `update itinerary_activities set status='confirmed' where title like 'Phi Phi%'`)
+  await as('admin', `update itinerary_activities set reminders='x' where title like 'Phi Phi%'`)
+  const r = await db.query(`select summary from activity_feed where verb='booking' order by created_at desc, id desc`)
+  eq(r.rows.length, n0 + 1, 'rows'); console.log('     ', r.rows.map((x) => x.summary).join(' | ')) })
+await ok('member cannot change activity status (so no forged event)', async () =>
+  eq((await as('sam', `update itinerary_activities set status='cancelled'`)).affectedRows, 0, 'rows'))
 
 console.log('Polls')
 let poll, o1, o2

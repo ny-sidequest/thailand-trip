@@ -15,6 +15,7 @@ _Last updated: 2026-11-17_
 - [ ] 8c. Realtime between two sessions: deferred until Phase 2 admin Edit exists (then a one-click test)
 - [x] 9. Mobile test over LAN: runs on phone; Home not well optimised (user must zoom in/out to see some parts). Accepted for now; logged for the UI polish phase
 - [x] 10. GitHub Pages deployed (https://ny-sidequest.github.io/thailand-trip/); CI green; manifest/SW/icons served; phone install, offline shell and deep-link reload confirmed by user
+- [x] 8c. Realtime verified live in Phase 2: aman's comment and admin status edit appeared in the other session without refresh; member has no Edit button
 - [x] Checkpoint tagged `phase-1-verified`; Phase 2 started 2026-11-17 (8c realtime test still pending, will run with admin Edit)
 
 ## Phase 2 scope (agreed 2026-11-17)
@@ -75,3 +76,13 @@ Placeholder routes currently render `ComingSoon`.
 ## Added phase: UI Polish ("world class" pass), scheduled after core features
 - Mobile Home: investigate horizontal overflow / fit (user has to zoom); tune hero, route chips, cards at 360-430px.
 - Real destination photography, typography, motion, empty/loading states, tablet and desktop layouts, accessibility audit.
+
+## Phase 2 — Itinerary  ✅ verified live (2026-11-17)
+**Done:** `/itinerary` day strip + timeline (status, optional, time notes, comment counts, bookings on that date,
+prev/next day); `/itinerary/activity/:id` detail (all populated fields, reminders callout, Directions, linked
+activity bookings); per-day multi-stop Google Maps route; threaded comments (edit/delete own, admin delete,
+realtime); admin Edit-activity sheet (status, times, note, description, location, maps link, meeting/pickup,
+booking ref, reminders); migration `0004` feed events for comments + status changes; Home "Up next" links to detail.
+**Tests:** unit 11 (maps + format); DB 55 (adds feed-event triggers); live two-account realtime + permission check by user.
+**Not in Phase 2 (planned Phase 7):** add/delete/reorder activities, edit days, edit bookings, per-day images.
+**Known:** DB migrations are applied manually via SQL Editor (CLI `db push` needs DB password).

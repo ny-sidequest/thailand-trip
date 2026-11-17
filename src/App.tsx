@@ -10,8 +10,10 @@ import Home from '@/pages/Home'
 import Group from '@/pages/Group'
 import Profile from '@/pages/Profile'
 import ComingSoon from '@/pages/ComingSoon'
+import Itinerary from '@/pages/Itinerary'
+import ActivityDetail from '@/pages/ActivityDetail'
 import SetupNotice from '@/pages/SetupNotice'
-import { CalendarDays, CheckSquare, Wallet, Receipt, MessagesSquare, ShieldCheck } from 'lucide-react'
+import { CheckSquare, Wallet, Receipt, MessagesSquare, ShieldCheck } from 'lucide-react'
 
 function Protected() {
   const { session, loading } = useAuth()
@@ -43,7 +45,9 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route element={<Protected />}>
             <Route index element={<Home />} />
-            <Route path="itinerary/*" element={<ComingSoon title="Itinerary" phase={2} icon={<CalendarDays className="h-8 w-8" />} />} />
+            <Route path="itinerary" element={<Itinerary />} />
+            <Route path="itinerary/day/:dayNumber" element={<Itinerary />} />
+            <Route path="itinerary/activity/:id" element={<ActivityDetail />} />
             <Route path="checklist" element={<ComingSoon title="Checklist" phase={3} icon={<CheckSquare className="h-8 w-8" />} />} />
             <Route path="wallet/*" element={<ComingSoon title="Travel Wallet" phase={4} icon={<Wallet className="h-8 w-8" />} />} />
             <Route path="expenses/*" element={<ComingSoon title="Expenses" phase={5} icon={<Receipt className="h-8 w-8" />} />} />

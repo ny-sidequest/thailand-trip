@@ -51,3 +51,11 @@ export interface FeedItem {
   id: string; verb: string; summary: string; body: string | null; created_at: string
   actor: Pick<Profile, 'id' | 'display_name' | 'avatar_path'> | null
 }
+export interface ActivityComment {
+  id: string; body: string; created_at: string; updated_at: string; author_id: string
+  author: Pick<Profile, 'id' | 'display_name' | 'avatar_path'> | null
+}
+export interface ActivityBooking {
+  id: string; name: string; operator: string | null; booking_ref: string | null; status: BookingStatus
+  meeting_point: string | null; pickup_info: string | null; contact: string | null; notes: string | null
+}
