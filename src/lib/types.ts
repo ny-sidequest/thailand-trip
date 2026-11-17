@@ -83,3 +83,19 @@ export interface TransportFull {
   meeting_point: string | null; luggage_notes: string | null; maps_url: string | null; notes: string | null; status: BookingStatus
 }
 export interface ActivityBookingLite { id: string; name: string; booking_date: string | null }
+export type Currency = 'THB' | 'INR'
+export interface ExpenseSplitRow { user_id: string; share_amount: number; percentage: number | null }
+export interface Expense {
+  id: string; trip_id: string; description: string; category: string; amount: number; currency: Currency
+  fx_rate_to_base: number; amount_base: number; expense_date: string; payer_id: string
+  split_type: 'equal' | 'custom' | 'percentage'; is_personal: boolean; receipt_path: string | null; notes: string | null
+  created_by: string; updated_by: string | null; created_at: string; updated_at: string; splits: ExpenseSplitRow[]
+}
+export interface Settlement {
+  id: string; trip_id: string; from_user: string; to_user: string; amount: number; currency: Currency
+  fx_rate_to_base: number; note: string | null; settled_on: string; created_by: string; created_at: string
+}
+export interface ExpenseAuditRow {
+  id: number; action: 'insert' | 'update' | 'delete'; changed_by: string | null; changed_at: string
+  old_row: Record<string, unknown> | null; new_row: Record<string, unknown> | null
+}

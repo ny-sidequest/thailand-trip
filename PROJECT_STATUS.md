@@ -110,3 +110,23 @@ upload feed + notification, wider activity-edit notifications: time / location /
 **Pending:** user applies `0006` in SQL Editor and runs the Phase 4 checks together with Phase 5 (user's choice).
 Phase 4 commit is local only; do NOT push until 0006 is applied (CI deploy would hit a DB without `visibility`).
 **Ideas:** "Save for offline" for tickets (Cache API on the user's device) - not built.
+
+## Phase 5 — Expenses  ⚠️ built, NOT yet verified live (2026-11-17)
+**Done:** `/expenses` Overview (your balance, group total + per-currency totals, minimum-transfer suggested
+settlements with THB equivalent, per-person paid/share/net, payment history with undo) and History (grouped by
+date, filters, detail sheet with receipt preview + full audit trail, admin/owner correct + delete);
+Add/Edit expense sheet (THB/INR, explicit editable FX rate stored per expense, shared or personal, payer,
+participants, equal / custom amounts / percentage with live exact preview, receipt photo/PDF, notes);
+record-payment sheet (idempotency key, 24h duplicate warning, per-payment rate).
+Migration `0007`: all expense writes only via `save_expense` / `delete_expense` (SECURITY DEFINER, atomic,
+validates sums/rates/membership/permissions, writes audit incl. splits snapshot, feed + notifications);
+direct INSERT/UPDATE/DELETE on expenses, splits, participants REVOKED; settlement feed + notification;
+receipts bucket policies follow the expenses table (personal receipts stay private).
+`src/lib/settle.ts` (written by an Opus subagent per the model plan, reviewed + independently re-tested):
+integer-minor-unit money, exact equal/weighted (largest-remainder) splits, ledger, and an EXACT minimum-transfer
+settlement solver (bitmask DP, greedy fallback > 16 non-zero balances).
+**Tests:** unit 51 (settle 24 incl. brute-force oracle, money 3, documents 9, checklist 4, maps 6, format 5);
+DB 93 (adds validation, rate handling, direct-write blocking, audit, personal privacy, settlement events).
+**Pending:** user applies `0006` THEN `0007` in SQL Editor, then verifies Phases 4 + 5 together; nothing pushed yet.
+**Rules recorded:** balances computed in base currency (INR) from each expense's stored rate; personal expenses
+never affect balances and are invisible to everyone else incl. admin.

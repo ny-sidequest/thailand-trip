@@ -31,6 +31,7 @@ await db.exec(read('migrations/0003_storage_realtime.sql'))
 await db.exec(read('migrations/0004_itinerary_events.sql'))
 await db.exec(read('migrations/0005_notifications_checklist.sql'))
 await db.exec(read('migrations/0006_wallet.sql'))
+await db.exec(read('migrations/0007_expenses.sql'))
 await db.exec(read('seed.sql'))
 
 const T = '00000000-0000-4000-8000-000000000001'
@@ -63,7 +64,7 @@ async function denied(label, fn) {   // expects error OR zero affected rows
     if ((r?.affectedRows ?? 0) > 0 || (r?.rows?.length ?? 0) > 0) throw new Error('was allowed')
     pass++; console.log('  ✓', label)
   } catch (e) {
-    if (e.message === 'was allowed') { fail++; console.log('  ✗', label, '(ALLOWED)') } else { pass++; console.log('  ✓', label, '(error)') }
+    if (e.message === 'was allowed') { fail++; console.log('  ✗', label, '(ALLOWED)') } else { pass++; console.log('  ✓', label, process.env.SHOW_ERRORS ? '→ ' + e.message.slice(0, 90) : '(error)') }
   }
 }
 const eq = (a, b, m) => { if (a !== b) throw new Error(`${m}: expected ${b}, got ${a}`) }
@@ -121,31 +122,70 @@ await ok('progress function visible to members w/o item detail', async () => {
 await denied('outsider cannot call progress', () => as('outsider', `select * from checklist_progress('${T}')`))
 
 console.log('Expenses')
+const split = (pairs) => pairs.map(([u, share]) => ({ user_id: ids[u], share_amount: share }))
+const exp = (over = {}) => ({ description: 'Dinner', category: 'food', amount: 1000, currency: 'THB', fx_rate: 2.5, expense_date: '2027-01-02',
+  payer_id: ids.ravi, split_type: 'equal', is_personal: false, splits: split([['ravi', 500], ['sam', 500]]), ...over })
+const save = (user, payload, id = null) => as(user, `select save_expense('${T}', $1, $2::jsonb) as id`, [id, JSON.stringify(payload)])
 let e1
-await ok('member adds expense with splits', async () => {
-  const r = await as('ravi', `insert into expenses(trip_id,description,amount,currency,fx_rate_to_base,amount_base,payer_id,created_by)
-    values ('${T}','Dinner',1000,'THB',2.5,2500,'${ids.ravi}','${ids.ravi}') returning id`); e1 = r.rows[0].id
-  await as('ravi', `insert into expense_splits(expense_id,user_id,trip_id,share_amount) values ($1,'${ids.sam}','${T}',500),($1,'${ids.ravi}','${T}',500)`, [e1]) })
-await ok('other members see it', async () => eq((await as('kiran', 'select count(*)::int n from expenses')).rows[0].n, 1, 'n'))
-await denied('member cannot edit another member\'s expense', () => as('sam', `update expenses set amount=1 where id='${e1}'`))
-await ok('admin can correct, audit trail written', async () => {
-  eq((await as('admin', `update expenses set amount=1200, amount_base=3000 where id='${e1}'`)).affectedRows, 1, 'rows')
-  eq((await db.query(`select count(*)::int n from expense_audit where expense_id='${e1}'`)).rows[0].n, 2, 'audit') })
-await denied('cannot forge created_by', () => as('sam', `insert into expenses(trip_id,description,amount,currency,amount_base,payer_id,created_by) values ('${T}','x',1,'INR',1,'${ids.sam}','${ids.ravi}')`))
-await denied('payer must be a trip member', () => as('sam', `insert into expenses(trip_id,description,amount,currency,amount_base,payer_id,created_by) values ('${T}','x',1,'INR',1,'${out}','${ids.sam}')`))
-await denied('cannot insert unsupported currency', () => as('sam', `insert into expenses(trip_id,description,amount,currency,amount_base,payer_id,created_by) values ('${T}','x',1,'USD',1,'${ids.sam}','${ids.sam}')`))
-await ok('personal expense hidden from others (incl. splits)', async () => {
-  const r = await as('sam', `insert into expenses(trip_id,description,amount,currency,amount_base,payer_id,created_by,is_personal) values ('${T}','Souvenir',100,'THB',250,'${ids.sam}','${ids.sam}',true) returning id`)
-  const id = r.rows[0].id
-  await as('sam', `insert into expense_splits(expense_id,user_id,trip_id,share_amount) values ($1,'${ids.sam}','${T}',100)`, [id])
-  eq((await as('ravi', `select count(*)::int n from expenses where is_personal`)).rows[0].n, 0, 'ravi')
-  eq((await as('admin', `select count(*)::int n from expenses where is_personal`)).rows[0].n, 0, 'admin')
-  eq((await as('ravi', `select count(*)::int n from expense_splits where expense_id='${id}'`)).rows[0].n, 0, 'splits') })
-await denied('member cannot add splits to someone else\'s expense', () => as('sam', `insert into expense_splits(expense_id,user_id,trip_id,share_amount) values ('${e1}','${ids.dev}','${T}',1)`))
+await ok('member adds expense via save_expense; stores rate + converted amount + splits', async () => {
+  e1 = (await save('ravi', exp())).rows[0].id
+  const r = (await db.query(`select amount_base, fx_rate_to_base, created_by, splits_snapshot is not null as snap from expenses where id='${e1}'`)).rows[0]
+  eq(Number(r.amount_base), 2500, 'amount_base'); eq(Number(r.fx_rate_to_base), 2.5, 'rate'); eq(r.created_by, ids.ravi, 'creator'); eq(r.snap, true, 'snapshot')
+  eq((await db.query(`select count(*)::int n from expense_splits where expense_id='${e1}'`)).rows[0].n, 2, 'splits') })
+await ok('base-currency expense forces rate 1', async () => {
+  const id = (await save('ravi', exp({ currency: 'INR', fx_rate: 99, amount: 300, splits: split([['ravi', 150], ['sam', 150]]) }))).rows[0].id
+  eq(Number((await db.query(`select fx_rate_to_base r from expenses where id='${id}'`)).rows[0].r), 1, 'rate') })
+await ok('other members see it; share holders were notified, not the payer', async () => {
+  eq((await as('kiran', `select count(*)::int n from expenses where id='${e1}'`)).rows[0].n, 1, 'visible')
+  const n = await db.query(`select user_id from notifications where type='expense' and title like '%Dinner%' and body like 'Your share: THB 500.00'`)
+  eq(n.rows.length, 1, 'notified'); eq(n.rows[0].user_id, ids.sam, 'recipient') })
+await denied('direct INSERT into expenses is blocked (must use save_expense)', () => as('ravi', `insert into expenses(trip_id,description,amount,currency,amount_base,payer_id,created_by) values ('${T}','x',1,'INR',1,'${ids.ravi}','${ids.ravi}')`))
+await denied('direct UPDATE of an expense is blocked', () => as('ravi', `update expenses set amount=1 where id='${e1}'`))
+await denied('direct INSERT into expense_splits is blocked', () => as('ravi', `insert into expense_splits(expense_id,user_id,trip_id,share_amount) values ('${e1}','${ids.dev}','${T}',1)`))
+await denied('shares that do not add up are rejected', () => save('ravi', exp({ splits: split([['ravi', 500], ['sam', 499.99]]) })))
+await denied('equal split with uneven shares is rejected', () => save('ravi', exp({ splits: split([['ravi', 900], ['sam', 100]]) })))
+await ok('custom split accepts uneven shares that add up', async () => save('ravi', exp({ split_type: 'custom', splits: split([['ravi', 900], ['sam', 100]]) })))
+await denied('percentage split must total 100', () => save('ravi', exp({ split_type: 'percentage', splits: [{ user_id: ids.ravi, share_amount: 500, percentage: 50 }, { user_id: ids.sam, share_amount: 500, percentage: 40 }] })))
+await ok('percentage split totalling 100 is accepted', async () => save('ravi', exp({ split_type: 'percentage', amount: 100, splits: [{ user_id: ids.ravi, share_amount: 33.33, percentage: 33.333 }, { user_id: ids.sam, share_amount: 33.33, percentage: 33.333 }, { user_id: ids.dev, share_amount: 33.34, percentage: 33.334 }] })))
+await denied('missing exchange rate for a non-base currency', () => save('ravi', exp({ fx_rate: null })))
+await denied('zero / negative rate rejected', () => save('ravi', exp({ fx_rate: 0 })))
+await denied('unsupported currency rejected', () => save('ravi', exp({ currency: 'USD' })))
+await denied('payer must be a trip member', () => save('ravi', exp({ payer_id: out })))
+await denied('participant must be a trip member', () => save('ravi', exp({ splits: split([['ravi', 500]]).concat([{ user_id: out, share_amount: 500 }]) })))
+await denied('duplicate participant rejected', () => save('ravi', exp({ splits: split([['ravi', 500], ['ravi', 500]]) })))
+await denied('amount with 3 decimals rejected', () => save('ravi', exp({ amount: 10.005, splits: split([['ravi', 10.01]]) })))
+await denied('receipt path must be inside this trip folder', () => save('ravi', exp({ receipt_path: `${out}/x.jpg` })))
+await denied('member cannot edit another member\'s expense', () => save('sam', exp({ amount: 2000, splits: split([['ravi', 1000], ['sam', 1000]]) }), e1))
+await ok('admin can correct; audit trail records old + new incl. splits', async () => {
+  await save('admin', exp({ amount: 1200, splits: split([['ravi', 600], ['sam', 600]]) }), e1)
+  const a = (await db.query(`select action, old_row->>'amount' o, new_row->>'amount' n, new_row->'splits_snapshot' s from expense_audit where expense_id='${e1}' order by id`)).rows
+  eq(a.length, 2, 'audit rows'); eq(a[1].action, 'update', 'action'); eq(Number(a[1].o), 1000, 'old'); eq(Number(a[1].n), 1200, 'new')
+  eq(JSON.parse(JSON.stringify(a[1].s)).length, 2, 'splits in audit') })
+await ok('soft delete via delete_expense is audited; member cannot delete others\'', async () => {
+  const id = (await save('kiran', exp({ payer_id: ids.kiran, splits: split([['kiran', 500], ['dev', 500]]) }))).rows[0].id
+  await denied('sam deletes', () => as('sam', `select delete_expense('${id}')`))
+  await as('kiran', `select delete_expense('${id}')`)
+  eq((await db.query(`select action from expense_audit where expense_id='${id}' order by id desc limit 1`)).rows[0].action, 'delete', 'audit') })
+await ok('personal expense hidden from others incl. admin, splits and audit; no feed event', async () => {
+  const feed0 = (await db.query(`select count(*)::int n from activity_feed where verb='expense'`)).rows[0].n
+  const id = (await save('sam', exp({ description: 'Souvenir', amount: 100, payer_id: ids.sam, is_personal: true, splits: split([['sam', 100]]) }))).rows[0].id
+  for (const u of ['ravi', 'admin']) {
+    eq((await as(u, `select count(*)::int n from expenses where id='${id}'`)).rows[0].n, 0, `${u} expense`)
+    eq((await as(u, `select count(*)::int n from expense_splits where expense_id='${id}'`)).rows[0].n, 0, `${u} splits`)
+    eq((await as(u, `select count(*)::int n from expense_audit where expense_id='${id}'`)).rows[0].n, 0, `${u} audit`) }
+  eq((await db.query(`select count(*)::int n from activity_feed where verb='expense'`)).rows[0].n, feed0, 'no feed')
+  await denied('admin cannot edit personal (valid payload, fails on ownership)', () => save('admin', exp({ description: 'Souvenir', amount: 100, payer_id: ids.admin, is_personal: true, splits: split([['admin', 100]]) }), id))
+  await denied('personal expense cannot be split with others', () => save('sam', exp({ is_personal: true, payer_id: ids.sam, splits: split([['sam', 500], ['ravi', 500]]) }))) })
+await ok('feed event written for shared expense', async () =>
+  eq((await db.query(`select count(*)::int n from activity_feed where verb='expense' and entity_id='${e1}'`)).rows[0].n >= 2, true, 'feed rows'))
+await denied('anon / outsider cannot call save_expense', () => save('outsider', exp()))
 
 console.log('Settlements')
 const key = '30000000-0000-4000-8000-000000000001'
 await ok('member records settlement', async () => as('sam', `insert into settlements(trip_id,from_user,to_user,amount,currency,idempotency_key,created_by) values ('${T}','${ids.sam}','${ids.ravi}',500,'THB','${key}','${ids.sam}')`))
+await ok('settlement writes feed + notifies the other party only', async () => {
+  eq((await db.query(`select count(*)::int n from activity_feed where verb='settlement'`)).rows[0].n, 1, 'feed')
+  const n = await db.query(`select user_id from notifications where type='settlement'`); eq(n.rows.length, 1, 'rows'); eq(n.rows[0].user_id, ids.ravi, 'recipient') })
 await denied('duplicate settlement (same idempotency key) rejected', () => as('sam', `insert into settlements(trip_id,from_user,to_user,amount,currency,idempotency_key,created_by) values ('${T}','${ids.sam}','${ids.ravi}',500,'THB','${key}','${ids.sam}')`))
 await denied('cannot record settlement between two others', () => as('kiran', `insert into settlements(trip_id,from_user,to_user,amount,currency,idempotency_key,created_by) values ('${T}','${ids.sam}','${ids.ravi}',1,'THB','${key.replace(/1$/, '2')}','${ids.kiran}')`))
 
