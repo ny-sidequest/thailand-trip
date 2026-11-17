@@ -14,8 +14,8 @@ _Last updated: 2026-11-17_
 - [x] 8b. Storage: member avatar upload visible to admin via signed URL (verified live)
 - [ ] 8c. Realtime between two sessions: deferred until Phase 2 admin Edit exists (then a one-click test)
 - [x] 9. Mobile test over LAN: runs on phone; Home not well optimised (user must zoom in/out to see some parts). Accepted for now; logged for the UI polish phase
-- [ ] 10. GitHub Pages deploy + PWA verification
-- [ ] Clean checkpoint commit, then Phase 2
+- [x] 10. GitHub Pages deployed (https://ny-sidequest.github.io/thailand-trip/); CI green; manifest/SW/icons served; phone install, offline shell and deep-link reload confirmed by user
+- [x] Checkpoint tagged `phase-1-verified`; Phase 2 started 2026-11-17 (8c realtime test still pending, will run with admin Edit)
 
 ## Phase 2 scope (agreed 2026-11-17)
 Itinerary day strip + timeline; activity detail page; Directions + per-day multi-stop route links;
