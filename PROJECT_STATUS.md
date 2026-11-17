@@ -99,3 +99,14 @@ activity comment -> earlier commenters on that activity) and ONE feed event per 
 (diagnostic: trigger list null, notifications 0). Lesson: confirm migrations with a diagnostic query.
 **Not in Phase 3 (Phase 7):** add/edit/remove checklist items and deadlines; per-member item drill-down for admin.
 **Known/ideas:** only status changes notify (time/location edits do not); consider widening in a follow-up.
+
+## Phase 4 — Travel Wallet  ⚠️ built, NOT yet verified live (2026-11-17)
+**Done:** `/wallet` Documents (upload, search, category filter, signed-URL preview for images/PDF, open, download,
+replace with version history, edit, soft-delete), per-document visibility (`group` / `private` = uploader only, not
+even admin), Stays + Transport tabs (all booking fields, Maps links, linked documents, admin Edit sheet),
+migration `0006` (visibility column, version-safe insert policy, storage rules that follow the documents table,
+upload feed + notification, wider activity-edit notifications: time / location / meeting point).
+**Tests:** unit 24; DB 73 (private-doc isolation incl. storage, version rules, admin limits, notification triggers).
+**Pending:** user applies `0006` in SQL Editor and runs the Phase 4 checks together with Phase 5 (user's choice).
+Phase 4 commit is local only; do NOT push until 0006 is applied (CI deploy would hit a DB without `visibility`).
+**Ideas:** "Save for offline" for tickets (Cache API on the user's device) - not built.

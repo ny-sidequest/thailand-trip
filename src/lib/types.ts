@@ -65,3 +65,21 @@ export interface ChecklistItem {
 export interface AppNotification {
   id: string; type: string; title: string; body: string | null; link: string | null; read_at: string | null; created_at: string
 }
+export interface DocumentRow {
+  id: string; trip_id: string; name: string; category: string; related_date: string | null
+  related_booking_type: 'accommodation' | 'transport' | 'activity' | null; related_booking_id: string | null
+  traveller_id: string | null; storage_path: string; mime_type: string | null; size_bytes: number | null
+  notes: string | null; version: number; replaces_id: string | null; uploaded_by: string; created_at: string
+  deleted_at: string | null; visibility: 'group' | 'private'
+}
+export interface StayFull {
+  id: string; name: string; city: string | null; address: string | null; check_in: string | null; check_out: string | null
+  confirmation_ref: string | null; contact: string | null; checkin_instructions: string | null
+  maps_url: string | null; notes: string | null; status: BookingStatus
+}
+export interface TransportFull {
+  id: string; mode: string; operator: string | null; origin: string; destination: string; travel_date: string | null
+  departure_time: string | null; arrival_time: string | null; time_note: string | null; booking_ref: string | null
+  meeting_point: string | null; luggage_notes: string | null; maps_url: string | null; notes: string | null; status: BookingStatus
+}
+export interface ActivityBookingLite { id: string; name: string; booking_date: string | null }

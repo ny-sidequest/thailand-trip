@@ -13,7 +13,7 @@ await db.exec(`
   create table auth.users (id uuid primary key default gen_random_uuid(), email text);
   create function auth.uid() returns uuid language sql stable as
     $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
-  create table storage.buckets (id text primary key, name text, public boolean, file_size_limit bigint);
+  create table storage.buckets (id text primary key, name text, public boolean, file_size_limit bigint, allowed_mime_types text[]);
   create table storage.objects (id uuid default gen_random_uuid(), bucket_id text, name text, owner uuid);
   alter table storage.objects enable row level security;
   create function storage.foldername(name text) returns text[] language sql immutable as
@@ -30,6 +30,7 @@ await db.exec(read('migrations/0002_rls.sql'))
 await db.exec(read('migrations/0003_storage_realtime.sql'))
 await db.exec(read('migrations/0004_itinerary_events.sql'))
 await db.exec(read('migrations/0005_notifications_checklist.sql'))
+await db.exec(read('migrations/0006_wallet.sql'))
 await db.exec(read('seed.sql'))
 
 const T = '00000000-0000-4000-8000-000000000001'
@@ -235,6 +236,46 @@ await ok('member can mark own notification read, not someone else\'s', async () 
   eq((await as('ravi', `update notifications set read_at=now() where title='x'`)).affectedRows, 1, 'own')
   eq((await as('ravi', `update notifications set read_at=now() where title='y'`)).affectedRows, 0, 'other') })
 await denied('member cannot rewrite notification text', () => as('ravi', `update notifications set title='hacked' where title='x'`))
+
+console.log('Phase 4: wallet')
+let gdoc, pdoc
+await ok('group doc visible to all; upload notifies others + feed', async () => {
+  await db.exec(`delete from notifications where type='document'`)
+  gdoc = (await as('kiran', `insert into documents(trip_id,name,category,storage_path,uploaded_by) values ('${T}','Flight tickets','flight','${T}/g1/tickets.pdf','${ids.kiran}') returning id`)).rows[0].id
+  eq((await as('sam', `select count(*)::int n from documents where id='${gdoc}'`)).rows[0].n, 1, 'sam sees')
+  eq((await db.query(`select count(*)::int n from notifications where type='document'`)).rows[0].n, 4, 'notified')
+  eq((await db.query(`select count(*)::int n from activity_feed where verb='document' and entity_id='${gdoc}'`)).rows[0].n, 1, 'feed') })
+await ok('PRIVATE doc: invisible to members AND admin; no feed/notification', async () => {
+  const before = (await db.query(`select count(*)::int n from notifications where type='document'`)).rows[0].n
+  pdoc = (await as('kiran', `insert into documents(trip_id,name,category,storage_path,uploaded_by,visibility) values ('${T}','My passport','entry','${T}/p1/passport.pdf','${ids.kiran}','private') returning id`)).rows[0].id
+  for (const u of ['sam', 'admin', 'dev']) eq((await as(u, `select count(*)::int n from documents where id='${pdoc}'`)).rows[0].n, 0, u)
+  eq((await as('kiran', `select count(*)::int n from documents where id='${pdoc}'`)).rows[0].n, 1, 'owner')
+  eq((await db.query(`select count(*)::int n from notifications where type='document'`)).rows[0].n, before, 'no notification') })
+await denied('admin cannot edit or delete a private doc', () => as('admin', `update documents set deleted_at=now() where id='${pdoc}'`))
+await denied('admin cannot flip a group doc to private to hide it', () => as('admin', `update documents set visibility='private' where id='${gdoc}'`))
+await ok('admin can soft-delete a group doc; other member cannot', async () => {
+  eq((await as('sam', `update documents set deleted_at=now() where id='${gdoc}'`)).affectedRows, 0, 'sam')
+  eq((await as('admin', `update documents set notes='checked' where id='${gdoc}'`)).affectedRows, 1, 'admin') })
+await denied('member cannot replace (version) someone else\'s doc', () => as('sam', `insert into documents(trip_id,name,category,storage_path,uploaded_by,replaces_id,version) values ('${T}','x','flight','${T}/g2/x.pdf','${ids.sam}','${gdoc}',2)`))
+await ok('owner can add a new version; admin can version a group doc', async () => {
+  await as('kiran', `insert into documents(trip_id,name,category,storage_path,uploaded_by,replaces_id,version) values ('${T}','Flight tickets','flight','${T}/g3/t2.pdf','${ids.kiran}','${gdoc}',2)`)
+  await as('admin', `insert into documents(trip_id,name,category,storage_path,uploaded_by,replaces_id,version) values ('${T}','Flight tickets','flight','${T}/g4/t3.pdf','${ids.admin}','${gdoc}',3)`) })
+await denied('admin cannot version a private doc', () => as('admin', `insert into documents(trip_id,name,category,storage_path,uploaded_by,replaces_id,version) values ('${T}','x','entry','${T}/p2/x.pdf','${ids.admin}','${pdoc}',2)`))
+await denied('traveller must be a trip member', () => as('kiran', `insert into documents(trip_id,name,category,storage_path,uploaded_by,traveller_id) values ('${T}','x','misc','${T}/z/x.pdf','${ids.kiran}','${out}')`))
+await db.exec(`insert into storage.objects(bucket_id,name,owner) values ('documents','${T}/g1/tickets.pdf','${ids.kiran}'),('documents','${T}/p1/passport.pdf','${ids.kiran}')`)
+await ok('storage: group file readable by members, PRIVATE file only by owner', async () => {
+  const n = async (u, path) => (await as(u, `select count(*)::int n from storage.objects where bucket_id='documents' and name='${path}'`)).rows[0].n
+  eq(await n('sam', `${T}/g1/tickets.pdf`), 1, 'sam group'); eq(await n('outsider', `${T}/g1/tickets.pdf`), 0, 'outsider group')
+  eq(await n('kiran', `${T}/p1/passport.pdf`), 1, 'owner private')
+  for (const u of ['sam', 'admin', 'dev', 'outsider']) eq(await n(u, `${T}/p1/passport.pdf`), 0, `${u} private`) })
+await denied('admin cannot delete a private file from storage', () => as('admin', `delete from storage.objects where name='${T}/p1/passport.pdf'`))
+await ok('activity edit of time/location/meeting point notifies others; no-op edit does not', async () => {
+  await db.exec(`delete from notifications where type='booking'`)
+  await as('admin', `update itinerary_activities set start_time='09:00', meeting_point='Lobby' where title like 'Phi Phi%'`)
+  const r = await db.query(`select title, body from notifications where type='booking'`)
+  eq(r.rows.length, 4, 'rows'); console.log('     ', r.rows[0].title, '|', r.rows[0].body)
+  await as('admin', `update itinerary_activities set booking_ref='B1' where title like 'Phi Phi%'`)
+  eq((await db.query(`select count(*)::int n from notifications where type='booking'`)).rows[0].n, 4, 'unchanged') })
 
 console.log('Storage policies')
 await db.exec(`insert into storage.objects(bucket_id,name,owner) values

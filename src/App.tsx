@@ -13,10 +13,11 @@ import ComingSoon from '@/pages/ComingSoon'
 import Checklist from '@/pages/Checklist'
 import Notifications from '@/pages/Notifications'
 import { NotificationsProvider } from '@/context/NotificationsContext'
+import Wallet from '@/pages/Wallet'
 import Itinerary from '@/pages/Itinerary'
 import ActivityDetail from '@/pages/ActivityDetail'
 import SetupNotice from '@/pages/SetupNotice'
-import { Wallet, Receipt, MessagesSquare, ShieldCheck } from 'lucide-react'
+import { Receipt, MessagesSquare, ShieldCheck } from 'lucide-react'
 
 function Protected() {
   const { session, loading } = useAuth()
@@ -53,7 +54,7 @@ export default function App() {
             <Route path="itinerary/activity/:id" element={<ActivityDetail />} />
             <Route path="checklist" element={<Checklist />} />
             <Route path="notifications" element={<Notifications />} />
-            <Route path="wallet/*" element={<ComingSoon title="Travel Wallet" phase={4} icon={<Wallet className="h-8 w-8" />} />} />
+            <Route path="wallet/*" element={<Wallet />} />
             <Route path="expenses/*" element={<ComingSoon title="Expenses" phase={5} icon={<Receipt className="h-8 w-8" />} />} />
             <Route path="feed" element={<ComingSoon title="Social Feed" phase={6} icon={<MessagesSquare className="h-8 w-8" />} />} />
             <Route path="group" element={<Group />} />
