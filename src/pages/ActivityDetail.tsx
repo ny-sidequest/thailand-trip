@@ -2,7 +2,9 @@ import { useState, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { AlertCircle, ArrowLeft, Banknote, Clock, Hash, MapPin, Navigation, Pencil, Route, Timer, Truck, Users } from 'lucide-react'
 import { supabase, unwrap } from '@/lib/supabase'
+import { useAuth } from '@/context/AuthContext'
 import { useTrip } from '@/context/TripContext'
+import { readCache } from '@/lib/offlineCache'
 import { useAsync } from '@/hooks/useAsync'
 import { useRealtime } from '@/hooks/useRealtime'
 import { Button, Card, ErrorState, Skeleton, StatusBadge } from '@/components/ui'
@@ -25,18 +27,28 @@ function Row({ icon, label, children }: { icon: ReactNode; label: string; childr
 
 export default function ActivityDetail() {
   const { id } = useParams()
+  const { session } = useAuth()
   const { trip, isAdmin } = useTrip()
   const [editing, setEditing] = useState(false)
   const tripId = trip!.id
 
   const q = useAsync(async () => {
-    const a = unwrap(await supabase.from('itinerary_activities').select('*').eq('id', id!).eq('trip_id', tripId).is('deleted_at', null).maybeSingle()) as Activity | null
-    if (!a) return null
-    const [day, bk] = await Promise.all([
-      supabase.from('itinerary_days').select('*').eq('id', a.day_id).single(),
-      supabase.from('activity_bookings').select('id,name,operator,booking_ref,status,meeting_point,pickup_info,contact,notes').eq('activity_id', a.id).is('deleted_at', null),
-    ])
-    return { a, day: unwrap(day) as Day, bookings: unwrap(bk) as ActivityBooking[] }
+    try {
+      const a = unwrap(await supabase.from('itinerary_activities').select('*').eq('id', id!).eq('trip_id', tripId).is('deleted_at', null).maybeSingle()) as Activity | null
+      if (!a) return null
+      const [day, bk] = await Promise.all([
+        supabase.from('itinerary_days').select('*').eq('id', a.day_id).single(),
+        supabase.from('activity_bookings').select('id,name,operator,booking_ref,status,meeting_point,pickup_info,contact,notes').eq('activity_id', a.id).is('deleted_at', null),
+      ])
+      return { a, day: unwrap(day) as Day, bookings: unwrap(bk) as ActivityBooking[] }
+    } catch (e) {
+      // offline: use the itinerary copy saved on this device (no comments or linked bookings)
+      const hit = readCache<{ days: Day[]; acts: Activity[] }>(session!.user.id, tripId, 'itinerary')
+      const a = hit?.data.acts.find((x) => x.id === id)
+      const day = a && hit?.data.days.find((d) => d.id === a.day_id)
+      if (a && day) return { a, day, bookings: [] as ActivityBooking[] }
+      throw e
+    }
   }, [id, tripId])
   useRealtime(tripId, ['itinerary_activities', 'activity_bookings'], q.reload)
 

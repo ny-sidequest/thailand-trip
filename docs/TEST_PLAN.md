@@ -63,5 +63,14 @@ Before testing, confirm every migration up to the latest one has been applied (s
 13. Needs attention on the Admin home lists pending/needs-verification items and links to them.
 14. As the member, try the admin pages' actions via the app: no buttons; direct database writes are refused (covered by DB tests).
 
-## Later phases
-Phase 8 (security audit, PWA install, offline, performance, final docs) checks are appended when built.
+## Phase 8: Hardening, offline, PWA  (migration 0010; redeploy admin-users)
+1. Record a payment from Suggested settlements (Phase 5 step 10) still works; removing it works; replaying it never double-records.
+2. Add a THB expense with an absurd rate (e.g. 100): refused with a clear message showing the allowed range.
+3. Upload a document, switch it to "Only me": the other member can no longer open it. Upload a receipt and open it as the other member.
+4. Tick and untick a checklist item as one member: the other member's group-progress bars update live (no item details shown).
+5. Offline: open the Itinerary once online, then switch the phone to airplane mode and reopen the installed app: the itinerary and any
+   activity open from the saved copy with an offline banner; other sections say they need a connection.
+6. Sign out, then go offline: the saved itinerary copy is gone (cleared on sign-out).
+7. Install to the home screen (iOS: Share → Add to Home Screen; Android: Install app); it opens full-screen with the icon.
+8. Auth → Providers → Email: "Secure password change" is ON; run `node scripts/rotate-emails.mjs`; everyone can still sign in with their username.
+9. Mobile: Home, Itinerary, Expenses, Feed fit the screen without zooming or sideways scrolling.

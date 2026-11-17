@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react'
+import { lazy, type ReactElement } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider, useAuth } from '@/context/AuthContext'
 import { TripProvider, useTrip } from '@/context/TripContext'
@@ -7,17 +7,17 @@ import AppShell from '@/components/layout/AppShell'
 import { Spinner } from '@/components/ui'
 import Login from '@/pages/Login'
 import Home from '@/pages/Home'
-import Group from '@/pages/Group'
-import Profile from '@/pages/Profile'
-import Checklist from '@/pages/Checklist'
-import Notifications from '@/pages/Notifications'
+const Group = lazy(() => import('@/pages/Group'))
+const Profile = lazy(() => import('@/pages/Profile'))
+const Checklist = lazy(() => import('@/pages/Checklist'))
+const Notifications = lazy(() => import('@/pages/Notifications'))
 import { NotificationsProvider } from '@/context/NotificationsContext'
-import Wallet from '@/pages/Wallet'
-import Expenses from '@/pages/Expenses'
-import Feed from '@/pages/Feed'
-import Admin from '@/pages/Admin'
-import Itinerary from '@/pages/Itinerary'
-import ActivityDetail from '@/pages/ActivityDetail'
+const Wallet = lazy(() => import('@/pages/Wallet'))
+const Expenses = lazy(() => import('@/pages/Expenses'))
+const Feed = lazy(() => import('@/pages/Feed'))
+const Admin = lazy(() => import('@/pages/Admin'))
+const Itinerary = lazy(() => import('@/pages/Itinerary'))
+const ActivityDetail = lazy(() => import('@/pages/ActivityDetail'))
 import SetupNotice from '@/pages/SetupNotice'
 
 function Protected() {

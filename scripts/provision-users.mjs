@@ -5,7 +5,7 @@
 // Random passwords are printed ONCE. Share each privately; users change them in Profile.
 import { createClient } from '@supabase/supabase-js'
 import { readFileSync } from 'node:fs'
-import { randomBytes } from 'node:crypto'
+import { randomBytes, randomUUID } from 'node:crypto'
 
 const url = process.env.SUPABASE_URL, key = process.env.SUPABASE_SERVICE_ROLE_KEY
 if (!url || !key) { console.error('Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in your shell.'); process.exit(1) }
@@ -27,7 +27,7 @@ for (const u of cfg.users) {
   if (exists.data) { rows.push({ username, status: 'already exists (skipped)', password: '-' }); continue }
   const password = genPw()
   const { data, error } = await sb.auth.admin.createUser({
-    email: u.email || `${username}@thailand-trip.example.com`, password, email_confirm: true })
+    email: u.email || `u-${randomUUID()}@thailand-trip.example.com`, password, email_confirm: true })
   if (error) { rows.push({ username, status: `ERROR ${error.message}`, password: '-' }); continue }
   const p = await sb.from('profiles').insert({ id: data.user.id, username, display_name: u.display_name })
   const m = p.error ? p : await sb.from('trip_members').insert({ trip_id: trip.id, user_id: data.user.id, role: u.role === 'admin' ? 'admin' : 'member' })

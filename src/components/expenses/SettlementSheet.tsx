@@ -45,13 +45,13 @@ export default function SettlementSheet({ preset, existing, onClose, onDone }: {
     const dup = existing.find((s) => s.from_user === from && s.to_user === to && s.amount === amount && s.currency === currency && new Date(s.created_at).getTime() > dayAgo)
     if (dup && !confirm('A payment with the same people and amount was already recorded in the last 24 hours. Record it again?')) return
     setBusy(true); setErr(null)
-    const { error } = await supabase.from('settlements').insert({
-      trip_id: trip!.id, from_user: from, to_user: to, amount, currency, fx_rate_to_base: rate, note: note.trim() || null,
-      settled_on: date, idempotency_key: key.current, created_by: uid,
+    const { error } = await supabase.rpc('record_settlement', {
+      p_trip: trip!.id, p_from: from, p_to: to, p_amount: amount, p_currency: currency, p_rate: currency === base ? 1 : rate,
+      p_note: note.trim() || null, p_date: date, p_key: key.current,
     })
     setBusy(false)
-    if (error && error.code !== '23505') return setErr(error.message)
-    done.current = true   // 23505 = this exact submission already went through
+    if (error) return setErr(error.message)   // replays of the same key succeed server-side, so no special case is needed
+    done.current = true
     onDone(); onClose()
   }
 

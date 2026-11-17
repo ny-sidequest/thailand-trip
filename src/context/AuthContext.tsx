@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { supabase, usernameLogin } from '@/lib/supabase'
+import { clearAllCaches } from '@/lib/offlineCache'
 import type { Profile } from '@/lib/types'
 
 interface AuthState {
@@ -51,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.auth.setSession(t)
     if (error) throw new Error(error.message)
   }, [])
-  const signOut = useCallback(async () => { await supabase.auth.signOut() }, [])
+  const signOut = useCallback(async () => { clearAllCaches(); await supabase.auth.signOut() }, [])
   const refreshProfile = useCallback(() => loadProfile(session?.user.id), [loadProfile, session])
 
   const value = useMemo(() => ({ session, profile, loading, signIn, signOut, refreshProfile }),

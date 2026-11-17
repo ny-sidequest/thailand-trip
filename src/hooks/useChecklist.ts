@@ -23,6 +23,6 @@ export function useChecklist(tripId: string) {
         .map((p): Progress => ({ user_id: p.user_id, completed: Number(p.completed), total: Number(p.total) })),
     }
   }, [tripId, uid])
-  useRealtime(tripId, ['checklist_items', 'checklist_completions'], q.reload)
+  useRealtime(tripId, ['checklist_items', 'checklist_pings'], q.reload)
   return q
 }

@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { CalendarDays, CheckSquare, Home, LogOut, MessagesSquare, MoreHorizontal, Receipt, ShieldCheck, UserCircle, Users, Wallet, X } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { useTrip } from '@/context/TripContext'
-import { Avatar, cx } from '@/components/ui'
+import { Avatar, Spinner, cx } from '@/components/ui'
 import NotificationBell from '@/components/NotificationBell'
+import OfflineBanner from './OfflineBanner'
 
 const MAIN = [
   { to: '/', label: 'Home', icon: Home, end: true },
@@ -65,8 +66,9 @@ export default function AppShell() {
         </div>
       </header>
 
+      <OfflineBanner />
       <main className="mx-auto max-w-5xl px-4 py-5 pb-28 lg:px-8 lg:py-8 lg:pb-10 animate-rise" key={loc.pathname}>
-        <Outlet />
+        <Suspense fallback={<Spinner />}><Outlet /></Suspense>
       </main>
 
       {/* Mobile bottom nav */}

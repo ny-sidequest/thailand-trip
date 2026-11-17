@@ -34,6 +34,7 @@ await db.exec(read('migrations/0006_wallet.sql'))
 await db.exec(read('migrations/0007_expenses.sql'))
 await db.exec(read('migrations/0008_social.sql'))
 await db.exec(read('migrations/0009_admin.sql'))
+await db.exec(read('migrations/0010_security_hardening.sql'))
 await db.exec(read('seed.sql'))
 
 const T = '00000000-0000-4000-8000-000000000001'
@@ -139,7 +140,7 @@ await ok('base-currency expense forces rate 1', async () => {
   eq(Number((await db.query(`select fx_rate_to_base r from expenses where id='${id}'`)).rows[0].r), 1, 'rate') })
 await ok('other members see it; share holders were notified, not the payer', async () => {
   eq((await as('kiran', `select count(*)::int n from expenses where id='${e1}'`)).rows[0].n, 1, 'visible')
-  const n = await db.query(`select user_id from notifications where type='expense' and title like '%Dinner%' and body like 'Your share: THB 500.00'`)
+  const n = await db.query(`select user_id from notifications where type='expense' and title like '%Dinner%' and body like 'Your share: THB 500.00%'`)
   eq(n.rows.length, 1, 'notified'); eq(n.rows[0].user_id, ids.sam, 'recipient') })
 await denied('direct INSERT into expenses is blocked (must use save_expense)', () => as('ravi', `insert into expenses(trip_id,description,amount,currency,amount_base,payer_id,created_by) values ('${T}','x',1,'INR',1,'${ids.ravi}','${ids.ravi}')`))
 await denied('direct UPDATE of an expense is blocked', () => as('ravi', `update expenses set amount=1 where id='${e1}'`))
@@ -184,12 +185,14 @@ await denied('anon / outsider cannot call save_expense', () => save('outsider', 
 
 console.log('Settlements')
 const key = '30000000-0000-4000-8000-000000000001'
-await ok('member records settlement', async () => as('sam', `insert into settlements(trip_id,from_user,to_user,amount,currency,idempotency_key,created_by) values ('${T}','${ids.sam}','${ids.ravi}',500,'THB','${key}','${ids.sam}')`))
+await ok('member records settlement via record_settlement', async () => as('sam', `select record_settlement('${T}','${ids.sam}','${ids.ravi}',500,'THB',2.5,null,null,'${key}')`))
 await ok('settlement writes feed + notifies the other party only', async () => {
   eq((await db.query(`select count(*)::int n from activity_feed where verb='settlement'`)).rows[0].n, 1, 'feed')
   const n = await db.query(`select user_id from notifications where type='settlement'`); eq(n.rows.length, 1, 'rows'); eq(n.rows[0].user_id, ids.ravi, 'recipient') })
-await denied('duplicate settlement (same idempotency key) rejected', () => as('sam', `insert into settlements(trip_id,from_user,to_user,amount,currency,idempotency_key,created_by) values ('${T}','${ids.sam}','${ids.ravi}',500,'THB','${key}','${ids.sam}')`))
-await denied('cannot record settlement between two others', () => as('kiran', `insert into settlements(trip_id,from_user,to_user,amount,currency,idempotency_key,created_by) values ('${T}','${ids.sam}','${ids.ravi}',1,'THB','${key.replace(/1$/, '2')}','${ids.kiran}')`))
+await ok('replaying the same idempotency key is safe: still exactly one row', async () => {
+  await as('sam', `select record_settlement('${T}','${ids.sam}','${ids.ravi}',500,'THB',2.5,null,null,'${key}')`)
+  eq((await db.query(`select count(*)::int n from settlements where idempotency_key='${key}'`)).rows[0].n, 1, 'rows') })
+await denied('cannot record settlement between two others', () => as('kiran', `select record_settlement('${T}','${ids.sam}','${ids.ravi}',1,'THB',2.5,null,null,'${key.replace(/1$/, '2')}')`))
 
 console.log('Social')
 await ok('member posts to feed as self', async () => as('dev', `insert into activity_feed(trip_id,actor_id,verb,summary,body) values ('${T}','${ids.dev}','post','dev posted','hello')`))
@@ -230,6 +233,7 @@ await ok('admin closes poll; voting then rejected', async () => {
   await denied('vote after close', () => as('sam', `insert into poll_votes(poll_id,option_id,user_id,trip_id) values ('${poll}','${o1}','${ids.sam}','${T}')`)) })
 await denied('member cannot close poll', () => as('sam', `update polls set closed_at=now()`))
 
+const DID = { a: 'aaaaaaaa-0000-4000-8000-00000000000a', g1: 'aaaaaaaa-0000-4000-8000-000000000001', p1: 'aaaaaaaa-0000-4000-8000-000000000002', g2: 'aaaaaaaa-0000-4000-8000-000000000003', g3: 'aaaaaaaa-0000-4000-8000-000000000004', g4: 'aaaaaaaa-0000-4000-8000-000000000005', p2: 'aaaaaaaa-0000-4000-8000-000000000006', z: 'aaaaaaaa-0000-4000-8000-000000000007' }
 console.log('Notifications / documents / announcements')
 await db.exec(`insert into notifications(trip_id,user_id,type,title) values ('${T}','${ids.ravi}','x','for ravi')`)
 await ok('notifications are private', async () => {
@@ -238,7 +242,7 @@ await ok('notifications are private', async () => {
   eq((await as('sam', `select count(*)::int n from notifications where user_id <> '${ids.sam}'`)).rows[0].n, 0, 'sam sees others') })
 await denied('member cannot forge notification', () => as('sam', `insert into notifications(trip_id,user_id,type,title) values ('${T}','${ids.ravi}','x','fake')`))
 await ok('member uploads document record; other member cannot edit it', async () => {
-  const d = await as('kiran', `insert into documents(trip_id,name,category,storage_path,uploaded_by) values ('${T}','Hotel','hotel','${T}/a.pdf','${ids.kiran}') returning id`)
+  const d = await as('kiran', `insert into documents(id,trip_id,name,category,storage_path,uploaded_by) values ('${DID.a}','${T}','Hotel','hotel','${T}/${DID.a}/a.pdf','${ids.kiran}') returning id`)
   eq((await as('sam', `select count(*)::int n from documents`)).rows[0].n, 1, 'visible')
   eq((await as('sam', `update documents set name='x' where id='${d.rows[0].id}'`)).affectedRows, 0, 'sam edit')
   eq((await as('admin', `update documents set notes='ok' where id='${d.rows[0].id}'`)).affectedRows, 1, 'admin edit') })
@@ -283,13 +287,13 @@ console.log('Phase 4: wallet')
 let gdoc, pdoc
 await ok('group doc visible to all; upload notifies others + feed', async () => {
   await db.exec(`delete from notifications where type='document'`)
-  gdoc = (await as('kiran', `insert into documents(trip_id,name,category,storage_path,uploaded_by) values ('${T}','Flight tickets','flight','${T}/g1/tickets.pdf','${ids.kiran}') returning id`)).rows[0].id
+  gdoc = (await as('kiran', `insert into documents(id,trip_id,name,category,storage_path,uploaded_by) values ('${DID.g1}','${T}','Flight tickets','flight','${T}/${DID.g1}/tickets.pdf','${ids.kiran}') returning id`)).rows[0].id
   eq((await as('sam', `select count(*)::int n from documents where id='${gdoc}'`)).rows[0].n, 1, 'sam sees')
   eq((await db.query(`select count(*)::int n from notifications where type='document'`)).rows[0].n, 4, 'notified')
   eq((await db.query(`select count(*)::int n from activity_feed where verb='document' and entity_id='${gdoc}'`)).rows[0].n, 1, 'feed') })
 await ok('PRIVATE doc: invisible to members AND admin; no feed/notification', async () => {
   const before = (await db.query(`select count(*)::int n from notifications where type='document'`)).rows[0].n
-  pdoc = (await as('kiran', `insert into documents(trip_id,name,category,storage_path,uploaded_by,visibility) values ('${T}','My passport','entry','${T}/p1/passport.pdf','${ids.kiran}','private') returning id`)).rows[0].id
+  pdoc = (await as('kiran', `insert into documents(id,trip_id,name,category,storage_path,uploaded_by,visibility) values ('${DID.p1}','${T}','My passport','entry','${T}/${DID.p1}/passport.pdf','${ids.kiran}','private') returning id`)).rows[0].id
   for (const u of ['sam', 'admin', 'dev']) eq((await as(u, `select count(*)::int n from documents where id='${pdoc}'`)).rows[0].n, 0, u)
   eq((await as('kiran', `select count(*)::int n from documents where id='${pdoc}'`)).rows[0].n, 1, 'owner')
   eq((await db.query(`select count(*)::int n from notifications where type='document'`)).rows[0].n, before, 'no notification') })
@@ -298,19 +302,19 @@ await denied('admin cannot flip a group doc to private to hide it', () => as('ad
 await ok('admin can soft-delete a group doc; other member cannot', async () => {
   eq((await as('sam', `update documents set deleted_at=now() where id='${gdoc}'`)).affectedRows, 0, 'sam')
   eq((await as('admin', `update documents set notes='checked' where id='${gdoc}'`)).affectedRows, 1, 'admin') })
-await denied('member cannot replace (version) someone else\'s doc', () => as('sam', `insert into documents(trip_id,name,category,storage_path,uploaded_by,replaces_id,version) values ('${T}','x','flight','${T}/g2/x.pdf','${ids.sam}','${gdoc}',2)`))
+await denied('member cannot replace (version) someone else\'s doc', () => as('sam', `insert into documents(id,trip_id,name,category,storage_path,uploaded_by,replaces_id,version) values ('${DID.g2}','${T}','x','flight','${T}/${DID.g2}/x.pdf','${ids.sam}','${gdoc}',2)`))
 await ok('owner can add a new version; admin can version a group doc', async () => {
-  await as('kiran', `insert into documents(trip_id,name,category,storage_path,uploaded_by,replaces_id,version) values ('${T}','Flight tickets','flight','${T}/g3/t2.pdf','${ids.kiran}','${gdoc}',2)`)
-  await as('admin', `insert into documents(trip_id,name,category,storage_path,uploaded_by,replaces_id,version) values ('${T}','Flight tickets','flight','${T}/g4/t3.pdf','${ids.admin}','${gdoc}',3)`) })
-await denied('admin cannot version a private doc', () => as('admin', `insert into documents(trip_id,name,category,storage_path,uploaded_by,replaces_id,version) values ('${T}','x','entry','${T}/p2/x.pdf','${ids.admin}','${pdoc}',2)`))
-await denied('traveller must be a trip member', () => as('kiran', `insert into documents(trip_id,name,category,storage_path,uploaded_by,traveller_id) values ('${T}','x','misc','${T}/z/x.pdf','${ids.kiran}','${out}')`))
-await db.exec(`insert into storage.objects(bucket_id,name,owner) values ('documents','${T}/g1/tickets.pdf','${ids.kiran}'),('documents','${T}/p1/passport.pdf','${ids.kiran}')`)
+  await as('kiran', `insert into documents(id,trip_id,name,category,storage_path,uploaded_by,replaces_id,version) values ('${DID.g3}','${T}','Flight tickets','flight','${T}/${DID.g3}/t2.pdf','${ids.kiran}','${gdoc}',2)`)
+  await as('admin', `insert into documents(id,trip_id,name,category,storage_path,uploaded_by,replaces_id,version) values ('${DID.g4}','${T}','Flight tickets','flight','${T}/${DID.g4}/t3.pdf','${ids.admin}','${gdoc}',3)`) })
+await denied('admin cannot version a private doc', () => as('admin', `insert into documents(id,trip_id,name,category,storage_path,uploaded_by,replaces_id,version) values ('${DID.p2}','${T}','x','entry','${T}/${DID.p2}/x.pdf','${ids.admin}','${pdoc}',2)`))
+await denied('traveller must be a trip member', () => as('kiran', `insert into documents(id,trip_id,name,category,storage_path,uploaded_by,traveller_id) values ('${DID.z}','${T}','x','misc','${T}/${DID.z}/x.pdf','${ids.kiran}','${out}')`))
+await db.exec(`insert into storage.objects(bucket_id,name,owner) values ('documents','${T}/${DID.g1}/tickets.pdf','${ids.kiran}'),('documents','${T}/${DID.p1}/passport.pdf','${ids.kiran}')`)
 await ok('storage: group file readable by members, PRIVATE file only by owner', async () => {
   const n = async (u, path) => (await as(u, `select count(*)::int n from storage.objects where bucket_id='documents' and name='${path}'`)).rows[0].n
-  eq(await n('sam', `${T}/g1/tickets.pdf`), 1, 'sam group'); eq(await n('outsider', `${T}/g1/tickets.pdf`), 0, 'outsider group')
-  eq(await n('kiran', `${T}/p1/passport.pdf`), 1, 'owner private')
-  for (const u of ['sam', 'admin', 'dev', 'outsider']) eq(await n(u, `${T}/p1/passport.pdf`), 0, `${u} private`) })
-await denied('admin cannot delete a private file from storage', () => as('admin', `delete from storage.objects where name='${T}/p1/passport.pdf'`))
+  eq(await n('sam', `${T}/${DID.g1}/tickets.pdf`), 1, 'sam group'); eq(await n('outsider', `${T}/${DID.g1}/tickets.pdf`), 0, 'outsider group')
+  eq(await n('kiran', `${T}/${DID.p1}/passport.pdf`), 1, 'owner private')
+  for (const u of ['sam', 'admin', 'dev', 'outsider']) eq(await n(u, `${T}/${DID.p1}/passport.pdf`), 0, `${u} private`) })
+await denied('admin cannot delete a private file from storage', () => as('admin', `delete from storage.objects where name='${T}/${DID.p1}/passport.pdf'`))
 await ok('activity edit of time/location/meeting point notifies others; no-op edit does not', async () => {
   await db.exec(`delete from notifications where type='booking'`)
   await as('admin', `update itinerary_activities set start_time='09:00', meeting_point='Lobby' where title like 'Phi Phi%'`)
@@ -411,6 +415,106 @@ await ok('admin can read every member\'s checklist completions; trip settings ar
   eq((await as('admin', `select count(distinct user_id)::int n from checklist_completions`)).rows[0].n >= 1, true, 'admin sees')
   eq((await as('admin', `update trips set default_thb_to_inr=2.7 where id='${T}'`)).affectedRows, 1, 'admin update')
   eq((await as('sam', `update trips set default_thb_to_inr=9 where id='${T}'`)).affectedRows, 0, 'member update') })
+
+console.log('Security regressions (independent audit)')
+const uuid = () => crypto.randomUUID()
+const settle = (user, o = {}) => as(user, `select record_settlement('${T}', $1, $2, $3, $4, $5, $6, $7, $8) as id`,
+  [o.from ?? ids[user], o.to ?? ids.ravi, o.amount ?? 100, o.cur ?? 'INR', o.rate ?? 1, o.note ?? null, o.date ?? '2027-01-03', o.key ?? uuid()])
+let sid
+await denied('S1 direct INSERT into settlements is blocked', () => as('dev', `insert into settlements(trip_id,from_user,to_user,amount,currency,fx_rate_to_base,idempotency_key,created_by) values ('${T}','${ids.dev}','${ids.ravi}',1,'INR',999999,'${uuid()}','${ids.dev}')`))
+await denied('S2 member cannot rewrite own settlement amount / rate / parties', () => as('sam', `update settlements set amount=9999999.99, fx_rate_to_base=999999 where created_by='${ids.sam}'`))
+await ok('S3 record_settlement works; base-currency rate is forced to 1 (rate abuse neutralised)', async () => {
+  sid = (await settle('dev', { amount: 100, cur: 'INR', rate: 999999 })).rows[0].id
+  eq(Number((await db.query(`select fx_rate_to_base r from settlements where id='${sid}'`)).rows[0].r), 1, 'rate') })
+await denied('S4 THB rate far outside the trip default is rejected', () => settle('dev', { cur: 'THB', rate: 999999 }))
+await ok('S4b THB rate near the default is accepted', async () => settle('dev', { cur: 'THB', rate: 2.6, amount: 50 }))
+await ok('S5 same idempotency key replays safely (one row, same id)', async () => {
+  const key = uuid(); const a = (await settle('dev', { key, amount: 7 })).rows[0].id; const b = (await settle('dev', { key, amount: 7 })).rows[0].id
+  eq(a, b, 'same id'); eq((await db.query(`select count(*)::int n from settlements where idempotency_key='${key}'`)).rows[0].n, 1, 'rows') })
+await denied('S6 member cannot record a payment between two other people', () => settle('dev', { from: ids.sam, to: ids.ravi }))
+await denied('S7 absurd amount rejected', () => settle('dev', { amount: 1e12 }))
+await denied('S7b three-decimal amount rejected', () => settle('dev', { amount: 1.005 }))
+await denied('S7c payment to self rejected', () => settle('dev', { from: ids.dev, to: ids.dev }))
+await ok('S8 only the creator or admin can remove a settlement', async () => {
+  await denied('other member', () => as('kiran', `select delete_settlement('${sid}')`))
+  await as('dev', `select delete_settlement('${sid}')`)
+  eq((await db.query(`select deleted_at is not null d from settlements where id='${sid}'`)).rows[0].d, true, 'soft deleted') })
+await denied('E1 expense with an absurd exchange rate is rejected', () => save('ravi', exp({ fx_rate: 100000, splits: split([['ravi', 500], ['sam', 500]]) })))
+await ok('E2 expense notification shows the converted base amount', async () => {
+  await db.exec(`delete from notifications where type='expense'`)
+  await save('ravi', exp({ description: 'Notif check', amount: 100, fx_rate: 2.5, splits: split([['ravi', 50], ['sam', 50]]) }))
+  const b = (await db.query(`select body from notifications where type='expense'`)).rows[0].body
+  if (!/INR 125\.00/.test(b)) throw new Error('base amount missing: ' + b) })
+
+// --- storage pointer forgery (audit #3) ---
+const kdoc = uuid(); const kpath = `${T}/${kdoc}/passport.pdf`
+await as('kiran', `insert into documents(id,trip_id,name,category,storage_path,uploaded_by,visibility) values ('${kdoc}','${T}','Kiran passport','entry','${kpath}','${ids.kiran}','private')`)
+await db.exec(`insert into storage.objects(bucket_id,name,owner) values ('documents','${kpath}','${ids.kiran}')`)
+const forgedId = uuid()
+await denied('D1 member cannot create a document row pointing at someone else\'s private file', () => as('sam', `insert into documents(id,trip_id,name,category,storage_path,uploaded_by) values ('${forgedId}','${T}','innocent','misc','${kpath}','${ids.sam}')`))
+await denied('D1b ...nor point a path outside this document\'s own folder', () => as('sam', `insert into documents(id,trip_id,name,category,storage_path,uploaded_by) values ('${uuid()}','${T}','x','misc','${T}/${uuid()}/x.pdf','${ids.sam}')`))
+await ok('D2 document storage_path is immutable after creation', async () => {
+  const id = uuid(); await as('sam', `insert into documents(id,trip_id,name,category,storage_path,uploaded_by) values ('${id}','${T}','mine','misc','${T}/${id}/a.pdf','${ids.sam}')`)
+  await denied('repoint', () => as('sam', `update documents set storage_path='${kpath}' where id='${id}'`)) })
+await ok('D3 even a forged row (inserted behind RLS) cannot expose a private object: storage checks the object owner', async () => {
+  const id = uuid()
+  await db.exec(`alter table documents disable trigger trg_documents_path`)
+  await db.exec(`insert into documents(id,trip_id,name,category,storage_path,uploaded_by,visibility) values ('${id}','${T}','forged','misc','${kpath}','${ids.sam}','group')`)
+  await db.exec(`alter table documents enable trigger trg_documents_path`)
+  eq((await as('sam', `select count(*)::int n from storage.objects where name='${kpath}'`)).rows[0].n, 0, 'sam reads')
+  eq((await as('admin', `select count(*)::int n from storage.objects where name='${kpath}'`)).rows[0].n, 0, 'admin reads')
+  await db.exec(`delete from documents where id='${id}'`) })
+await denied('D4 admin cannot delete a private file even with a forged pointer row', async () => {
+  const id = uuid(); await db.exec(`alter table documents disable trigger trg_documents_path`)
+  await db.exec(`insert into documents(id,trip_id,name,category,storage_path,uploaded_by,visibility) values ('${id}','${T}','forged2','misc','${kpath}','${ids.admin}','group')`)
+  await db.exec(`alter table documents enable trigger trg_documents_path`)
+  try { return await as('admin', `delete from storage.objects where name='${kpath}'`) } finally { await db.exec(`delete from documents where id='${id}'`) } })
+await denied('R1 expense receipt must live in the expense\'s own folder (cannot point at another receipt)', async () => {
+  const other = uuid(); await db.exec(`insert into storage.objects(bucket_id,name,owner) values ('receipts','${T}/${other}/r.jpg','${ids.kiran}')`)
+  return save('sam', exp({ payer_id: ids.sam, receipt_path: `${T}/${other}/r.jpg`, splits: split([['sam', 500], ['dev', 500]]) })) })
+await ok('R2 a correctly-placed receipt works; receipt object is readable by members, a stranger\'s forged row is not enough', async () => {
+  const eid = uuid(); const rp = `${T}/${eid}/r.jpg`
+  await db.exec(`insert into storage.objects(bucket_id,name,owner) values ('receipts','${rp}','${ids.ravi}')`)
+  await save('ravi', exp({ receipt_path: rp }), eid)
+  eq((await as('sam', `select count(*)::int n from storage.objects where name='${rp}'`)).rows[0].n, 1, 'member reads receipt')
+  eq((await as('outsider', `select count(*)::int n from storage.objects where name='${rp}'`)).rows[0].n, 0, 'outsider') })
+
+// --- feed / comments column hardening (audit #6) ---
+await denied('F1 member cannot rewrite the verb/summary of a feed event they own', () => as('ravi', `update activity_feed set verb='settlement', summary='Sam paid Ravi INR 50,000.00' where actor_id='${ids.ravi}'`))
+await ok('F1b ...but can still soft-delete their own post', async () => {
+  const id = (await as('dev', `insert into activity_feed(trip_id,actor_id,verb,summary,body) values ('${T}','${ids.dev}','post','dev posted','temp') returning id`)).rows[0].id
+  eq((await as('dev', `update activity_feed set deleted_at=now() where id='${id}'`)).affectedRows, 1, 'deleted') })
+await denied('C1 comment author cannot move a comment to another target', () => as('sam', `update comments set target_type='feed', target_id=gen_random_uuid() where author_id='${ids.sam}'`))
+await ok('C1b ...but can edit the body', async () => eq((await as('sam', `update comments set body='edited' where author_id='${ids.sam}' and target_type='activity'`)).affectedRows >= 1, true, 'edited'))
+
+// --- helper functions / oracle (audit #7) ---
+await ok('O1 anon cannot call the membership helpers (no oracle)', async () => {
+  await db.exec('set role anon'); let blocked = 0
+  for (const q of [`select is_member_of('${T}','${ids.ravi}')`, `select is_trip_member('${T}')`, `select shares_trip_with('${ids.ravi}')`]) { try { await db.query(q) } catch { blocked++ } }
+  await db.exec('reset role'); eq(blocked, 3, 'blocked') })
+await ok('O2 authenticated members still work normally (RLS depends on the helpers)', async () => eq((await as('sam', 'select count(*)::int n from itinerary_days')).rows[0].n > 0, true, 'reads'))
+
+// --- realtime DELETE leak on checklist completions ---
+await ok('P1 checklist completions are NOT published to realtime (DELETE events bypass RLS); a content-free ping is', async () => {
+  const pub = (await db.query(`select tablename from pg_publication_tables where pubname='supabase_realtime'`)).rows.map((r) => r.tablename)
+  if (pub.includes('checklist_completions')) throw new Error('checklist_completions still published')
+  if (!pub.includes('checklist_pings')) throw new Error('checklist_pings not published') })
+await ok('P2 ticking / unticking writes a ping that carries no item or user', async () => {
+  const it = (await db.query(`select id from checklist_items where category='Packing' limit 1`)).rows[0].id
+  const n0 = (await db.query(`select count(*)::int n from checklist_pings`)).rows[0].n
+  await as('kiran', `insert into checklist_completions(item_id,user_id,trip_id) values ($1,'${ids.kiran}','${T}')`, [it])
+  await as('kiran', `delete from checklist_completions where item_id=$1 and user_id='${ids.kiran}'`, [it])
+  eq((await db.query(`select count(*)::int n from checklist_pings`)).rows[0].n, n0 + 2, 'pings')
+  const cols = (await db.query(`select column_name from information_schema.columns where table_name='checklist_pings'`)).rows.map((r) => r.column_name).sort().join()
+  eq(cols, 'created_at,id,trip_id', 'columns')
+  eq((await as('sam', `select count(*)::int n from checklist_pings`)).rows[0].n >= 2, true, 'members read')
+  await denied('member cannot forge pings', () => as('sam', `insert into checklist_pings(trip_id) values ('${T}')`)) })
+await ok('M1 photo / avatar buckets restrict MIME types', async () => {
+  for (const b of ['photos', 'avatars']) { const r = (await db.query(`select allowed_mime_types a from storage.buckets where id='${b}'`)).rows[0].a; if (!r || !r.includes('image/jpeg') || r.includes('text/html')) throw new Error(b + ' not restricted') } })
+
+await denied('U1 uploader cannot rewrite replaces_id to hide someone else\'s document', async () => {
+  const id = uuid(); await as('sam', `insert into documents(id,trip_id,name,category,storage_path,uploaded_by) values ('${id}','${T}','u1','misc','${T}/${id}/a.pdf','${ids.sam}')`)
+  return as('sam', `update documents set replaces_id='${DID.g1}' where id='${id}'`) })
 
 console.log('Storage policies')
 await db.exec(`insert into storage.objects(bucket_id,name,owner) values

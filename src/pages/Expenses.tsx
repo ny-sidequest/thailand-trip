@@ -61,7 +61,7 @@ export default function Expenses() {
 
   async function undoSettlement(id: string) {
     if (!confirm('Remove this recorded payment? Balances will update.')) return
-    const { error } = await supabase.from('settlements').update({ deleted_at: new Date().toISOString() }).eq('id', id)
+    const { error } = await supabase.rpc('delete_settlement', { p_id: id })
     if (error) alert(error.message); else q.reload()
   }
 

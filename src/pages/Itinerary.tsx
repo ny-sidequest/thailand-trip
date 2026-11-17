@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Bed, Bus, Clock, MapPin, MessageCircle, Navigation, Plane, Ship } from 'lucide-react'
+import { Bed, Bus, Clock, MapPin, MessageCircle, Navigation, Plane, Ship, WifiOff } from 'lucide-react'
 import { useTrip } from '@/context/TripContext'
 import { useItinerary } from '@/hooks/useItinerary'
 import { Card, EmptyState, ErrorState, Skeleton, StatusBadge, cx } from '@/components/ui'
@@ -44,6 +44,7 @@ export default function Itinerary() {
   return (
     <div className="space-y-5">
       <h1 className="font-display text-3xl font-bold text-navy-800">Itinerary</h1>
+      {q.data.savedAt && <p role="status" className="rounded-xl bg-amber-50 border border-amber-200 px-4 py-2 text-amber-900 inline-flex items-center gap-2"><WifiOff className="h-4 w-4" />Offline copy saved {new Date(q.data.savedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</p>}
 
       {/* Day strip */}
       <div ref={stripRef} className="-mx-4 px-4 lg:mx-0 lg:px-0 flex gap-2 overflow-x-auto pb-2 snap-x" role="tablist" aria-label="Days">

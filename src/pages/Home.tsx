@@ -36,7 +36,7 @@ export default function Home() {
     }
   }, [tripId])
 
-  useRealtime(tripId, ['itinerary_activities', 'itinerary_days', 'accommodation_bookings', 'transport_bookings', 'activity_feed', 'checklist_completions', 'checklist_items'], q.reload)
+  useRealtime(tripId, ['itinerary_activities', 'itinerary_days', 'accommodation_bookings', 'transport_bookings', 'activity_feed', 'checklist_pings', 'checklist_items'], q.reload)
 
   const left = daysUntil(trip!.start_date)
   const over = daysUntil(trip!.end_date) < 0

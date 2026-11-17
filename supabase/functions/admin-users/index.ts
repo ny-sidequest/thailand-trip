@@ -47,7 +47,8 @@ Deno.serve(async (req) => {
       if (!/^[a-z0-9_.]{3,30}$/.test(username) || !display || display.length > 60) return json({ error: 'Invalid username or display name' }, 400)
       const password = b.password || genPassword()
       if (password.length < 10) return json({ error: 'Password must be at least 10 characters' }, 400)
-      const email = b.email || `${username}@thailand-trip.example.com`
+      // random local part: the sign-in email is not derivable from the username
+      const email = b.email || `u-${crypto.randomUUID()}@thailand-trip.example.com`
       const { data, error } = await admin.auth.admin.createUser({ email, password, email_confirm: true })
       if (error || !data.user) return json({ error: error?.message ?? 'Could not create user' }, 400)
       const uid = data.user.id
