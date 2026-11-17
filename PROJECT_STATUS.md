@@ -86,3 +86,16 @@ booking ref, reminders); migration `0004` feed events for comments + status chan
 **Tests:** unit 11 (maps + format); DB 55 (adds feed-event triggers); live two-account realtime + permission check by user.
 **Not in Phase 2 (planned Phase 7):** add/delete/reorder activities, edit days, edit bookings, per-day images.
 **Known:** DB migrations are applied manually via SQL Editor (CLI `db push` needs DB password).
+
+## Phase 3 — Personal preparation  ✅ verified live (2026-11-17)
+**Done:** `/checklist` (per-category sections, optimistic tick/untick persisted per user, deadline badges
+overdue/soon/later, next-deadline hint, personal %, group progress via `checklist_progress()` totals only);
+notifications (bell + unread badge in header/sidebar, `/notifications` list, mark read / mark all read, realtime);
+migration `0005`: notification triggers (announcement -> all but author; activity status change -> all but editor;
+activity comment -> earlier commenters on that activity) and ONE feed event per completed checklist category.
+**Tests:** unit 15; DB 61 (triggers, recipients, no self-notify, one event per category, notification privacy).
+**Live-verified by user:** status-change and comment notifications, checklist progress + privacy, feed event.
+**Incident:** first retest failed because migration 0005 had not actually been applied to the live DB
+(diagnostic: trigger list null, notifications 0). Lesson: confirm migrations with a diagnostic query.
+**Not in Phase 3 (Phase 7):** add/edit/remove checklist items and deadlines; per-member item drill-down for admin.
+**Known/ideas:** only status changes notify (time/location edits do not); consider widening in a follow-up.

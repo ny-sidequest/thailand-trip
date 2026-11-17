@@ -29,6 +29,7 @@ await db.exec(read('migrations/0001_schema.sql').replace('create extension if no
 await db.exec(read('migrations/0002_rls.sql'))
 await db.exec(read('migrations/0003_storage_realtime.sql'))
 await db.exec(read('migrations/0004_itinerary_events.sql'))
+await db.exec(read('migrations/0005_notifications_checklist.sql'))
 await db.exec(read('seed.sql'))
 
 const T = '00000000-0000-4000-8000-000000000001'
@@ -189,8 +190,9 @@ await denied('member cannot close poll', () => as('sam', `update polls set close
 console.log('Notifications / documents / announcements')
 await db.exec(`insert into notifications(trip_id,user_id,type,title) values ('${T}','${ids.ravi}','x','for ravi')`)
 await ok('notifications are private', async () => {
-  eq((await as('sam', 'select count(*)::int n from notifications')).rows[0].n, 0, 'sam')
-  eq((await as('ravi', 'select count(*)::int n from notifications')).rows[0].n, 1, 'ravi') })
+  eq((await as('sam', `select count(*)::int n from notifications where title='for ravi'`)).rows[0].n, 0, 'sam')
+  eq((await as('ravi', `select count(*)::int n from notifications where title='for ravi'`)).rows[0].n, 1, 'ravi')
+  eq((await as('sam', `select count(*)::int n from notifications where user_id <> '${ids.sam}'`)).rows[0].n, 0, 'sam sees others') })
 await denied('member cannot forge notification', () => as('sam', `insert into notifications(trip_id,user_id,type,title) values ('${T}','${ids.ravi}','x','fake')`))
 await ok('member uploads document record; other member cannot edit it', async () => {
   const d = await as('kiran', `insert into documents(trip_id,name,category,storage_path,uploaded_by) values ('${T}','Hotel','hotel','${T}/a.pdf','${ids.kiran}') returning id`)
@@ -201,6 +203,38 @@ await ok('announcement read receipts are private', async () => {
   const a = (await as('admin', `insert into announcements(trip_id,title,body,created_by) values ('${T}','Meet 6pm','b','${ids.admin}') returning id`)).rows[0].id
   await as('ravi', `insert into announcement_reads(announcement_id,user_id,trip_id) values ('${a}','${ids.ravi}','${T}')`)
   eq((await as('sam', 'select count(*)::int n from announcement_reads')).rows[0].n, 0, 'sam') })
+
+console.log('Phase 3: notifications + checklist events')
+await ok('announcement notifies everyone except the author', async () => {
+  const before = (await db.query(`select count(*)::int n from notifications where type='announcement'`)).rows[0].n
+  await as('admin', `insert into announcements(trip_id,title,body,importance,created_by) values ('${T}','Bus time changed','Leaves 5pm','urgent','${ids.admin}')`)
+  const r = await db.query(`select user_id, title from notifications where type='announcement' order by created_at desc, id desc limit 4`)
+  const total = (await db.query(`select count(*)::int n from notifications where type='announcement'`)).rows[0].n
+  eq(total - before, 4, 'new notifications'); if (r.rows.some((x) => x.user_id === ids.admin)) throw new Error('author notified')
+  if (!r.rows[0].title.startsWith('Urgent: ')) throw new Error('urgent prefix missing') })
+await ok('status change notifies others, not the editor', async () => {
+  await db.exec(`delete from notifications where type='booking'`)
+  await as('admin', `update itinerary_activities set status='cancelled' where title like '%at Railay'`)
+  const r = await db.query(`select user_id from notifications where type='booking'`)
+  eq(r.rows.length, 4, 'rows'); if (r.rows.some((x) => x.user_id === ids.admin)) throw new Error('editor notified') })
+await ok('comment notifies earlier commenters only', async () => {
+  await db.exec(`delete from notifications where type='comment'`)
+  const a = (await db.query(`select id from itinerary_activities limit 1`)).rows[0].id   // sam commented here earlier
+  await as('kiran', `insert into comments(trip_id,target_type,target_id,author_id,body) values ('${T}','activity','${a}','${ids.kiran}','me too')`)
+  const r = await db.query(`select user_id from notifications where type='comment'`)
+  eq(r.rows.length, 1, 'rows'); eq(r.rows[0].user_id, ids.sam, 'recipient') })
+await ok('finishing a whole category writes ONE feed event (ticks alone do not)', async () => {
+  const items = (await db.query(`select id from checklist_items where category='Before departure'`)).rows
+  const feed0 = (await db.query(`select count(*)::int n from activity_feed where verb='checklist'`)).rows[0].n
+  for (const [i, it] of items.entries()) {
+    await as('dev', `insert into checklist_completions(item_id,user_id,trip_id) values ($1,'${ids.dev}','${T}')`, [it.id])
+    const n = (await db.query(`select count(*)::int n from activity_feed where verb='checklist'`)).rows[0].n
+    eq(n, i === items.length - 1 ? feed0 + 1 : feed0, `feed after tick ${i + 1}`) } })
+await ok('member can mark own notification read, not someone else\'s', async () => {
+  await db.exec(`insert into notifications(trip_id,user_id,type,title) values ('${T}','${ids.ravi}','t','x'),('${T}','${ids.sam}','t','y')`)
+  eq((await as('ravi', `update notifications set read_at=now() where title='x'`)).affectedRows, 1, 'own')
+  eq((await as('ravi', `update notifications set read_at=now() where title='y'`)).affectedRows, 0, 'other') })
+await denied('member cannot rewrite notification text', () => as('ravi', `update notifications set title='hacked' where title='x'`))
 
 console.log('Storage policies')
 await db.exec(`insert into storage.objects(bucket_id,name,owner) values

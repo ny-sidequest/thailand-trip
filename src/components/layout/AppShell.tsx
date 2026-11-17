@@ -4,6 +4,7 @@ import { CalendarDays, CheckSquare, Home, LogOut, MessagesSquare, MoreHorizontal
 import { useAuth } from '@/context/AuthContext'
 import { useTrip } from '@/context/TripContext'
 import { Avatar, cx } from '@/components/ui'
+import NotificationBell from '@/components/NotificationBell'
 
 const MAIN = [
   { to: '/', label: 'Home', icon: Home, end: true },
@@ -48,6 +49,7 @@ export default function AppShell() {
             <Avatar profile={profile} size={36} />
             <span className="truncate font-medium">{profile?.display_name}</span>
           </NavLink>
+          <NotificationBell />
           <button onClick={() => void signOut()} aria-label="Sign out" className="p-2 rounded-lg hover:bg-white/10"><LogOut className="h-5 w-5" /></button>
         </div>
       </aside>
@@ -56,7 +58,10 @@ export default function AppShell() {
       <header className="lg:hidden sticky top-0 z-30 bg-navy-800 text-white safe-top">
         <div className="flex items-center justify-between px-4 h-14">
           <span className="font-display text-lg font-bold">{trip?.name}</span>
-          <NavLink to="/profile" aria-label="My profile"><Avatar profile={profile} size={32} /></NavLink>
+          <div className="flex items-center gap-1">
+            <NotificationBell />
+            <NavLink to="/profile" aria-label="My profile"><Avatar profile={profile} size={32} /></NavLink>
+          </div>
         </div>
       </header>
 

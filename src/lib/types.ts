@@ -59,3 +59,9 @@ export interface ActivityBooking {
   id: string; name: string; operator: string | null; booking_ref: string | null; status: BookingStatus
   meeting_point: string | null; pickup_info: string | null; contact: string | null; notes: string | null
 }
+export interface ChecklistItem {
+  id: string; category: string; title: string; description: string | null; due_date: string | null; sort_order: number
+}
+export interface AppNotification {
+  id: string; type: string; title: string; body: string | null; link: string | null; read_at: string | null; created_at: string
+}
