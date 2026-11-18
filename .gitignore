@@ -9,3 +9,6 @@ supabase/.env
 *.local
 .DS_Store
 *.tsbuildinfo
+
+# third-party design skill (MIT, installed locally; not part of the app)
+.claude/skills/ui-ux-pro-max/
