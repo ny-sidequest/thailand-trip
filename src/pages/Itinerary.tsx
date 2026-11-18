@@ -44,7 +44,7 @@ export default function Itinerary() {
 
   return (
     <div className="space-y-5">
-      <h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">Itinerary</h1>
+      <h1 className="font-display text-[1.75rem] sm:text-[2rem] font-semibold tracking-tight text-navy-800">Itinerary</h1>
       {q.data.savedAt && <p role="status" className="rounded-xl bg-amber-50 border border-amber-200 px-4 py-2 text-amber-900 inline-flex items-center gap-2"><WifiOff className="h-4 w-4" />Offline copy saved {new Date(q.data.savedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</p>}
 
       {/* Day strip */}
@@ -71,11 +71,11 @@ export default function Itinerary() {
             : <CityScene city={selected.city} className="absolute inset-0 h-full w-full" />}
           <div className="absolute inset-0 bg-gradient-to-t from-navy-900/70 via-navy-900/10 to-transparent" />
           <span className="absolute top-3 left-3 glass-chip-dark rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[.14em] text-white">Day {selected.day_number}</span>
-          <p className="absolute bottom-3 left-4 font-display text-2xl font-bold text-white drop-shadow">{selected.city}</p>
+          <p className="absolute bottom-3 left-4 font-display text-2xl font-semibold text-white drop-shadow">{selected.city}</p>
         </div>
         <div className="p-5">
           <p className="text-sm font-semibold text-ember-700">{fmtDateLong(selected.day_date)}{until > 0 ? ` · in ${until} day${until === 1 ? '' : 's'}` : until === 0 ? ' · today' : ''}</p>
-          <h2 className="font-display text-2xl font-bold tracking-tight text-navy-800 mt-1">{selected.title}</h2>
+          <h2 className="font-display text-2xl font-semibold tracking-tight text-navy-800 mt-1">{selected.title}</h2>
           {selected.summary && <p className="text-navy-600 mt-1">{selected.summary}</p>}
           {route && (
             <a href={route} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-2 rounded-2xl text-white px-4 min-h-[44px] font-semibold bg-gradient-to-b from-jungle-500 to-jungle-700 shadow-[inset_0_1px_0_rgba(255,255,255,.25),0_8px_18px_-8px_rgba(18,102,73,.7)] hover:from-jungle-400 transition">

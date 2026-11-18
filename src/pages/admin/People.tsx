@@ -13,7 +13,7 @@ function Credentials({ username, password, onClose }: { username: string; passwo
   return (
     <div className="fixed inset-0 z-50 bg-navy-900/60 grid place-items-center p-4">
       <div role="dialog" aria-label="Temporary credentials" className="glass-sheet rounded-3xl p-6 w-full max-w-sm space-y-3">
-        <h2 className="font-display text-xl font-bold text-navy-800">Share these privately</h2>
+        <h2 className="font-display text-xl font-semibold text-navy-800">Share these privately</h2>
         <p className="text-navy-600">Shown once and never stored. They can change the password in their Profile.</p>
         <div className="rounded-2xl bg-sand-100 p-4 font-mono text-navy-900 break-all"><p>Username: {username}</p><p>Password: {password}</p></div>
         <div className="flex gap-2">
@@ -62,7 +62,7 @@ export default function People() {
 
   return (
     <div className="space-y-5 max-w-2xl">
-      <div className="flex items-center justify-between gap-3"><h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">People & access</h1><Button onClick={() => setAdding(true)}><UserPlus className="h-4 w-4" />Add traveller</Button></div>
+      <div className="flex items-center justify-between gap-3"><h1 className="font-display text-[1.75rem] sm:text-[2rem] font-semibold tracking-tight text-navy-800">People & access</h1><Button onClick={() => setAdding(true)}><UserPlus className="h-4 w-4" />Add traveller</Button></div>
       {err && <p role="alert" className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-red-800">{err}</p>}
       <div className="space-y-3">
         {members.map((m) => {
@@ -109,7 +109,7 @@ function AddTraveller({ onClose, onCreated }: { onClose: () => void; onCreated: 
   return (
     <div className="fixed inset-0 z-50 bg-navy-900/40 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
       <form onSubmit={submit} role="dialog" aria-label="Add traveller" onClick={(e) => e.stopPropagation()} className="glass-sheet w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
-        <div className="flex items-center justify-between"><h2 className="font-display text-xl font-bold text-navy-800">Add traveller</h2><button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button></div>
+        <div className="flex items-center justify-between"><h2 className="font-display text-xl font-semibold text-navy-800">Add traveller</h2><button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button></div>
         <Field label="Display name"><input className={inputCls} maxLength={60} value={name} onChange={(e) => setName(e.target.value)} required /></Field>
         <Field label="Username" hint="Used to sign in. Cannot be changed later."><input className={inputCls} autoCapitalize="none" autoCorrect="off" value={username} onChange={(e) => setUsername(e.target.value)} required /></Field>
         <Field label="Role"><select className={inputCls} value={role} onChange={(e) => setRole(e.target.value)}><option value="member">Member</option><option value="admin">Admin</option></select></Field>

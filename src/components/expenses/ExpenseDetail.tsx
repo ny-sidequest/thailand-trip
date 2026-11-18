@@ -52,8 +52,8 @@ export default function ExpenseDetail({ expense: e, onClose, onEdit, onChanged }
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="text-sm font-semibold text-ember-700 inline-flex items-center gap-1"><cat.icon className="h-4 w-4" />{cat.label}{e.is_personal ? ' · Personal' : ''}</p>
-            <h2 className="font-display text-xl font-bold text-navy-800 break-words">{e.description}</h2>
-            <p className="font-display text-3xl font-bold text-navy-800 mt-1">{formatMoney(e.amount, e.currency)}</p>
+            <h2 className="font-display text-xl font-semibold text-navy-800 break-words">{e.description}</h2>
+            <p className="font-display text-3xl font-semibold text-navy-800 mt-1">{formatMoney(e.amount, e.currency)}</p>
             {e.currency !== base && <p className="text-navy-500">{formatMoney(e.amount_base, base)} at 1 {e.currency} = {e.fx_rate_to_base} {base}</p>}
           </div>
           <button onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button>

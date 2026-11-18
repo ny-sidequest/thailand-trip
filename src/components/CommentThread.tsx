@@ -52,7 +52,7 @@ export default function CommentThread({ targetType, targetId }: { targetType: 'a
 
   return (
     <section aria-label="Comments">
-      <h2 className="font-display text-xl font-bold text-navy-800 mb-3 flex items-center gap-2"><MessageCircle className="h-5 w-5 text-jungle-600" />Comments{q.data ? ` (${q.data.length})` : ''}</h2>
+      <h2 className="font-display text-xl font-semibold text-navy-800 mb-3 flex items-center gap-2"><MessageCircle className="h-5 w-5 text-jungle-600" />Comments{q.data ? ` (${q.data.length})` : ''}</h2>
       {q.loading && !q.data && <Spinner />}
       {q.error && <ErrorState message={q.error} onRetry={q.reload} />}
       {q.data && q.data.length === 0 && <EmptyState title="No comments yet" hint="Start the conversation about this plan." />}

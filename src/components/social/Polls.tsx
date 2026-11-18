@@ -90,7 +90,7 @@ function CreatePoll({ onClose, onDone }: { onClose: () => void; onDone: () => vo
   return (
     <div className="fixed inset-0 z-50 bg-navy-900/40 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
       <form onSubmit={submit} role="dialog" aria-label="New poll" onClick={(e) => e.stopPropagation()} className="glass-sheet w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
-        <div className="flex items-center justify-between"><h2 className="font-display text-xl font-bold text-navy-800">New poll</h2><button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button></div>
+        <div className="flex items-center justify-between"><h2 className="font-display text-xl font-semibold text-navy-800">New poll</h2><button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button></div>
         <Field label="Question"><input className={inputCls} maxLength={200} value={q} onChange={(e) => setQ(e.target.value)} placeholder="Which New Year's Eve party?" required /></Field>
         <div className="space-y-2">
           <span className="block text-sm font-semibold text-navy-700">Options</span>
@@ -119,7 +119,7 @@ export default function PollsTab({ data, reload }: { data: { polls: PollRow[]; o
       {isAdmin && <Button onClick={() => setCreate(true)}><Plus className="h-4 w-4" />New poll</Button>}
       {data.polls.length === 0 && <Card><EmptyState title="No polls yet" hint="Group decisions (parties, restaurants, timings) show up here." /></Card>}
       {open.map(card)}
-      {closed.length > 0 && <h2 className="font-display text-xl font-bold text-navy-800 pt-2">Closed</h2>}
+      {closed.length > 0 && <h2 className="font-display text-xl font-semibold text-navy-800 pt-2">Closed</h2>}
       {closed.map(card)}
       {create && <CreatePoll onClose={() => setCreate(false)} onDone={reload} />}
     </div>

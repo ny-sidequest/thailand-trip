@@ -56,7 +56,7 @@ export default function DocumentViewer({ doc, allDocs, onClose, onReplace, onCha
       <div role="dialog" aria-label={cur.name} onClick={(e) => e.stopPropagation()} className="glass-sheet w-full sm:max-w-2xl max-h-[94vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h2 className="font-display text-xl font-bold text-navy-800 break-words">{cur.name}</h2>
+            <h2 className="font-display text-xl font-semibold text-navy-800 break-words">{cur.name}</h2>
             <p className="text-sm text-navy-500">{categoryLabel(cur.category)} · v{cur.version}{cur.size_bytes ? ` · ${formatBytes(cur.size_bytes)}` : ''}</p>
             <p className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-navy-600">
               {cur.visibility === 'private' ? <><Lock className="h-3.5 w-3.5" />Only you can see this</> : <><Users className="h-3.5 w-3.5" />Shared with the group</>}

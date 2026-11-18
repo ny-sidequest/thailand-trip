@@ -55,13 +55,13 @@ export default function Checklist() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">Checklist</h1>
+      <h1 className="font-display text-[1.75rem] sm:text-[2rem] font-semibold tracking-tight text-navy-800">Checklist</h1>
 
       <Card className="p-5">
         <div className="flex items-end justify-between">
           <div>
             <p className="text-navy-500 font-semibold">Your progress</p>
-            <p className="font-display text-5xl font-bold text-navy-800 leading-none mt-1">{pct(myDone, total)}%</p>
+            <p className="font-display text-5xl font-semibold text-navy-800 leading-none mt-1">{pct(myDone, total)}%</p>
           </div>
           <p className="text-navy-500">{myDone} of {total} done</p>
         </div>

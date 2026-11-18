@@ -34,7 +34,7 @@ export default function Wallet() {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">Travel Wallet</h1>
+        <h1 className="font-display text-[1.75rem] sm:text-[2rem] font-semibold tracking-tight text-navy-800">Travel Wallet</h1>
         <Button onClick={() => setUpload({})}><Plus className="h-4 w-4" />Upload</Button>
       </div>
 

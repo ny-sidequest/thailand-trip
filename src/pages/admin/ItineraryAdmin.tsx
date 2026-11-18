@@ -64,7 +64,7 @@ function DaysAdmin() {
 
   return (
     <div className="space-y-4 max-w-2xl">
-      <div className="flex items-center justify-between gap-3"><h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">Itinerary</h1><Button onClick={() => setEdit('new')}><Plus className="h-4 w-4" />Add day</Button></div>
+      <div className="flex items-center justify-between gap-3"><h1 className="font-display text-[1.75rem] sm:text-[2rem] font-semibold tracking-tight text-navy-800">Itinerary</h1><Button onClick={() => setEdit('new')}><Plus className="h-4 w-4" />Add day</Button></div>
       {err && <p role="alert" className="text-red-700">{err}</p>}
       {q.data.days.length === 0 ? <Card><EmptyState title="No days yet" hint="Add the first day." /></Card> : (
         <Card className="divide-y divide-sand-200/70">
@@ -122,7 +122,7 @@ function DayAdmin({ dayId }: { dayId: string }) {
   return (
     <div className="space-y-4 max-w-2xl">
       <Link to="/admin/itinerary" className="inline-flex items-center gap-1 text-jungle-700 font-semibold min-h-[44px]"><ArrowLeft className="h-4 w-4" />All days</Link>
-      <div className="flex items-center justify-between gap-3"><div><p className="text-sm font-semibold text-ember-700">Day {day.day_number} · {fmtDate(day.day_date)}</p><h1 className="font-display text-2xl font-bold text-navy-800">{day.title}</h1></div><Button onClick={() => setEdit('new')}><Plus className="h-4 w-4" />Add</Button></div>
+      <div className="flex items-center justify-between gap-3"><div><p className="text-sm font-semibold text-ember-700">Day {day.day_number} · {fmtDate(day.day_date)}</p><h1 className="font-display text-2xl font-semibold text-navy-800">{day.title}</h1></div><Button onClick={() => setEdit('new')}><Plus className="h-4 w-4" />Add</Button></div>
       {err && <p role="alert" className="text-red-700">{err}</p>}
       {acts.length === 0 ? <Card><EmptyState title="No activities yet" /></Card> : (
         <Card className="divide-y divide-sand-200/70">

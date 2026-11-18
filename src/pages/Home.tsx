@@ -52,7 +52,7 @@ export default function Home() {
         <div className="absolute -top-20 -right-12 h-64 w-64 rounded-full bg-ember-500/40 blur-3xl animate-float" />
         <div className="relative p-6 sm:p-8 flex flex-col min-h-[22rem]">
           <p className="eyebrow !text-sand-200">{fmtDate(trip!.start_date, { day: 'numeric', month: 'short' })} – {fmtDate(trip!.end_date, { day: 'numeric', month: 'short', year: 'numeric' })}</p>
-          <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight mt-2 leading-[1.05]">{trip!.name}</h1>
+          <h1 className="font-display text-[2.1rem] sm:text-5xl font-semibold tracking-[-0.03em] mt-2 leading-[1.06]">{trip!.name}</h1>
           {trip!.tagline && <p className="text-white/80 mt-2 max-w-xl text-lg">{trip!.tagline}</p>}
 
           <div className="mt-auto pt-8 flex flex-wrap items-end justify-between gap-4">
@@ -60,14 +60,14 @@ export default function Home() {
               <div className="grid grid-cols-3 gap-2 w-full max-w-[19rem]" role="timer" aria-label={`${clock.days} days, ${clock.hours} hours, ${clock.minutes} minutes until departure`}>
                 {([['days', clock.days], ['hrs', clock.hours], ['min', clock.minutes]] as const).map(([l, v]) => (
                   <div key={l} className="glass-chip-dark rounded-2xl py-2.5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,.25)]">
-                    <p className="font-display text-3xl sm:text-4xl font-bold leading-none num">{String(v).padStart(2, '0')}</p>
+                    <p className="font-display text-3xl sm:text-4xl font-semibold leading-none num">{String(v).padStart(2, '0')}</p>
                     <p className="mt-1 text-xs font-semibold uppercase tracking-[.14em] text-white/70">{l}</p>
                   </div>
                 ))}
               </div>
             ) : (
               <div className="glass-chip-dark rounded-2xl px-5 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,.25)]">
-                <p className="font-display text-3xl font-bold leading-none">{clock.state === 'during' ? `Day ${clock.day} of ${clock.total}` : 'Trip complete'}</p>
+                <p className="font-display text-3xl font-semibold leading-none">{clock.state === 'during' ? `Day ${clock.day} of ${clock.total}` : 'Trip complete'}</p>
                 <p className="mt-1 text-xs font-semibold uppercase tracking-[.14em] text-white/70">{clock.state === 'during' ? 'Enjoy it' : 'See you next time'}</p>
               </div>
             )}
@@ -153,7 +153,7 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
                   style={safeUrl(r.image_url) ? { backgroundImage: `linear-gradient(rgba(11,31,58,.35),rgba(11,31,58,.75)), url(${safeUrl(r.image_url)})`, backgroundSize: 'cover' } : undefined}>
                   {!safeUrl(r.image_url) && <CityScene city={r.city} className="absolute inset-0 h-full w-full" />}
                   <div className="absolute inset-0 bg-gradient-to-t from-navy-900/80 via-navy-900/10 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-3.5"><p className="font-display text-xl font-bold leading-tight">{r.city}</p><p className="text-sm text-white/80">{r.from === r.to ? fmtDate(r.from) : `${fmtDate(r.from)} – ${fmtDate(r.to)}`}</p></div>
+                  <div className="absolute inset-x-0 bottom-0 p-3.5"><p className="font-display text-xl font-semibold leading-tight">{r.city}</p><p className="text-sm text-white/80">{r.from === r.to ? fmtDate(r.from) : `${fmtDate(r.from)} – ${fmtDate(r.to)}`}</p></div>
                   <span className="absolute top-3 left-3 glass-chip-dark rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-[.12em]">Stop {i + 1}</span>
                 </div>
               ))}
@@ -174,7 +174,7 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
             {next ? (
               <>
                 <div className="flex items-center gap-2 text-sm font-semibold text-ember-700"><CalendarClock className="h-4 w-4" />Day {next.day.day_number} · {fmtDateLong(next.day.day_date)}</div>
-                <Link to={`/itinerary/activity/${next.a.id}`}><h3 className="font-display text-2xl font-bold text-navy-800 mt-1 hover:underline">{next.a.title}</h3></Link>
+                <Link to={`/itinerary/activity/${next.a.id}`}><h3 className="font-display text-2xl font-semibold text-navy-800 mt-1 hover:underline">{next.a.title}</h3></Link>
                 <p className="text-navy-600 mt-1">{[fmtTime(next.a.start_time) ?? next.a.time_note, next.a.location_name].filter(Boolean).join(' · ')}</p>
                 <div className="mt-3 flex items-center gap-3 flex-wrap">
                   <StatusBadge status={next.a.status} />

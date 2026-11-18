@@ -13,7 +13,7 @@ export function Card({ children, className }: { children: ReactNode; className?:
 export function SectionTitle({ children, action }: { children: ReactNode; action?: ReactNode }) {
   return (
     <div className="flex items-center justify-between mb-2 px-1 min-h-[44px]">
-      <h2 className="font-display text-xl font-bold tracking-tight text-navy-800">{children}</h2>
+      <h2 className="font-display text-[1.15rem] font-semibold tracking-tight text-navy-800">{children}</h2>
       {action}
     </div>
   )

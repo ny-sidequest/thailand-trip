@@ -14,7 +14,7 @@ export default function Notifications() {
   return (
     <div className="max-w-2xl space-y-4">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">Notifications</h1>
+        <h1 className="font-display text-[1.75rem] sm:text-[2rem] font-semibold tracking-tight text-navy-800">Notifications</h1>
         {unread > 0 && <Button variant="soft" onClick={() => void markAllRead()}><CheckCheck className="h-4 w-4" />Mark all read</Button>}
       </div>
       {error && <ErrorState message={error} onRetry={reload} />}

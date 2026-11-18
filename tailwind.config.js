@@ -10,8 +10,8 @@ export default {
         ember: { 50: '#fff4ec', 100: '#ffe4d1', 300: '#ffb283', 400: '#ff914d', 500: '#f97316', 600: '#dd5e0a', 700: '#b24607' },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
-        display: ['"Fraunces"', 'Georgia', 'serif'],
+        sans: ['"Inter Variable"', 'Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ['"Outfit Variable"', 'Outfit', '"Inter Variable"', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         card: '0 1px 2px rgba(11,31,58,.05), 0 8px 24px -12px rgba(11,31,58,.18)',

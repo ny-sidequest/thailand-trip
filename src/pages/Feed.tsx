@@ -19,7 +19,7 @@ export default function Feed() {
 
   return (
     <div className="space-y-5 max-w-2xl">
-      <h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">Feed</h1>
+      <h1 className="font-display text-[1.75rem] sm:text-[2rem] font-semibold tracking-tight text-navy-800">Feed</h1>
       <nav className="flex gap-1.5 glass rounded-2xl p-1.5" aria-label="Feed sections">
         {tabs.map((t) => (
           <Link key={t.key} to={t.to} aria-current={tab === t.key ? 'page' : undefined}

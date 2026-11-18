@@ -34,7 +34,7 @@ export default function ChecklistAdmin() {
 
   return (
     <div className="space-y-4 max-w-2xl">
-      <div className="flex items-center justify-between gap-3"><h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">Checklist</h1><Button onClick={() => setEdit('new')}><Plus className="h-4 w-4" />Add item</Button></div>
+      <div className="flex items-center justify-between gap-3"><h1 className="font-display text-[1.75rem] sm:text-[2rem] font-semibold tracking-tight text-navy-800">Checklist</h1><Button onClick={() => setEdit('new')}><Plus className="h-4 w-4" />Add item</Button></div>
       <p className="text-navy-500">Items apply to every traveller. Each person ticks their own.</p>
       {err && <p role="alert" className="text-red-700">{err}</p>}
       {q.data.length === 0 ? <Card><EmptyState title="No items yet" /></Card> : groupByCategory(q.data).map((g) => (

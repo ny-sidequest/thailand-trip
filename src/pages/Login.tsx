@@ -29,7 +29,7 @@ export default function Login() {
         <div className="absolute -top-24 -right-16 h-96 w-96 rounded-full bg-ember-500/40 blur-3xl animate-float" />
         <div className="relative h-full flex flex-col justify-end p-14 text-white">
           <p className="eyebrow !text-sand-200">Bangkok · Phuket · Krabi</p>
-          <h1 className="font-display text-6xl font-bold tracking-tight mt-3 leading-[1.05]">Trip HQ</h1>
+          <h1 className="font-display text-5xl font-semibold tracking-[-0.03em] mt-3 leading-[1.06]">Trip HQ</h1>
           <p className="mt-3 text-white/80 text-lg max-w-sm">Everything for the trip, in one private place.</p>
         </div>
       </div>
@@ -42,7 +42,7 @@ export default function Login() {
         <form onSubmit={submit} className="glass-strong relative w-full max-w-sm rounded-[28px] p-6 sm:p-8 space-y-5 animate-rise mt-24 lg:mt-0">
           <div className="text-center">
             <img src={`${import.meta.env.BASE_URL}icons/icon-192.png`} alt="" className="mx-auto h-14 w-14 rounded-2xl shadow-glass" />
-            <h2 className="font-display text-3xl font-bold tracking-tight text-navy-800 mt-3">Welcome back</h2>
+            <h2 className="font-display text-[1.75rem] sm:text-[2rem] font-semibold tracking-tight text-navy-800 mt-3">Welcome back</h2>
             <p className="text-navy-500 mt-1">Sign in to your trip</p>
           </div>
           <Field label="Username">

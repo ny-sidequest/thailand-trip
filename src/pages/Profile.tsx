@@ -69,7 +69,7 @@ export default function Profile() {
 
   return (
     <div className="max-w-xl space-y-6">
-      <h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">My profile</h1>
+      <h1 className="font-display text-[1.75rem] sm:text-[2rem] font-semibold tracking-tight text-navy-800">My profile</h1>
       <Card className="p-5">
         <div className="flex items-center gap-4 mb-5">
           <div className="relative">
@@ -89,7 +89,7 @@ export default function Profile() {
       </Card>
 
       <Card className="p-5">
-        <h2 className="font-display text-xl font-bold text-navy-800 mb-4">Change password</h2>
+        <h2 className="font-display text-xl font-semibold text-navy-800 mb-4">Change password</h2>
         <form onSubmit={changePw} className="space-y-4">
           <Field label="Current password"><input className={inputCls} type="password" autoComplete="current-password" value={cur} onChange={(e) => setCur(e.target.value)} required /></Field>
           <Field label="New password" hint="At least 10 characters."><input className={inputCls} type="password" autoComplete="new-password" value={pw} onChange={(e) => setPw(e.target.value)} required /></Field>

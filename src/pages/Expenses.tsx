@@ -68,7 +68,7 @@ export default function Expenses() {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">Expenses</h1>
+        <h1 className="font-display text-[1.75rem] sm:text-[2rem] font-semibold tracking-tight text-navy-800">Expenses</h1>
         <Button onClick={() => setAdding(true)}><Plus className="h-4 w-4" />Add</Button>
       </div>
       <nav className="flex gap-2 glass rounded-2xl p-1.5" aria-label="Expense sections">
@@ -89,7 +89,7 @@ export default function Expenses() {
             <Card className="p-5">
               {calc.count === 0 ? <EmptyState title="No shared expenses yet" hint="Tap Add to record the first one." /> : (
                 <>
-                  <p className="font-display text-3xl font-bold tracking-tight text-navy-800">{formatMinor(calc.totalBase, base)}</p>
+                  <p className="font-display text-[1.75rem] sm:text-[2rem] font-semibold tracking-tight text-navy-800">{formatMinor(calc.totalBase, base)}</p>
                   <p className="text-navy-500">{calc.count} shared expense{calc.count === 1 ? '' : 's'}, converted using each expense's recorded rate</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {(Object.entries(calc.byCcy) as [Currency, number][]).map(([c, v]) => <span key={c} className="rounded-full bg-sand-100 px-3 py-1 font-semibold text-navy-800">{formatMinor(v, c)} spent in {c}</span>)}
@@ -110,7 +110,7 @@ export default function Expenses() {
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="font-semibold text-navy-800">{memberName(t.from)}</span><ArrowRight className="h-4 w-4 text-ember-500 shrink-0" aria-label="pays" /><span className="font-semibold text-navy-800">{memberName(t.to)}</span>
                       </div>
-                      <p className="mt-0.5"><span className="font-display text-xl font-bold text-navy-800 num">{formatMinor(t.amount, base)}</span>{base === 'INR' && <span className="ml-2 text-xs text-navy-500">≈ {formatMoney(t.amount / 100 * thbPerBase, 'THB')} at {trip!.default_thb_to_inr}/฿</span>}</p>
+                      <p className="mt-0.5"><span className="font-display text-xl font-semibold text-navy-800 num">{formatMinor(t.amount, base)}</span>{base === 'INR' && <span className="ml-2 text-xs text-navy-500">≈ {formatMoney(t.amount / 100 * thbPerBase, 'THB')} at {trip!.default_thb_to_inr}/฿</span>}</p>
                     </div>
                     {canRecord && <Button variant="soft" onClick={() => setSettle({ from: t.from, to: t.to, amount: t.amount / 100 })}>Record</Button>}
                   </div>

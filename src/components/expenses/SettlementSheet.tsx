@@ -61,7 +61,7 @@ export default function SettlementSheet({ preset, existing, onClose, onDone }: {
   return (
     <div className="fixed inset-0 z-50 bg-navy-900/40 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
       <form onSubmit={submit} role="dialog" aria-label="Record payment" onClick={(e) => e.stopPropagation()} className="glass-sheet w-full sm:max-w-md max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
-        <div className="flex items-center justify-between"><h2 className="font-display text-xl font-bold text-navy-800">Record a payment</h2><button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button></div>
+        <div className="flex items-center justify-between"><h2 className="font-display text-xl font-semibold text-navy-800">Record a payment</h2><button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button></div>
         <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-2">{sel(from, setFrom, 'Who paid')}<ArrowRight className="mb-4 h-5 w-5 text-navy-400" />{sel(to, setTo, 'Who received')}</div>
         <div className="grid grid-cols-[1fr_auto] gap-3 items-end">
           <Field label="Amount"><input className={inputCls} inputMode="decimal" value={amountStr} onChange={(e) => setAmountStr(e.target.value)} placeholder="0.00" required /></Field>

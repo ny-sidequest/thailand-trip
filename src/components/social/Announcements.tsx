@@ -85,7 +85,7 @@ export function ComposeAnnouncement({ onClose, onDone }: { onClose: () => void; 
   return (
     <div className="fixed inset-0 z-50 bg-navy-900/40 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
       <form onSubmit={submit} role="dialog" aria-label="New announcement" onClick={(e) => e.stopPropagation()} className="glass-sheet w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
-        <div className="flex items-center justify-between"><h2 className="font-display text-xl font-bold text-navy-800">New announcement</h2><button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button></div>
+        <div className="flex items-center justify-between"><h2 className="font-display text-xl font-semibold text-navy-800">New announcement</h2><button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button></div>
         <Field label="Title"><input className={inputCls} maxLength={160} value={title} onChange={(e) => setTitle(e.target.value)} required /></Field>
         <Field label="Message"><textarea className={`${inputCls} min-h-[110px] py-3`} maxLength={3000} value={body} onChange={(e) => setBody(e.target.value)} required /></Field>
         <Field label="Importance"><select className={inputCls} value={importance} onChange={(e) => setImportance(e.target.value)}><option value="normal">Normal</option><option value="important">Important</option><option value="urgent">Urgent</option></select></Field>

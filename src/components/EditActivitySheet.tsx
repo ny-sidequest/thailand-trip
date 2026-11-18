@@ -44,7 +44,7 @@ export default function EditActivitySheet({ activity, onClose, onSaved }: { acti
       <form onSubmit={save} role="dialog" aria-label="Edit activity" onClick={(e) => e.stopPropagation()}
         className="glass-sheet w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-xl font-bold text-navy-800">Edit activity</h2>
+          <h2 className="font-display text-xl font-semibold text-navy-800">Edit activity</h2>
           <button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button>
         </div>
         <p className="text-navy-500 -mt-2">{activity.title}</p>

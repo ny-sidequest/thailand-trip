@@ -46,7 +46,7 @@ export default function AppShell() {
       <aside className="hidden lg:flex fixed left-4 top-4 bottom-4 w-64 flex-col glass-dark rounded-[28px] text-white p-5 z-40">
         <div className="flex items-center gap-3 mb-7">
           <Logo size={42} />
-          <div className="min-w-0"><p className="font-display text-lg font-bold leading-tight truncate">{trip?.name}</p><p className="eyebrow !text-white/50">Trip HQ</p></div>
+          <div className="min-w-0"><p className="font-display text-lg font-semibold leading-tight truncate">{trip?.name}</p><p className="eyebrow !text-white/50">Trip HQ</p></div>
         </div>
         <nav className="flex-1 space-y-1" aria-label="Main">
           {sidebar.map(({ to, label, icon: I, ...r }) => (
@@ -72,7 +72,7 @@ export default function AppShell() {
       {/* Mobile top bar: floating frosted pill */}
       <header className="lg:hidden sticky top-0 z-30 safe-top px-3 pt-3">
         <div className="glass-nav rounded-2xl h-14 px-3 flex items-center justify-between">
-          <div className="flex items-center gap-2.5 min-w-0"><Logo size={32} /><span className="font-display text-lg font-bold tracking-tight text-navy-800 truncate">{trip?.name}</span></div>
+          <div className="flex items-center gap-2.5 min-w-0"><Logo size={32} /><span className="font-display text-lg font-semibold tracking-tight text-navy-800 truncate">{trip?.name}</span></div>
           <div className="flex items-center gap-0.5 text-navy-700">
             <NotificationBell className="hover:!bg-navy-900/5" />
             <NavLink to="/profile" aria-label="My profile" className="p-1"><Avatar profile={profile} size={34} /></NavLink>
@@ -112,7 +112,7 @@ export default function AppShell() {
           <div role="dialog" aria-label="More" className="glass-sheet absolute bottom-0 inset-x-0 rounded-t-[32px] p-5 safe-bottom" onClick={(e) => e.stopPropagation()}>
             <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-navy-900/15" />
             <div className="flex items-center justify-between mb-3">
-              <h2 className="font-display text-xl font-bold tracking-tight text-navy-800">More</h2>
+              <h2 className="font-display text-[1.15rem] font-semibold tracking-tight text-navy-800">More</h2>
               <button onClick={() => setMore(false)} aria-label="Close" className="p-2 -mr-2 text-navy-500"><X className="h-5 w-5" /></button>
             </div>
             <div className="grid grid-cols-2 gap-3">

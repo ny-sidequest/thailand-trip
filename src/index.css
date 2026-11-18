@@ -4,7 +4,8 @@
 
 @layer base {
   html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; scroll-padding-top: 5.5rem; scroll-padding-bottom: 7.5rem; }
-  body { @apply text-navy-900 font-sans antialiased; overscroll-behavior-y: none; background: #efe9de; font-feature-settings: 'cv11', 'ss01'; }
+  body { @apply text-navy-900 font-sans antialiased; overscroll-behavior-y: none; background: #efe9de; font-feature-settings: 'cv11'; letter-spacing: -0.005em; }
+  h1, h2, h3 { font-family: theme('fontFamily.display'); }
   h1, h2, h3 { text-wrap: balance; }
   ::selection { background: rgba(31, 157, 107, .25); }
   :focus-visible { @apply outline-2 outline-offset-2 outline-jungle-500; }
@@ -76,7 +77,7 @@ body::after { /* fine grain keeps large gradients from banding and adds a tactil
 
   /* Typography helpers */
   .eyebrow { @apply text-xs font-semibold uppercase tracking-[.16em] text-navy-400; }
-  .num { font-variant-numeric: tabular-nums; }
+  .num { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum'; }
 
   /* Staggered entrance for stacked children */
   .stagger > * { animation: rise .5s cubic-bezier(.2, .7, .2, 1) both; }

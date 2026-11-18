@@ -71,7 +71,7 @@ export default function ActivityDetail() {
           <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-jungle-50 text-jungle-700"><KindIcon kind={a.kind} className="h-6 w-6" /></span>
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-ember-700">{fmtDateLong(day.day_date)}</p>
-            <h1 className="font-display text-2xl font-bold text-navy-800 leading-tight">{a.title}</h1>
+            <h1 className="font-display text-2xl font-semibold text-navy-800 leading-tight">{a.title}</h1>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <StatusBadge status={a.status} />
               {a.is_optional && <span className="rounded-full bg-ember-100 text-ember-700 px-2.5 py-0.5 text-sm font-semibold">Optional</span>}
