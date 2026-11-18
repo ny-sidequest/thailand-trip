@@ -19,8 +19,8 @@ import type { Activity, ActivityBooking, Day } from '@/lib/types'
 function Row({ icon, label, children }: { icon: ReactNode; label: string; children: ReactNode }) {
   return (
     <div className="flex gap-3 py-3">
-      <span className="mt-0.5 text-navy-400 shrink-0">{icon}</span>
-      <div className="min-w-0"><p className="text-sm font-semibold text-navy-400">{label}</p><p className="text-navy-800 break-words whitespace-pre-wrap">{children}</p></div>
+      <span className="mt-0.5 text-ink-400 shrink-0">{icon}</span>
+      <div className="min-w-0"><p className="text-sm font-semibold text-ink-400">{label}</p><p className="text-ink-50 break-words whitespace-pre-wrap">{children}</p></div>
     </div>
   )
 }
@@ -55,7 +55,7 @@ export default function ActivityDetail() {
   if (q.error) return <ErrorState message={q.error} onRetry={q.reload} />
   if (!q.data && q.loading) return <div className="space-y-4"><Skeleton className="h-10 w-40" /><Skeleton className="h-64" /></div>
   if (!q.data) return (
-    <div className="space-y-3"><Link to="/itinerary" className="inline-flex items-center gap-1 text-jungle-700 font-semibold min-h-[44px]"><ArrowLeft className="h-4 w-4" />Itinerary</Link><p className="text-navy-600">This activity no longer exists.</p></div>
+    <div className="space-y-3"><Link to="/itinerary" className="inline-flex items-center gap-1 text-jungle-300 font-semibold min-h-[44px]"><ArrowLeft className="h-4 w-4" />Itinerary</Link><p className="text-ink-200">This activity no longer exists.</p></div>
   )
   const { a, day, bookings } = q.data
   const nav = activityDirectionsUrl(a, day.city)
@@ -64,21 +64,21 @@ export default function ActivityDetail() {
 
   return (
     <div className="space-y-5 max-w-2xl">
-      <Link to={`/itinerary/day/${day.day_number}`} className="inline-flex items-center gap-1 text-jungle-700 font-semibold min-h-[44px]"><ArrowLeft className="h-4 w-4" />Day {day.day_number} · {day.city}</Link>
+      <Link to={`/itinerary/day/${day.day_number}`} className="inline-flex items-center gap-1 text-jungle-300 font-semibold min-h-[44px]"><ArrowLeft className="h-4 w-4" />Day {day.day_number} · {day.city}</Link>
 
       <Card className="p-5">
         <div className="flex items-start gap-3">
-          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-jungle-50 text-jungle-700"><KindIcon kind={a.kind} className="h-6 w-6" /></span>
+          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-jungle-500/10 text-jungle-300"><KindIcon kind={a.kind} className="h-6 w-6" /></span>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-ember-700">{fmtDateLong(day.day_date)}</p>
-            <h1 className="font-display text-2xl font-semibold text-navy-800 leading-tight">{a.title}</h1>
+            <p className="text-sm font-semibold text-ember-300">{fmtDateLong(day.day_date)}</p>
+            <h1 className="font-display text-2xl font-medium text-ink-50 leading-tight">{a.title}</h1>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <StatusBadge status={a.status} />
-              {a.is_optional && <span className="rounded-full bg-ember-100 text-ember-700 px-2.5 py-0.5 text-sm font-semibold">Optional</span>}
+              {a.is_optional && <span className="rounded-full bg-ember-500/20 text-ember-300 px-2.5 py-0.5 text-sm font-semibold">Optional</span>}
             </div>
           </div>
         </div>
-        {a.description && <p className="mt-4 text-navy-700 whitespace-pre-wrap">{a.description}</p>}
+        {a.description && <p className="mt-4 text-ink-100 whitespace-pre-wrap">{a.description}</p>}
         <div className="mt-4 flex flex-wrap gap-3">
           {nav && <a href={nav} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl bg-jungle-600 text-white px-4 min-h-[44px] font-semibold hover:bg-jungle-700"><Navigation className="h-4 w-4" />Directions</a>}
           {isAdmin && <Button variant="soft" onClick={() => setEditing(true)}><Pencil className="h-4 w-4" />Edit</Button>}
@@ -86,13 +86,13 @@ export default function ActivityDetail() {
       </Card>
 
       {a.reminders && (
-        <div className="rounded-2xl bg-ember-50 border border-ember-100 p-4 flex gap-3">
-          <AlertCircle className="h-5 w-5 text-ember-700 shrink-0 mt-0.5" />
-          <div><p className="font-semibold text-navy-800">Reminder</p><p className="text-navy-700 whitespace-pre-wrap">{a.reminders}</p></div>
+        <div className="rounded-2xl bg-ember-500/10 border border-ember-400/20 p-4 flex gap-3">
+          <AlertCircle className="h-5 w-5 text-ember-300 shrink-0 mt-0.5" />
+          <div><p className="font-semibold text-ink-50">Reminder</p><p className="text-ink-100 whitespace-pre-wrap">{a.reminders}</p></div>
         </div>
       )}
 
-      <Card className="px-5 divide-y divide-sand-200/70">
+      <Card className="px-5 divide-y divide-white/10">
         <Row icon={<Clock className="h-5 w-5" />} label="Time">{time || 'To be confirmed'}</Row>
         {a.duration_text && <Row icon={<Timer className="h-5 w-5" />} label="Duration">{a.duration_text}</Row>}
         {a.location_name && <Row icon={<MapPin className="h-5 w-5" />} label="Location">{a.location_name}</Row>}
@@ -105,12 +105,12 @@ export default function ActivityDetail() {
       </Card>
 
       {bookings.length > 0 && (
-        <Card className="divide-y divide-sand-200/70">
+        <Card className="divide-y divide-white/10">
           {bookings.map((b) => (
             <div key={b.id} className="p-4">
-              <div className="flex items-start justify-between gap-2"><p className="font-semibold text-navy-800">{b.name}</p><StatusBadge status={b.status} /></div>
-              <p className="text-navy-600 text-sm">{[b.operator, b.booking_ref && `Ref ${b.booking_ref}`, b.contact].filter(Boolean).join(' · ')}</p>
-              {b.notes && <p className="text-navy-600 mt-1">{b.notes}</p>}
+              <div className="flex items-start justify-between gap-2"><p className="font-semibold text-ink-50">{b.name}</p><StatusBadge status={b.status} /></div>
+              <p className="text-ink-200 text-sm">{[b.operator, b.booking_ref && `Ref ${b.booking_ref}`, b.contact].filter(Boolean).join(' · ')}</p>
+              {b.notes && <p className="text-ink-200 mt-1">{b.notes}</p>}
             </div>
           ))}
         </Card>

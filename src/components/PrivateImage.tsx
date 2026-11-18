@@ -17,7 +17,7 @@ export default function PrivateImage({ bucket, path, alt, className }: { bucket:
     })
     return () => { alive = false }
   }, [bucket, path])
-  if (failed) return <div className={`grid place-items-center bg-sand-100 text-navy-400 text-sm ${className ?? ''}`}>Photo unavailable</div>
-  if (!url) return <div className={`animate-pulse bg-navy-100/60 ${className ?? ''}`} style={{ minHeight: 160 }} />
+  if (failed) return <div className={`grid place-items-center bg-white/[.07] text-ink-400 text-sm ${className ?? ''}`}>Photo unavailable</div>
+  if (!url) return <div className={`animate-pulse bg-white/10 ${className ?? ''}`} style={{ minHeight: 160 }} />
   return <img src={url} alt={alt} loading="lazy" className={className} />
 }

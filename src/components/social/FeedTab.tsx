@@ -67,13 +67,13 @@ function Composer({ onPosted }: { onPosted: () => void }) {
           <textarea className={`${inputCls} min-h-[72px] py-3`} maxLength={4000} value={text} onChange={(e) => setText(e.target.value)} placeholder="Share an update with the group…" aria-label="New post" />
           {photo && (
             <div className="relative inline-block">
-              {preview ? <img src={preview} alt="Selected" className="max-h-48 rounded-2xl" /> : <p className="rounded-xl bg-sand-100 px-3 py-2 text-navy-600">{photo.name}</p>}
-              <button type="button" onClick={clearPhoto} aria-label="Remove photo" className="absolute -top-2 -right-2 grid h-8 w-8 place-items-center rounded-full bg-navy-800 text-white"><X className="h-4 w-4" /></button>
+              {preview ? <img src={preview} alt="Selected" className="max-h-48 rounded-2xl" /> : <p className="rounded-xl bg-white/[.07] px-3 py-2 text-ink-200">{photo.name}</p>}
+              <button type="button" onClick={clearPhoto} aria-label="Remove photo" className="absolute -top-2 -right-2 grid h-8 w-8 place-items-center rounded-full bg-night-700 border border-white/25 text-white"><X className="h-4 w-4" /></button>
             </div>
           )}
-          {err && <p role="alert" className="text-red-700 text-sm">{err}</p>}
+          {err && <p role="alert" className="text-red-300 text-sm">{err}</p>}
           <div className="flex items-center gap-2">
-            <label className="inline-flex items-center gap-2 rounded-xl bg-sand-100 px-4 min-h-[44px] font-semibold text-navy-800 cursor-pointer"><Camera className="h-4 w-4" />Photo<input type="file" accept="image/*" hidden onChange={(e) => { pick(e.target.files?.[0]); e.target.value = '' }} /></label>
+            <label className="inline-flex items-center gap-2 rounded-xl bg-white/[.07] px-4 min-h-[44px] font-semibold text-ink-50 cursor-pointer"><Camera className="h-4 w-4" />Photo<input type="file" accept="image/*" hidden onChange={(e) => { pick(e.target.files?.[0]); e.target.value = '' }} /></label>
             <Button type="submit" busy={busy} disabled={!text.trim() && !photo} className="ml-auto"><Send className="h-4 w-4" />Post</Button>
           </div>
         </div>
@@ -97,23 +97,23 @@ function PostCard({ post, comments, reload }: { post: FeedPost; comments: number
   }
 
   return (
-    <Card className={cx('p-4', !social && 'bg-sand-50')}>
+    <Card className={cx('p-4', !social && 'bg-white/[.04]')}>
       <div className="flex items-start gap-3">
         <Avatar profile={post.actor} size={social ? 40 : 32} />
         <div className="min-w-0 flex-1">
-          <p className="text-sm text-navy-400"><span className="font-semibold text-navy-800">{post.actor?.display_name ?? 'Someone'}</span> · {timeAgo(post.created_at)}</p>
+          <p className="text-sm text-ink-400"><span className="font-semibold text-ink-50">{post.actor?.display_name ?? 'Someone'}</span> · {timeAgo(post.created_at)}</p>
           {social
-            ? post.body && <p className="mt-1 text-navy-800 whitespace-pre-wrap break-words">{post.body}</p>
-            : <p className="mt-0.5 text-navy-800">{link ? <Link to={link} className="hover:underline">{post.summary}</Link> : post.summary}{post.body && <span className="block text-navy-500 truncate">{post.body}</span>}</p>}
+            ? post.body && <p className="mt-1 text-ink-50 whitespace-pre-wrap break-words">{post.body}</p>
+            : <p className="mt-0.5 text-ink-50">{link ? <Link to={link} className="hover:underline">{post.summary}</Link> : post.summary}{post.body && <span className="block text-ink-300 truncate">{post.body}</span>}</p>}
         </div>
-        {canDelete && <button onClick={() => void remove()} aria-label="Delete post" className="p-2 -mr-2 text-navy-400 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>}
+        {canDelete && <button onClick={() => void remove()} aria-label="Delete post" className="p-2 -mr-2 text-ink-400 hover:text-red-400"><Trash2 className="h-4 w-4" /></button>}
       </div>
       {post.photo_path && <PrivateImage bucket="photos" path={post.photo_path} alt="Shared photo" className="mt-3 w-full max-h-[70vh] object-cover rounded-2xl" />}
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <ReactionBar targetType="feed" targetId={post.id} />
-        <button onClick={() => setTalk(!talk)} className="ml-auto inline-flex items-center gap-1.5 text-navy-500 font-semibold min-h-[44px] px-2"><MessageCircle className="h-4 w-4" />{comments > 0 ? comments : ''}{talk ? ' Hide' : ' Comment'}</button>
+        <button onClick={() => setTalk(!talk)} className="ml-auto inline-flex items-center gap-1.5 text-ink-300 font-semibold min-h-[44px] px-2"><MessageCircle className="h-4 w-4" />{comments > 0 ? comments : ''}{talk ? ' Hide' : ' Comment'}</button>
       </div>
-      {talk && <div className="mt-3 border-t border-sand-200 pt-4"><CommentThread targetType="feed" targetId={post.id} /></div>}
+      {talk && <div className="mt-3 border-t border-white/10 pt-4"><CommentThread targetType="feed" targetId={post.id} /></div>}
     </Card>
   )
 }

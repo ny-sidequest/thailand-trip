@@ -46,7 +46,7 @@ export default function AppShell() {
       <aside className="hidden lg:flex fixed left-4 top-4 bottom-4 w-64 flex-col glass-dark rounded-[28px] text-white p-5 z-40">
         <div className="flex items-center gap-3 mb-7">
           <Logo size={42} />
-          <div className="min-w-0"><p className="font-display text-lg font-semibold leading-tight truncate">{trip?.name}</p><p className="eyebrow !text-white/50">Trip HQ</p></div>
+          <div className="min-w-0"><p className="font-display text-lg font-medium leading-tight truncate">{trip?.name}</p><p className="eyebrow !text-white/50">Trip HQ</p></div>
         </div>
         <nav className="flex-1 space-y-1" aria-label="Main">
           {sidebar.map(({ to, label, icon: I, ...r }) => (
@@ -72,9 +72,9 @@ export default function AppShell() {
       {/* Mobile top bar: floating frosted pill */}
       <header className="lg:hidden sticky top-0 z-30 safe-top px-3 pt-3">
         <div className="glass-nav rounded-2xl h-14 px-3 flex items-center justify-between">
-          <div className="flex items-center gap-2.5 min-w-0"><Logo size={32} /><span className="font-display text-lg font-semibold tracking-tight text-navy-800 truncate">{trip?.name}</span></div>
-          <div className="flex items-center gap-0.5 text-navy-700">
-            <NotificationBell className="hover:!bg-navy-900/5" />
+          <div className="flex items-center gap-2.5 min-w-0"><Logo size={32} /><span className="font-display text-lg font-medium tracking-tight text-ink-50 truncate">{trip?.name}</span></div>
+          <div className="flex items-center gap-0.5 text-ink-100">
+            <NotificationBell className="hover:!bg-white/10" />
             <NavLink to="/profile" aria-label="My profile" className="p-1"><Avatar profile={profile} size={34} /></NavLink>
           </div>
         </div>
@@ -92,7 +92,7 @@ export default function AppShell() {
             <li key={to}>
               <NavLink to={to} end={'end' in r} className={({ isActive }) =>
                 cx('flex flex-col items-center justify-center gap-0.5 min-h-[56px] rounded-[20px] text-xs font-semibold transition duration-200',
-                  isActive ? 'bg-gradient-to-b from-navy-600 to-navy-800 text-white shadow-[inset_0_1px_0_rgba(255,255,255,.22),0_6px_14px_-6px_rgba(11,31,58,.7)]' : 'text-navy-500 active:bg-navy-900/5')}>
+                  isActive ? 'bg-gradient-to-b from-jungle-500 to-jungle-700 text-white shadow-[inset_0_1px_0_rgba(255,255,255,.28),0_8px_20px_-8px_rgba(31,157,107,.75)]' : 'text-ink-300 active:bg-white/10')}>
                 <I className="h-[22px] w-[22px]" />{label}
               </NavLink>
             </li>
@@ -100,7 +100,7 @@ export default function AppShell() {
           <li>
             <button onClick={() => setMore(true)} aria-haspopup="dialog"
               className={cx('w-full flex flex-col items-center justify-center gap-0.5 min-h-[56px] rounded-[20px] text-xs font-semibold transition duration-200',
-                moreActive ? 'bg-gradient-to-b from-navy-600 to-navy-800 text-white shadow-[inset_0_1px_0_rgba(255,255,255,.22)]' : 'text-navy-500 active:bg-navy-900/5')}>
+                moreActive ? 'bg-gradient-to-b from-jungle-500 to-jungle-700 text-white shadow-[inset_0_1px_0_rgba(255,255,255,.28),0_8px_20px_-8px_rgba(31,157,107,.75)]' : 'text-ink-300 active:bg-white/10')}>
               <MoreHorizontal className="h-[22px] w-[22px]" />More
             </button>
           </li>
@@ -108,20 +108,20 @@ export default function AppShell() {
       </nav>
 
       {more && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-navy-900/40 backdrop-blur-sm" onClick={() => setMore(false)}>
+        <div className="lg:hidden fixed inset-0 z-50 bg-black/55 backdrop-blur-sm" onClick={() => setMore(false)}>
           <div role="dialog" aria-label="More" className="glass-sheet absolute bottom-0 inset-x-0 rounded-t-[32px] p-5 safe-bottom" onClick={(e) => e.stopPropagation()}>
-            <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-navy-900/15" />
+            <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-white/25" />
             <div className="flex items-center justify-between mb-3">
-              <h2 className="font-display text-[1.15rem] font-semibold tracking-tight text-navy-800">More</h2>
-              <button onClick={() => setMore(false)} aria-label="Close" className="p-2 -mr-2 text-navy-500"><X className="h-5 w-5" /></button>
+              <h2 className="font-display text-[1.15rem] font-medium tracking-tight text-ink-50">More</h2>
+              <button onClick={() => setMore(false)} aria-label="Close" className="p-2 -mr-2 text-ink-300"><X className="h-5 w-5" /></button>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {moreItems.map(({ to, label, icon: I }) => (
-                <NavLink key={to} to={to} onClick={() => setMore(false)} className="glass-chip flex items-center gap-3 rounded-2xl px-4 min-h-[60px] font-semibold text-navy-800 active:scale-[.98] transition">
-                  <span className="grid h-9 w-9 place-items-center rounded-xl bg-jungle-500/10 text-jungle-700"><I className="h-5 w-5" /></span>{label}
+                <NavLink key={to} to={to} onClick={() => setMore(false)} className="glass-chip flex items-center gap-3 rounded-2xl px-4 min-h-[60px] font-semibold text-ink-50 active:scale-[.98] transition">
+                  <span className="grid h-9 w-9 place-items-center rounded-xl bg-jungle-500/10 text-jungle-300"><I className="h-5 w-5" /></span>{label}
                 </NavLink>
               ))}
-              <button onClick={() => void signOut()} className="flex items-center gap-3 rounded-2xl px-4 min-h-[60px] font-semibold text-red-700 bg-red-50/80 border border-red-100"><span className="grid h-9 w-9 place-items-center rounded-xl bg-red-500/10"><LogOut className="h-5 w-5" /></span>Sign out</button>
+              <button onClick={() => void signOut()} className="flex items-center gap-3 rounded-2xl px-4 min-h-[60px] font-semibold text-red-300 bg-red-500/10 border border-red-100"><span className="grid h-9 w-9 place-items-center rounded-xl bg-red-500/10"><LogOut className="h-5 w-5" /></span>Sign out</button>
             </div>
           </div>
         </div>

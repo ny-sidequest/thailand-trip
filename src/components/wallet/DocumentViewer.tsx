@@ -52,13 +52,13 @@ export default function DocumentViewer({ doc, allDocs, onClose, onReplace, onCha
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-navy-900/45 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
+    <div className="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
       <div role="dialog" aria-label={cur.name} onClick={(e) => e.stopPropagation()} className="glass-sheet w-full sm:max-w-2xl max-h-[94vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h2 className="font-display text-xl font-semibold text-navy-800 break-words">{cur.name}</h2>
-            <p className="text-sm text-navy-500">{categoryLabel(cur.category)} · v{cur.version}{cur.size_bytes ? ` · ${formatBytes(cur.size_bytes)}` : ''}</p>
-            <p className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-navy-600">
+            <h2 className="font-display text-xl font-medium text-ink-50 break-words">{cur.name}</h2>
+            <p className="text-sm text-ink-300">{categoryLabel(cur.category)} · v{cur.version}{cur.size_bytes ? ` · ${formatBytes(cur.size_bytes)}` : ''}</p>
+            <p className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-ink-200">
               {cur.visibility === 'private' ? <><Lock className="h-3.5 w-3.5" />Only you can see this</> : <><Users className="h-3.5 w-3.5" />Shared with the group</>}
             </p>
           </div>
@@ -66,12 +66,12 @@ export default function DocumentViewer({ doc, allDocs, onClose, onReplace, onCha
         </div>
 
         {/* Preview */}
-        <div className="rounded-2xl bg-sand-100 overflow-hidden min-h-[160px] grid place-items-center">
-          {urlErr ? <p className="p-4 text-red-700">{urlErr}</p>
+        <div className="rounded-2xl bg-white/[.07] overflow-hidden min-h-[160px] grid place-items-center">
+          {urlErr ? <p className="p-4 text-red-300">{urlErr}</p>
             : !url ? <Spinner label="Opening securely…" />
             : isImage(cur.mime_type) ? <img src={url} alt={cur.name} className="max-h-[60vh] w-full object-contain" />
             : isPdf(cur.mime_type) ? <iframe src={url} title={cur.name} className="w-full h-[60vh] bg-white" />
-            : <div className="p-6 text-center text-navy-600"><FileText className="mx-auto h-10 w-10 text-navy-400" /><p className="mt-2">No preview for this file type. Use Download.</p></div>}
+            : <div className="p-6 text-center text-ink-200"><FileText className="mx-auto h-10 w-10 text-ink-400" /><p className="mt-2">No preview for this file type. Use Download.</p></div>}
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -79,26 +79,26 @@ export default function DocumentViewer({ doc, allDocs, onClose, onReplace, onCha
           <Button variant="soft" onClick={() => void download()}><Download className="h-4 w-4" />Download</Button>
           {canManage && isNewest && <Button variant="soft" onClick={() => onReplace(cur)}><RefreshCw className="h-4 w-4" />New version</Button>}
           {canManage && <Button variant="soft" onClick={() => setEditing(true)}><Pencil className="h-4 w-4" />Edit</Button>}
-          {canManage && <Button variant="ghost" className="text-red-600" onClick={() => void remove()}><Trash2 className="h-4 w-4" />Delete</Button>}
+          {canManage && <Button variant="ghost" className="text-red-400" onClick={() => void remove()}><Trash2 className="h-4 w-4" />Delete</Button>}
         </div>
-        {err && <p role="alert" className="text-red-700">{err}</p>}
+        {err && <p role="alert" className="text-red-300">{err}</p>}
 
         <dl className="grid grid-cols-2 gap-3 text-sm">
-          <div><dt className="text-navy-400 font-semibold">Uploaded by</dt><dd className="text-navy-800">{memberName(cur.uploaded_by)}</dd></div>
-          <div><dt className="text-navy-400 font-semibold">Uploaded</dt><dd className="text-navy-800">{fmtDate(cur.created_at.slice(0, 10), { day: 'numeric', month: 'short', year: 'numeric' })}</dd></div>
-          {cur.related_date && <div><dt className="text-navy-400 font-semibold">Related date</dt><dd className="text-navy-800">{fmtDate(cur.related_date, { day: 'numeric', month: 'short', year: 'numeric' })}</dd></div>}
-          {cur.traveller_id && <div><dt className="text-navy-400 font-semibold">For</dt><dd className="text-navy-800">{memberName(cur.traveller_id)}</dd></div>}
+          <div><dt className="text-ink-400 font-semibold">Uploaded by</dt><dd className="text-ink-50">{memberName(cur.uploaded_by)}</dd></div>
+          <div><dt className="text-ink-400 font-semibold">Uploaded</dt><dd className="text-ink-50">{fmtDate(cur.created_at.slice(0, 10), { day: 'numeric', month: 'short', year: 'numeric' })}</dd></div>
+          {cur.related_date && <div><dt className="text-ink-400 font-semibold">Related date</dt><dd className="text-ink-50">{fmtDate(cur.related_date, { day: 'numeric', month: 'short', year: 'numeric' })}</dd></div>}
+          {cur.traveller_id && <div><dt className="text-ink-400 font-semibold">For</dt><dd className="text-ink-50">{memberName(cur.traveller_id)}</dd></div>}
         </dl>
-        {cur.notes && <p className="text-navy-700 whitespace-pre-wrap">{cur.notes}</p>}
+        {cur.notes && <p className="text-ink-100 whitespace-pre-wrap">{cur.notes}</p>}
 
         {chain.length > 1 && (
           <div>
-            <h3 className="font-semibold text-navy-800 flex items-center gap-2 mb-2"><History className="h-4 w-4" />Version history</h3>
-            <ul className="divide-y divide-sand-200 rounded-2xl border border-sand-200">
+            <h3 className="font-semibold text-ink-50 flex items-center gap-2 mb-2"><History className="h-4 w-4" />Version history</h3>
+            <ul className="divide-y divide-white/10 rounded-2xl border border-white/10">
               {chain.map((v) => (
-                <li key={v.id}><button onClick={() => setCur(v)} className="w-full text-left px-4 py-3 min-h-[48px] flex justify-between gap-3 hover:bg-sand-50" aria-current={v.id === cur.id}>
-                  <span className={v.id === cur.id ? 'font-semibold text-navy-800' : 'text-navy-700'}>v{v.version}{v.notes ? ` · ${v.notes}` : ''}</span>
-                  <span className="text-navy-400 shrink-0">{memberName(v.uploaded_by)} · {fmtDate(v.created_at.slice(0, 10))}</span>
+                <li key={v.id}><button onClick={() => setCur(v)} className="w-full text-left px-4 py-3 min-h-[48px] flex justify-between gap-3 hover:bg-white/[.04]" aria-current={v.id === cur.id}>
+                  <span className={v.id === cur.id ? 'font-semibold text-ink-50' : 'text-ink-100'}>v{v.version}{v.notes ? ` · ${v.notes}` : ''}</span>
+                  <span className="text-ink-400 shrink-0">{memberName(v.uploaded_by)} · {fmtDate(v.created_at.slice(0, 10))}</span>
                 </button></li>
               ))}
             </ul>

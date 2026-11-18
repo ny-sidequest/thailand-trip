@@ -52,7 +52,7 @@ export default function CommentThread({ targetType, targetId }: { targetType: 'a
 
   return (
     <section aria-label="Comments">
-      <h2 className="font-display text-xl font-semibold text-navy-800 mb-3 flex items-center gap-2"><MessageCircle className="h-5 w-5 text-jungle-600" />Comments{q.data ? ` (${q.data.length})` : ''}</h2>
+      <h2 className="font-display text-xl font-medium text-ink-50 mb-3 flex items-center gap-2"><MessageCircle className="h-5 w-5 text-jungle-400" />Comments{q.data ? ` (${q.data.length})` : ''}</h2>
       {q.loading && !q.data && <Spinner />}
       {q.error && <ErrorState message={q.error} onRetry={q.reload} />}
       {q.data && q.data.length === 0 && <EmptyState title="No comments yet" hint="Start the conversation about this plan." />}
@@ -63,19 +63,19 @@ export default function CommentThread({ targetType, targetId }: { targetType: 'a
             <li key={c.id} className="flex gap-3">
               <Avatar profile={c.author} size={36} />
               <div className="min-w-0 flex-1">
-                <p className="text-sm text-navy-400"><span className="font-semibold text-navy-800">{c.author?.display_name ?? 'Someone'}</span> · {timeAgo(c.created_at)}{new Date(c.updated_at).getTime() - new Date(c.created_at).getTime() > 2000 && ' · edited'}</p>
+                <p className="text-sm text-ink-400"><span className="font-semibold text-ink-50">{c.author?.display_name ?? 'Someone'}</span> · {timeAgo(c.created_at)}{new Date(c.updated_at).getTime() - new Date(c.created_at).getTime() > 2000 && ' · edited'}</p>
                 {editing === c.id ? (
                   <div className="mt-1 space-y-2">
                     <textarea className={`${inputCls} min-h-[80px] py-3`} maxLength={2000} value={editText} onChange={(e) => setEditText(e.target.value)} />
                     <div className="flex gap-2"><Button onClick={() => void saveEdit(c.id)}>Save</Button><Button variant="ghost" onClick={() => setEditing(null)}>Cancel</Button></div>
                   </div>
                 ) : (
-                  <p className="text-navy-800 whitespace-pre-wrap break-words">{c.body}</p>
+                  <p className="text-ink-50 whitespace-pre-wrap break-words">{c.body}</p>
                 )}
                 {editing !== c.id && (mine || isAdmin) && (
                   <div className="flex gap-1 -ml-2">
-                    {mine && <button onClick={() => { setEditing(c.id); setEditText(c.body) }} className="inline-flex items-center gap-1 px-2 min-h-[40px] text-sm text-navy-500"><Pencil className="h-3.5 w-3.5" />Edit</button>}
-                    <button onClick={() => void remove(c.id)} className="inline-flex items-center gap-1 px-2 min-h-[40px] text-sm text-red-600"><Trash2 className="h-3.5 w-3.5" />Delete</button>
+                    {mine && <button onClick={() => { setEditing(c.id); setEditText(c.body) }} className="inline-flex items-center gap-1 px-2 min-h-[40px] text-sm text-ink-300"><Pencil className="h-3.5 w-3.5" />Edit</button>}
+                    <button onClick={() => void remove(c.id)} className="inline-flex items-center gap-1 px-2 min-h-[40px] text-sm text-red-400"><Trash2 className="h-3.5 w-3.5" />Delete</button>
                   </div>
                 )}
               </div>
@@ -87,7 +87,7 @@ export default function CommentThread({ targetType, targetId }: { targetType: 'a
         <Avatar profile={profile} size={36} />
         <div className="flex-1 space-y-2">
           <textarea className={`${inputCls} min-h-[72px] py-3`} placeholder="Add a comment…" maxLength={2000} value={text} onChange={(e) => setText(e.target.value)} aria-label="Add a comment" />
-          {err && <p role="alert" className="text-red-700 text-sm">{err}</p>}
+          {err && <p role="alert" className="text-red-300 text-sm">{err}</p>}
           <Button type="submit" busy={busy} disabled={!text.trim()}><Send className="h-4 w-4" />Post</Button>
         </div>
       </form>

@@ -31,13 +31,13 @@ export default function ReactionBar({ targetType, targetId }: { targetType: 'fee
     <div className="flex flex-wrap items-center gap-1.5">
       {used.map((e) => (
         <button key={e} onClick={() => void toggle(e)} aria-pressed={mine[e].includes(uid)} aria-label={`${e} ${mine[e].length}`}
-          className={cx('inline-flex items-center gap-1 rounded-full border px-2.5 min-h-[36px] text-sm font-semibold', mine[e].includes(uid) ? 'border-jungle-500 bg-jungle-50 text-jungle-800' : 'glass-chip text-navy-700')}>
+          className={cx('inline-flex items-center gap-1 rounded-full border px-2.5 min-h-[36px] text-sm font-semibold', mine[e].includes(uid) ? 'border-jungle-500 bg-jungle-500/10 text-jungle-200' : 'glass-chip text-ink-100')}>
           <span>{e}</span><span>{mine[e].length}</span>
         </button>
       ))}
       {picker
-        ? EMOJIS.map((e) => <button key={e} onClick={() => void toggle(e)} className="rounded-full min-h-[40px] min-w-[40px] text-xl hover:bg-sand-100">{e}</button>)
-        : <button onClick={() => setPicker(true)} aria-label="Add reaction" className="inline-grid place-items-center rounded-full min-h-[36px] min-w-[36px] text-navy-400 hover:bg-sand-100"><SmilePlus className="h-5 w-5" /></button>}
+        ? EMOJIS.map((e) => <button key={e} onClick={() => void toggle(e)} className="rounded-full min-h-[40px] min-w-[40px] text-xl hover:bg-white/[.07]">{e}</button>)
+        : <button onClick={() => setPicker(true)} aria-label="Add reaction" className="inline-grid place-items-center rounded-full min-h-[36px] min-w-[36px] text-ink-400 hover:bg-white/[.07]"><SmilePlus className="h-5 w-5" /></button>}
     </div>
   )
 }

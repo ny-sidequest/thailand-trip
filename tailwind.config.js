@@ -6,7 +6,9 @@ export default {
       colors: {
         navy: { 50: '#eef2f8', 100: '#d5deec', 200: '#aebcd6', 300: '#7f93b7', 400: '#52688f', 500: '#304a73', 600: '#1e3558', 700: '#14284a', 800: '#0b1f3a', 900: '#071427' },
         sand: { 50: '#fbf8f2', 100: '#f6efe3', 200: '#ecdfc7', 300: '#dfc9a1', 400: '#cfae78', 500: '#bd9356' },
-        jungle: { 50: '#ecf8f1', 100: '#d1f0de', 200: '#a2e0bd', 400: '#3fb583', 500: '#1f9d6b', 600: '#16805a', 700: '#126649', 800: '#0f4f3a' },
+        jungle: { 50: '#ecf8f1', 100: '#d1f0de', 200: '#a2e0bd', 300: '#6fcfa0', 400: '#3fb583', 500: '#1f9d6b', 600: '#16805a', 700: '#126649', 800: '#0f4f3a' },
+        night: { 950: '#050913', 900: '#070d1c', 800: '#0b1428', 700: '#101b36', 600: '#17264a' },
+        ink: { 50: '#f3f6ff', 100: '#e3e9f8', 200: '#c4cde6', 300: '#98a6c8', 400: '#7886ad' },
         ember: { 50: '#fff4ec', 100: '#ffe4d1', 300: '#ffb283', 400: '#ff914d', 500: '#f97316', 600: '#dd5e0a', 700: '#b24607' },
       },
       fontFamily: {
@@ -25,7 +27,7 @@ export default {
         float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-6px)' } },
         sheet: { '0%': { opacity: 0, transform: 'translateY(24px) scale(.98)' }, '100%': { opacity: 1, transform: 'none' } },
       },
-      animation: { rise: 'rise .45s cubic-bezier(.2,.7,.2,1) both', float: 'float 9s ease-in-out infinite', sheet: 'sheet .28s cubic-bezier(.2,.8,.2,1) both' },
+      animation: { rise: 'rise .45s cubic-bezier(.2,.7,.2,1) backwards', float: 'float 9s ease-in-out infinite', sheet: 'sheet .28s cubic-bezier(.2,.8,.2,1) backwards' },
     },
   },
   plugins: [],

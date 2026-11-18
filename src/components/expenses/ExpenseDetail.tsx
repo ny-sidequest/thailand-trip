@@ -47,47 +47,47 @@ export default function ExpenseDetail({ expense: e, onClose, onEdit, onChanged }
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-navy-900/45 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
+    <div className="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
       <div role="dialog" aria-label={e.description} onClick={(ev) => ev.stopPropagation()} className="glass-sheet w-full sm:max-w-lg max-h-[94vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-ember-700 inline-flex items-center gap-1"><cat.icon className="h-4 w-4" />{cat.label}{e.is_personal ? ' · Personal' : ''}</p>
-            <h2 className="font-display text-xl font-semibold text-navy-800 break-words">{e.description}</h2>
-            <p className="font-display text-3xl font-semibold text-navy-800 mt-1">{formatMoney(e.amount, e.currency)}</p>
-            {e.currency !== base && <p className="text-navy-500">{formatMoney(e.amount_base, base)} at 1 {e.currency} = {e.fx_rate_to_base} {base}</p>}
+            <p className="text-sm font-semibold text-ember-300 inline-flex items-center gap-1"><cat.icon className="h-4 w-4" />{cat.label}{e.is_personal ? ' · Personal' : ''}</p>
+            <h2 className="font-display text-xl font-medium text-ink-50 break-words">{e.description}</h2>
+            <p className="font-display text-3xl font-medium text-ink-50 mt-1">{formatMoney(e.amount, e.currency)}</p>
+            {e.currency !== base && <p className="text-ink-300">{formatMoney(e.amount_base, base)} at 1 {e.currency} = {e.fx_rate_to_base} {base}</p>}
           </div>
           <button onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button>
         </div>
-        <p className="text-navy-600">{fmtDate(e.expense_date, { day: 'numeric', month: 'short', year: 'numeric' })} · paid by <span className="font-semibold">{memberName(e.payer_id)}</span> · added by {memberName(e.created_by)}</p>
+        <p className="text-ink-200">{fmtDate(e.expense_date, { day: 'numeric', month: 'short', year: 'numeric' })} · paid by <span className="font-semibold">{memberName(e.payer_id)}</span> · added by {memberName(e.created_by)}</p>
 
         <div>
-          <h3 className="font-semibold text-navy-800 mb-1">Split ({e.split_type === 'equal' ? 'equally' : e.split_type === 'percentage' ? 'by percentage' : 'by amount'})</h3>
-          <ul className="rounded-2xl border border-sand-200 divide-y divide-sand-200">
-            {e.splits.map((s) => <li key={s.user_id} className="flex justify-between px-4 py-2.5"><span className="text-navy-800">{memberName(s.user_id)}{s.percentage != null ? ` · ${s.percentage}%` : ''}</span><span className="tabular-nums text-navy-700">{formatMoney(s.share_amount, e.currency)}</span></li>)}
+          <h3 className="font-semibold text-ink-50 mb-1">Split ({e.split_type === 'equal' ? 'equally' : e.split_type === 'percentage' ? 'by percentage' : 'by amount'})</h3>
+          <ul className="rounded-2xl border border-white/10 divide-y divide-white/10">
+            {e.splits.map((s) => <li key={s.user_id} className="flex justify-between px-4 py-2.5"><span className="text-ink-50">{memberName(s.user_id)}{s.percentage != null ? ` · ${s.percentage}%` : ''}</span><span className="tabular-nums text-ink-100">{formatMoney(s.share_amount, e.currency)}</span></li>)}
           </ul>
         </div>
-        {e.notes && <p className="text-navy-700 whitespace-pre-wrap">{e.notes}</p>}
+        {e.notes && <p className="text-ink-100 whitespace-pre-wrap">{e.notes}</p>}
 
         {e.receipt_path && (
           <div>
-            <h3 className="font-semibold text-navy-800 mb-1">Receipt</h3>
+            <h3 className="font-semibold text-ink-50 mb-1">Receipt</h3>
             {!url ? <Spinner label="Opening securely…" /> : /\.pdf$/i.test(e.receipt_path)
-              ? <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-jungle-700 font-semibold min-h-[44px]"><ExternalLink className="h-4 w-4" />Open PDF receipt</a>
-              : <a href={url} target="_blank" rel="noopener noreferrer"><img src={url} alt="Receipt" className="max-h-72 w-full object-contain rounded-2xl bg-sand-100" /></a>}
+              ? <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-jungle-300 font-semibold min-h-[44px]"><ExternalLink className="h-4 w-4" />Open PDF receipt</a>
+              : <a href={url} target="_blank" rel="noopener noreferrer"><img src={url} alt="Receipt" className="max-h-72 w-full object-contain rounded-2xl bg-white/[.07]" /></a>}
           </div>
         )}
 
-        {canEdit && <div className="flex gap-2"><Button variant="soft" onClick={() => onEdit(e)}><Pencil className="h-4 w-4" />Correct</Button><Button variant="ghost" className="text-red-600" onClick={() => void remove()}><Trash2 className="h-4 w-4" />Delete</Button></div>}
-        {err && <p role="alert" className="text-red-700">{err}</p>}
+        {canEdit && <div className="flex gap-2"><Button variant="soft" onClick={() => onEdit(e)}><Pencil className="h-4 w-4" />Correct</Button><Button variant="ghost" className="text-red-400" onClick={() => void remove()}><Trash2 className="h-4 w-4" />Delete</Button></div>}
+        {err && <p role="alert" className="text-red-300">{err}</p>}
 
         <div>
-          <h3 className="font-semibold text-navy-800 flex items-center gap-2 mb-2"><History className="h-4 w-4" />Audit trail</h3>
+          <h3 className="font-semibold text-ink-50 flex items-center gap-2 mb-2"><History className="h-4 w-4" />Audit trail</h3>
           {audit.loading && !audit.data ? <Spinner /> : (
             <ul className="space-y-2">
               {audit.data?.map((a) => (
-                <li key={a.id} className="rounded-xl bg-sand-50 px-4 py-2.5 text-sm">
-                  <p className="text-navy-500"><span className="font-semibold text-navy-800">{memberName(a.changed_by)}</span> · {timeAgo(a.changed_at)}</p>
-                  {changes(a).map((c, i) => <p key={i} className="text-navy-700 break-words">{c}</p>)}
+                <li key={a.id} className="rounded-xl bg-white/[.04] px-4 py-2.5 text-sm">
+                  <p className="text-ink-300"><span className="font-semibold text-ink-50">{memberName(a.changed_by)}</span> · {timeAgo(a.changed_at)}</p>
+                  {changes(a).map((c, i) => <p key={i} className="text-ink-100 break-words">{c}</p>)}
                 </li>
               ))}
             </ul>

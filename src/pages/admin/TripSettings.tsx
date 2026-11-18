@@ -30,7 +30,7 @@ export default function TripSettings() {
 
   return (
     <form onSubmit={save} className="max-w-xl space-y-4">
-      <h1 className="font-display text-[1.75rem] sm:text-[2rem] font-semibold tracking-tight text-navy-800">Trip settings</h1>
+      <h1 className="font-display text-[1.75rem] sm:text-[2rem] font-medium tracking-tight text-ink-50">Trip settings</h1>
       <Card className="p-5 space-y-4">
         <Field label="Trip name"><input className={inputCls} maxLength={120} value={f.name} onChange={set('name')} required /></Field>
         <Field label="Tagline"><input className={inputCls} maxLength={200} value={f.tagline} onChange={set('tagline')} /></Field>
@@ -43,7 +43,7 @@ export default function TripSettings() {
         </Field>
         <Field label="Route overview" hint="Comma-separated, in order. e.g. Bangalore, Bangkok, Phuket, Krabi, Bangkok, Bangalore"><input className={inputCls} value={f.route} onChange={set('route')} /></Field>
         <Field label="Hero image link" hint="Optional. A photo link you have the rights to use (https://…)."><input className={inputCls} inputMode="url" value={f.hero} onChange={set('hero')} /></Field>
-        {msg && <p role="status" className={msg.ok ? 'text-jungle-700 font-semibold' : 'text-red-700 font-semibold'}>{msg.text}</p>}
+        {msg && <p role="status" className={msg.ok ? 'text-jungle-300 font-semibold' : 'text-red-300 font-semibold'}>{msg.text}</p>}
         <Button type="submit" busy={busy}>Save settings</Button>
       </Card>
     </form>

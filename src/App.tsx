@@ -28,8 +28,8 @@ function Protected() {
   if (!trip) return (
     <div className="min-h-screen grid place-items-center p-6 text-center">
       <div className="max-w-sm">
-        <h1 className="font-display text-2xl font-semibold text-navy-800">No trip yet</h1>
-        <p className="mt-2 text-navy-600">{error ?? 'Your account is not part of a trip. Ask the trip admin to add you.'}</p>
+        <h1 className="font-display text-2xl font-medium text-ink-50">No trip yet</h1>
+        <p className="mt-2 text-ink-200">{error ?? 'Your account is not part of a trip. Ask the trip admin to add you.'}</p>
       </div>
     </div>
   )

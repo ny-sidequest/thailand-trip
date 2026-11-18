@@ -43,14 +43,14 @@ export default function EditRecordSheet({ title, subtitle, table, id, fields, in
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-navy-900/40 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
+    <div className="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
       <form onSubmit={save} role="dialog" aria-label={title} onClick={(e) => e.stopPropagation()}
         className="glass-sheet w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-xl font-semibold text-navy-800">{title}</h2>
+          <h2 className="font-display text-xl font-medium text-ink-50">{title}</h2>
           <button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button>
         </div>
-        {subtitle && <p className="text-navy-500 -mt-2">{subtitle}</p>}
+        {subtitle && <p className="text-ink-300 -mt-2">{subtitle}</p>}
         {fields.map((x) => (
           <Field key={x.key} label={x.label} hint={x.hint}>
             {x.type === 'boolean' ? (
@@ -68,7 +68,7 @@ export default function EditRecordSheet({ title, subtitle, table, id, fields, in
             )}
           </Field>
         ))}
-        {err && <p role="alert" className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-red-800">{err}</p>}
+        {err && <p role="alert" className="rounded-xl bg-red-500/10 border border-red-400/30 px-4 py-3 text-red-200">{err}</p>}
         <div className="flex gap-3"><Button type="submit" busy={busy} className="flex-1">Save</Button><Button type="button" variant="ghost" onClick={onClose}>Cancel</Button></div>
       </form>
     </div>

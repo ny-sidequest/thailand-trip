@@ -183,3 +183,16 @@ all 24 routes x 5 viewports render with no crashes, console/CSP errors or horizo
 - [x] `scripts/rotate-emails.mjs` run: all 5 accounts now have random sign-in emails; sign-in confirmed working.
 - [x] Auth "Secure password change" enabled.
 - [ ] Manual live test round (`docs/TEST_PLAN.md`, Phases 4-8) -> then push + deploy (8 local commits not pushed).
+
+## UI redesign branch `ui-polish` (NOT merged; 2026-11-18)
+Dark glassmorphism theme (deep navy surfaces, near-black aurora with teal / indigo / ember light, frosted translucent cards,
+jungle-green selected states, ember accent CTA); type system Outfit (headings, medium / light numerals) + Inter (body, data),
+self-hosted via fontsource; hand-drawn vector destination art (Bangkok / Phuket / Krabi); **journey map** on Home replacing the
+route chips and arrows (vertical road on phones, horizontal on desktop; the group's car sits at Bangalore before the trip,
+moves along the road by itinerary dates, home afterwards; driven stretch glows green); live D/H/M countdown;
+design guidance from the locally installed `ui-ux-pro-max` skill (contrast, focus, no emoji-as-icons).
+**Bug found while testing popups in a real browser:** the page's entrance animation left an identity transform on `<main>`,
+which becomes the containing block for `position: fixed`, so popup sheets could be placed below the screen (browser dependent).
+Fixed here by using `animation-fill-mode: backwards`. The same `both` fill exists on `main` (tailwind.config.js); the merge brings the fix.
+**Checks:** unit 68; DB 159; browser smoke test 24 routes x 5 viewports on mocked data (no crash / console / CSP / overflow).
+**Before merging:** user finishes the live TEST_PLAN round on `main`, then merge `ui-polish`, re-run all checks, push + deploy.

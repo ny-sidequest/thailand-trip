@@ -61,18 +61,18 @@ export default function UploadDocumentSheet({ preset, replaces, stays, transport
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-navy-900/40 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
+    <div className="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
       <form onSubmit={submit} role="dialog" aria-label={replaces ? 'Upload new version' : 'Upload document'} onClick={(e) => e.stopPropagation()}
         className="glass-sheet w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-xl font-semibold text-navy-800">{replaces ? `New version of “${replaces.name}”` : 'Upload document'}</h2>
+          <h2 className="font-display text-xl font-medium text-ink-50">{replaces ? `New version of “${replaces.name}”` : 'Upload document'}</h2>
           <button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button>
         </div>
 
-        <label className="block rounded-2xl border-2 border-dashed border-sand-300 bg-sand-50 p-5 text-center cursor-pointer hover:border-jungle-400">
-          <Upload className="mx-auto h-6 w-6 text-navy-400" />
-          <span className="mt-1 block font-semibold text-navy-700">{file ? file.name : 'Choose a file or take a photo'}</span>
-          <span className="block text-sm text-navy-400">{file ? formatBytes(file.size) : 'PDF, JPG, PNG, WebP, HEIC, Word, Excel · max 20 MB'}</span>
+        <label className="block rounded-2xl border-2 border-dashed border-white/15 bg-white/[.04] p-5 text-center cursor-pointer hover:border-jungle-400">
+          <Upload className="mx-auto h-6 w-6 text-ink-400" />
+          <span className="mt-1 block font-semibold text-ink-100">{file ? file.name : 'Choose a file or take a photo'}</span>
+          <span className="block text-sm text-ink-400">{file ? formatBytes(file.size) : 'PDF, JPG, PNG, WebP, HEIC, Word, Excel · max 20 MB'}</span>
           <input type="file" accept={ACCEPT} hidden onChange={(e) => pick(e.target.files?.[0])} />
         </label>
 
@@ -106,19 +106,19 @@ export default function UploadDocumentSheet({ preset, replaces, stays, transport
         <Field label={replaces ? 'What changed? (optional)' : 'Notes (optional)'}><textarea className={`${inputCls} min-h-[72px] py-3`} maxLength={1000} value={notes} onChange={(e) => setNotes(e.target.value)} /></Field>
 
         <fieldset>
-          <legend className="text-sm font-semibold text-navy-700 mb-1.5">Who can see this?</legend>
+          <legend className="text-sm font-semibold text-ink-100 mb-1.5">Who can see this?</legend>
           <div className="grid grid-cols-2 gap-3">
             {[{ v: false, icon: Users, t: 'Whole group', d: 'All travellers' }, { v: true, icon: Lock, t: 'Only me', d: 'Private, even from admin' }].map(({ v, icon: I, t, d }) => (
               <button type="button" key={t} aria-pressed={priv === v} disabled={!!replaces} onClick={() => setPriv(v)}
-                className={cx('rounded-2xl border-2 p-3 text-left disabled:opacity-60', priv === v ? 'border-jungle-500 bg-jungle-50' : 'border-sand-200')}>
-                <I className="h-5 w-5 text-jungle-600" /><span className="block font-semibold text-navy-800 mt-1">{t}</span><span className="block text-sm text-navy-500">{d}</span>
+                className={cx('rounded-2xl border-2 p-3 text-left disabled:opacity-60', priv === v ? 'border-jungle-500 bg-jungle-500/10' : 'border-white/10')}>
+                <I className="h-5 w-5 text-jungle-400" /><span className="block font-semibold text-ink-50 mt-1">{t}</span><span className="block text-sm text-ink-300">{d}</span>
               </button>
             ))}
           </div>
-          {replaces && <p className="text-sm text-navy-400 mt-1">A new version keeps the visibility of the original.</p>}
+          {replaces && <p className="text-sm text-ink-400 mt-1">A new version keeps the visibility of the original.</p>}
         </fieldset>
 
-        {err && <p role="alert" className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-red-800">{err}</p>}
+        {err && <p role="alert" className="rounded-xl bg-red-500/10 border border-red-400/30 px-4 py-3 text-red-200">{err}</p>}
         <div className="flex gap-3"><Button type="submit" busy={busy} className="flex-1">{busy ? 'Uploading…' : 'Upload'}</Button><Button type="button" variant="ghost" onClick={onClose}>Cancel</Button></div>
       </form>
     </div>
