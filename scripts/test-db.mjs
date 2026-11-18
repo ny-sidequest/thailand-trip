@@ -35,6 +35,7 @@ await db.exec(read('migrations/0007_expenses.sql'))
 await db.exec(read('migrations/0008_social.sql'))
 await db.exec(read('migrations/0009_admin.sql'))
 await db.exec(read('migrations/0010_security_hardening.sql'))
+await db.exec(read('migrations/0011_guide.sql'))
 await db.exec(read('seed.sql'))
 
 const T = '00000000-0000-4000-8000-000000000001'
@@ -527,6 +528,39 @@ await denied('member cannot upload into another user\'s avatar folder', () => as
 await ok('avatar readable by trip-mates only', async () => {
   eq((await as('sam', `select count(*)::int n from storage.objects where bucket_id='avatars'`)).rows[0].n, 1, 'sam')
   eq((await as('outsider', `select count(*)::int n from storage.objects where bucket_id='avatars'`)).rows[0].n, 0, 'outsider') })
+
+console.log('Destination guide')
+await db.exec(read('guide_seed.sql'))
+const gcount = async () => (await db.query(`select count(*)::int n from guide_items`)).rows[0].n
+const g0 = await gcount()
+await ok('guide seed loaded (40 items) and re-running it is idempotent', async () => {
+  eq(g0, 40, 'items'); await db.exec(read('guide_seed.sql')); eq(await gcount(), 40, 'after rerun') })
+await ok('every member reads the guide; outsider sees nothing', async () => {
+  eq((await as('sam', `select count(*)::int n from guide_items`)).rows[0].n, 40, 'sam')
+  eq((await as('outsider', `select count(*)::int n from guide_items`)).rows[0].n, 0, 'outsider') })
+await denied('anon cannot read the guide', () => as('anon', `select 1 from guide_items`))
+await denied('member cannot insert a guide item', () => as('sam', `insert into guide_items(trip_id,category,title) values ('${T}','places','x')`))
+await denied('member cannot edit a guide item', () => as('sam', `update guide_items set title='hacked'`))
+await denied('member cannot soft-delete a guide item', () => as('sam', `update guide_items set deleted_at=now()`))
+await denied('outsider cannot insert', () => as('outsider', `insert into guide_items(trip_id,category,title) values ('${T}','places','x')`))
+await ok('admin adds and edits an item', async () => {
+  await as('admin', `insert into guide_items(trip_id,category,title,links,created_by) values ('${T}','places','Admin tip','[{"label":"Site","url":"https://example.com"}]','${ids.admin}')`)
+  await as('admin', `update guide_items set summary='edited' where title='Admin tip'`)
+  eq((await as('sam', `select summary from guide_items where title='Admin tip'`)).rows[0].summary, 'edited', 'summary') })
+await denied('admin cannot create an item as someone else', () => as('admin', `insert into guide_items(trip_id,category,title,created_by) values ('${T}','places','forged','${ids.sam}')`))
+await denied('admin cannot hard-delete (soft delete only)', () => as('admin', `delete from guide_items where title='Admin tip'`))
+await ok('admin can soft-delete', async () => { await as('admin', `update guide_items set deleted_at=now() where title='Admin tip'`) })
+await denied('trip_id is immutable', () => as('admin', `update guide_items set trip_id='${T.replace(/1$/, '9')}' where title='Admin tip'`))
+await denied('javascript: links rejected', () => as('admin', `insert into guide_items(trip_id,category,title,links) values ('${T}','places','bad','[{"label":"x","url":"javascript:alert(1)"}]')`))
+await denied('http (non-https) links rejected', () => as('admin', `insert into guide_items(trip_id,category,title,links) values ('${T}','places','bad2','[{"label":"x","url":"http://example.com"}]')`))
+await denied('photo path must be a guide/*.webp file', () => as('admin', `insert into guide_items(trip_id,category,title,photo_path) values ('${T}','places','bad3','../secret.webp')`))
+await denied('unknown category rejected', () => as('admin', `insert into guide_items(trip_id,category,title) values ('${T}','nonsense','bad4')`))
+await ok('guide table is in the realtime publication', async () => {
+  const pub = (await db.query(`select tablename from pg_publication_tables where pubname='supabase_realtime'`)).rows.map((r) => r.tablename)
+  if (!pub.includes('guide_items')) throw new Error('not published') })
+await ok('seeded content has no private identifiers', async () => {
+  const bad = (await db.query(`select title from guide_items where body ~* '(792FDQ|HMMNMSY|NN2AON|GII\\d|PIN:? ?\\d{4})' or links::text ~* 'password'`)).rows
+  if (bad.length) throw new Error('private data in: ' + bad.map((b) => b.title)) })
 
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

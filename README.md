@@ -12,7 +12,7 @@ Home dashboard · Itinerary (days, activities, Google Maps directions, comments,
 progress, group totals, deadlines) · Travel Wallet (private documents with versions, per-document privacy, stays,
 transport) · Expenses (THB/INR with a stored rate per expense, equal / amount / percentage splits, receipts,
 minimum-transfer settlement suggestions, audit trail, personal expenses) · Feed (posts, photos, reactions, comments) ·
-Polls · Announcements with read receipts · Notifications · Admin panel · Installable PWA.
+Destination guide (check-in, airports, getting around, SIM/money/power, places, safety, with credited photos; admin-editable; offline copy) · Polls · Announcements with read receipts · Notifications · Admin panel · Installable PWA.
 
 Design: dark glass theme, Outfit + Inter fonts bundled with the app (no external font requests), hand-drawn destination art,
 a journey map on Home that follows the trip dates.
@@ -23,8 +23,8 @@ a journey map on Home that follows the trip dates.
 1. Create a project at supabase.com (free tier is fine).
 2. **SQL Editor → New query**: run each file below, **in order, one at a time**, in a fresh query each time, and
    confirm "Success" before the next:
-   `supabase/migrations/0001_schema.sql` … `0010_security_hardening.sql`, then `supabase/seed.sql`
-   (seed = the initial Thailand itinerary; skip it for a blank trip).
+   `supabase/migrations/0001_schema.sql` … `0011_guide.sql`, then `supabase/seed.sql`
+   (seed = the initial Thailand itinerary; skip it for a blank trip), then `supabase/guide_seed.sql` (the destination guide content).
 3. **Authentication → Providers → Email**: turn **off** "Allow new users to sign up"; minimum password length `10`;
    turn **on** "Secure password change" (requires a recent sign-in before a password can be changed).
 4. **Project Settings → API**: copy the Project URL and the **anon** key. Never put the `service_role` key in the
@@ -37,6 +37,7 @@ select count(*) from pg_proc where proname in ('save_expense','delete_expense');
 select count(*) from pg_proc where proname in ('create_poll','set_poll_votes');                             -- 0008 (=2)
 select count(*) from pg_proc where proname in ('reorder_activities','delete_day');                         -- 0009 (=2)
 select count(*) from pg_proc where proname in ('record_settlement','delete_settlement','normalize_fx');       -- 0010 (=3)
+select count(*) from public.guide_items;                                                                    -- 0011 + guide_seed (=40)
 ```
 
 ### 2. Edge functions (username login + admin user management)
@@ -107,5 +108,9 @@ Known limitation: the app currently opens the first trip a person belongs to. A 
 supports several trips) is a small follow-up if you need two trips live at once.
 
 ## Photos
-No photos are bundled (licensing). Add https links in **Admin → Trip settings** (hero image) and per day in
-**Admin → Itinerary → edit day → Photo link**. Gradients are used until then.
+The destination guide ships 23 photos in `public/guide/` from Wikimedia Commons, only under CC BY, CC BY-SA, CC0 or
+public-domain licences. Each is credited (author, licence, source page) in the guide item that shows it. Guide content
+lives in `supabase/guide/thailand-2026.json`; `node scripts/build-guide-seed.mjs` regenerates `supabase/guide_seed.sql`.
+The guide must never contain booking references, PINs, policy numbers or traveller details (the repo is public;
+`npm run test:db` checks the seed). Hero and day photos can also be added as https links in **Admin → Trip settings** and
+**Admin → Itinerary → edit day → Photo link**.

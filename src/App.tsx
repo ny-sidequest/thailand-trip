@@ -15,6 +15,7 @@ import { NotificationsProvider } from '@/context/NotificationsContext'
 const Wallet = lazy(() => import('@/pages/Wallet'))
 const Expenses = lazy(() => import('@/pages/Expenses'))
 const Feed = lazy(() => import('@/pages/Feed'))
+const Guide = lazy(() => import('@/pages/Guide'))
 const Admin = lazy(() => import('@/pages/Admin'))
 const Itinerary = lazy(() => import('@/pages/Itinerary'))
 const ActivityDetail = lazy(() => import('@/pages/ActivityDetail'))
@@ -58,6 +59,8 @@ export default function App() {
             <Route path="wallet/*" element={<Wallet />} />
             <Route path="expenses/*" element={<Expenses />} />
             <Route path="feed/*" element={<Feed />} />
+            <Route path="guide" element={<Guide />} />
+            <Route path="guide/:itemId" element={<Guide />} />
             <Route path="group" element={<Group />} />
             <Route path="profile" element={<Profile />} />
             <Route path="admin/*" element={<AdminOnly><Admin /></AdminOnly>} />

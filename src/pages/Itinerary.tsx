@@ -1,8 +1,11 @@
 import { useEffect, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Bed, Bus, Clock, MapPin, MessageCircle, Navigation, Plane, Ship, WifiOff } from 'lucide-react'
+import { BookOpen, Bed, Bus, Clock, MapPin, MessageCircle, Navigation, Plane, Ship, WifiOff } from 'lucide-react'
 import { useTrip } from '@/context/TripContext'
 import { useItinerary } from '@/hooks/useItinerary'
+import { useGuide } from '@/hooks/useGuide'
+import { guideForDay } from '@/lib/guide'
+import { GuidePhoto } from '@/components/GuideBits'
 import { Card, EmptyState, ErrorState, Skeleton, StatusBadge, cx } from '@/components/ui'
 import { KindIcon } from '@/components/KindIcon'
 import CityScene from '@/components/CityScene'
@@ -22,6 +25,7 @@ export default function Itinerary() {
   const { trip } = useTrip()
   const { dayNumber } = useParams()
   const q = useItinerary(trip!.id)
+  const guide = useGuide(trip!.id)
   const stripRef = useRef<HTMLDivElement>(null)
 
   const days = q.data?.days ?? []
@@ -41,6 +45,7 @@ export default function Itinerary() {
   const route = dayRouteUrl(acts, selected.city)
   const idx = days.indexOf(selected)
   const until = daysUntil(selected.day_date)
+  const tips = guideForDay(guide.data?.items ?? [], selected.day_number)
 
   return (
     <div className="space-y-5">
@@ -145,6 +150,21 @@ export default function Itinerary() {
             )
           })}
         </ol>
+      )}
+
+      {/* Good to know: guide items tied to this day */}
+      {tips.length > 0 && (
+        <section aria-label="Good to know for this day">
+          <h2 className="font-display text-lg font-medium text-ink-50 mb-2 inline-flex items-center gap-2"><BookOpen className="h-5 w-5 text-jungle-300" aria-hidden="true" />Good to know</h2>
+          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 lg:mx-0 lg:px-0 snap-x">
+            {tips.map((t) => (
+              <Link key={t.id} to={`/guide/${t.id}`} className="glass hover-lift snap-start shrink-0 w-64 rounded-2xl overflow-hidden">
+                {t.photo_path && <GuidePhoto item={t} className="h-24 w-full object-cover" />}
+                <span className="block p-3"><span className="block font-semibold text-ink-50 leading-snug">{t.title}</span><span className="block text-sm text-ink-300 line-clamp-2">{t.summary}</span></span>
+              </Link>
+            ))}
+          </div>
+        </section>
       )}
 
       {/* Prev / next */}

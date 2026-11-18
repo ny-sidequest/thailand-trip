@@ -6,6 +6,7 @@ import People from './admin/People'
 import ItineraryAdmin from './admin/ItineraryAdmin'
 import BookingsAdmin from './admin/BookingsAdmin'
 import ChecklistAdmin from './admin/ChecklistAdmin'
+import GuideAdmin from './admin/GuideAdmin'
 
 /** UI only: every operation here is also enforced by RLS / admin-only functions in the database. */
 export default function Admin() {
@@ -23,6 +24,7 @@ export default function Admin() {
         <Route path="bookings" element={<BookingsAdmin />} />
         <Route path="bookings/:kind" element={<BookingsAdmin />} />
         <Route path="checklist" element={<ChecklistAdmin />} />
+        <Route path="guide" element={<GuideAdmin />} />
       </Routes>
     </div>
   )

@@ -49,7 +49,12 @@ export default defineConfig(({ mode }) => {
           // precache only the Latin font subsets (smaller offline cache)
           globIgnores: ['**/*-latin-ext-*', '**/*cyrillic*', '**/*greek*', '**/*vietnamese*'],
           // Never cache Supabase API / storage responses in the SW: private data.
-          runtimeCaching: [],
+          // The only runtime cache is the guide's own static, openly licensed photos (same origin, public files).
+          runtimeCaching: [{
+            urlPattern: ({ url, sameOrigin }: { url: URL; sameOrigin: boolean }) => sameOrigin && url.pathname.startsWith(`${base}guide/`) && url.pathname.endsWith('.webp'),
+            handler: 'CacheFirst',
+            options: { cacheName: 'guide-photos', expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 90 }, cacheableResponse: { statuses: [200] } },
+          }],
         },
       }),
     ],

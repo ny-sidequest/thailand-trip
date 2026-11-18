@@ -1,6 +1,6 @@
 import { Suspense, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { CalendarDays, CheckSquare, Home, LogOut, MessagesSquare, MoreHorizontal, Receipt, ShieldCheck, UserCircle, Users, Wallet, X } from 'lucide-react'
+import { BookOpen, CalendarDays, CheckSquare, Home, LogOut, MessagesSquare, MoreHorizontal, Receipt, ShieldCheck, UserCircle, Users, Wallet, X } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { useTrip } from '@/context/TripContext'
 import { Avatar, Spinner, cx } from '@/components/ui'
@@ -14,6 +14,7 @@ const MAIN = [
   { to: '/feed', label: 'Feed', icon: MessagesSquare },
 ]
 const MORE = [
+  { to: '/guide', label: 'Guide', icon: BookOpen },
   { to: '/checklist', label: 'Checklist', icon: CheckSquare },
   { to: '/wallet', label: 'Wallet', icon: Wallet },
   { to: '/group', label: 'Group', icon: Users },
@@ -31,7 +32,7 @@ export default function AppShell() {
   const [more, setMore] = useState(false)
   const loc = useLocation()
   const moreItems = isAdmin ? [...MORE, { to: '/admin', label: 'Admin', icon: ShieldCheck }] : MORE
-  const sidebar = [MAIN[0], MAIN[1], MORE[0], MORE[1], MAIN[2], MAIN[3], MORE[2], ...(isAdmin ? [moreItems[moreItems.length - 1]] : [])]
+  const sidebar = [MAIN[0], MAIN[1], MORE[0], MORE[1], MORE[2], MAIN[2], MAIN[3], MORE[3], ...(isAdmin ? [moreItems[moreItems.length - 1]] : [])]
   const moreActive = moreItems.some((i) => loc.pathname.startsWith(i.to))
 
   return (

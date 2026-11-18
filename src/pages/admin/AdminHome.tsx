@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { AlertTriangle, BedDouble, CalendarDays, CheckSquare, FileText, Megaphone, Receipt, Settings, Users } from 'lucide-react'
+import { AlertTriangle, BedDouble, BookOpen, CalendarDays, CheckSquare, FileText, Megaphone, Receipt, Settings, Users } from 'lucide-react'
 import { supabase, unwrap } from '@/lib/supabase'
 import { useTrip } from '@/context/TripContext'
 import { useAsync } from '@/hooks/useAsync'
@@ -12,6 +12,7 @@ const TILES = [
   { to: '/admin/itinerary', icon: CalendarDays, title: 'Itinerary', desc: 'Days, activities, order, timings, map links' },
   { to: '/admin/bookings', icon: BedDouble, title: 'Bookings', desc: 'Stays, transport and activity bookings' },
   { to: '/admin/checklist', icon: CheckSquare, title: 'Checklist', desc: 'Shared items and deadlines' },
+  { to: '/admin/guide', icon: BookOpen, title: 'Destination guide', desc: 'Tips, how-tos and places everyone can read' },
   { to: '/feed/announcements', icon: Megaphone, title: 'Announcements & polls', desc: 'Post updates, create polls' },
   { to: '/wallet', icon: FileText, title: 'Documents', desc: 'Upload, replace and manage files' },
   { to: '/expenses', icon: Receipt, title: 'Expenses', desc: 'Group totals, corrections, audit trail' },

@@ -13,6 +13,7 @@ convenience, not security.
 | Post an announcement | Feed → Announcements → **New announcement** (everyone is notified; you can see who has read it) |
 | Ask the group to decide something | Feed → Polls → **New poll** (single or multiple choice, optional closing time; close it any time) |
 | Add a checklist item or deadline | Admin → Checklist |
+| Add or fix a destination-guide tip | Admin → Destination guide → **Add** or the pencil. Links are one per line as `Label | https://…`; "Show on itinerary days" puts it in that day's Good to know strip |
 | See who is behind on prep | Admin → People & access (percentage, expand for item-level detail) |
 | Correct someone's expense | Expenses → History → open it → **Correct** (the audit trail keeps the old values) |
 | Change the default THB→INR rate | Admin → Trip settings (past expenses keep the rate they were saved with) |

@@ -11,9 +11,9 @@ export interface FieldSpec {
 }
 
 /** Generic admin/owner editor for one row. Authorisation is RLS: an unauthorised update affects 0 rows and is reported. */
-export default function EditRecordSheet({ title, subtitle, table, id, fields, initial, insertDefaults, stampUpdatedBy, onClose, onSaved }: {
+export default function EditRecordSheet({ title, subtitle, table, id, fields, initial, insertDefaults, stampUpdatedBy, mapPatch, onClose, onSaved }: {
   title: string; subtitle?: string; table: string; id?: string; fields: FieldSpec[]
-  initial: Record<string, unknown>; insertDefaults?: Record<string, unknown>; stampUpdatedBy?: boolean; onClose: () => void; onSaved: () => void
+  initial: Record<string, unknown>; insertDefaults?: Record<string, unknown>; stampUpdatedBy?: boolean; mapPatch?: (patch: Record<string, unknown>) => Record<string, unknown>; onClose: () => void; onSaved: () => void
 }) {
   const { session } = useAuth()
   const [f, setF] = useState<Record<string, string>>(() =>
@@ -32,10 +32,12 @@ export default function EditRecordSheet({ title, subtitle, table, id, fields, in
       patch[x.key] = v === '' ? null : x.type === 'number' ? Number(v) : x.type === 'boolean' ? v === 'true' : v
     }
     if (stampUpdatedBy) patch.updated_by = session!.user.id
+    let out = patch
+    if (mapPatch) { try { out = mapPatch(patch) } catch (x) { return setErr(x instanceof Error ? x.message : 'Invalid input') } }
     setBusy(true); setErr(null)
     const { data, error } = id
-      ? await supabase.from(table).update(patch).eq('id', id).select('id')
-      : await supabase.from(table).insert({ ...insertDefaults, ...patch }).select('id')
+      ? await supabase.from(table).update(out).eq('id', id).select('id')
+      : await supabase.from(table).insert({ ...insertDefaults, ...out }).select('id')
     setBusy(false)
     if (error) return setErr(error.code === '42501' ? 'Only the trip admin can do this.' : error.message)
     if (!data?.length) return setErr('Not saved: you do not have permission to edit this.')

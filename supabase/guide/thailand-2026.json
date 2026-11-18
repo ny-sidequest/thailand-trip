@@ -1,0 +1,910 @@
+{
+  "trip_slug": "thailand-2026",
+  "items": [
+    {
+      "category": "before",
+      "city": "Everywhere",
+      "title": "Thai Airways web check-in",
+      "summary": "Check in on the THAI app or website, with your booking reference and passport.",
+      "body": "Use the booking reference or an e-ticket number from your ticket (Wallet → Documents → Thai Airways e-tickets). Your last name must match the ticket.\n\n**How**\n- Website: thaiairways.com → Check-in (\"iCheck-in\"), or use the THAI app.\n- Enter your last name plus the booking reference or e-ticket number. Have your passport to hand: for international flights you must give the destination's regulatory details and answer the security questions.\n\n**When**\n- Thai's own check-in page says the app lets you check in as early as 24 hours before departure. An older FAQ gives a 24-hour to 1-hour window for the website; one FAQ saying 48 hours looks out of date. Confirm in the app.\n- For the 16:15 departure on 28 Dec that means from about 16:15 on 27 Dec.\n\n**Deadlines**\n- Bag drop: at least 60 minutes before departure.\n- Check-in counter closes 50 minutes before departure; the gate closes 10 minutes before take-off.\n\n**Good to know**\n- Our booking has no seats or meals chosen yet: pick seats while you check in.\n- Online check-in is not available if you need special assistance, travel with sports equipment, or have oversized bags.\n- Phone dead or lost? Go to the THAI mobile check-in counter for a paper boarding pass.",
+      "links": [
+        {
+          "label": "Thai Airways: online & airport check-in",
+          "url": "https://www.thaiairways.com/en-th/content/check-in/"
+        }
+      ],
+      "day_numbers": [
+        1
+      ],
+      "pinned": true,
+      "sort_order": 1,
+      "photo_path": "guide/thai-airways-aircraft.webp",
+      "photo_credit": "Mattes",
+      "photo_license": "Public domain",
+      "photo_license_url": null,
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Thai_Airways_aircraft_new_paint_design.JPG"
+    },
+    {
+      "category": "before",
+      "city": "Everywhere",
+      "title": "Thailand Digital Arrival Card (TDAC)",
+      "summary": "Free, online, within 3 days before you land. Use only the official site.",
+      "body": "Every non-Thai national entering Thailand must complete the TDAC. We land on 28 Dec, so submit it between 25 and 28 Dec.\n\n**Do this**\n- Use the official portal: tdac.immigration.go.th. It is free.\n- You need your passport details, flight details (arrival date and flight number) and the address of the first night's stay (see the Stays tab).\n- Save or screenshot the confirmation so you can show it at immigration, even offline.\n- If something changes, use the \"update arrival card\" option on the official site.\n\n**Watch out**\n- Lookalike sites charge fees for the same form. Thai authorities have warned about them. If a site asks for money, it is not the official one.\n- It must be done separately for each entry into Thailand and for each traveller.",
+      "links": [
+        {
+          "label": "Official TDAC portal",
+          "url": "https://tdac.immigration.go.th"
+        },
+        {
+          "label": "Royal Thai Embassy: how to submit the TDAC",
+          "url": "https://buenos-aires.thaiembassy.org/en/content/how-to-submit-the-thailand-digital-arrival-card-td"
+        }
+      ],
+      "day_numbers": [
+        1
+      ],
+      "pinned": true,
+      "sort_order": 2,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    },
+    {
+      "category": "before",
+      "city": "Everywhere",
+      "title": "Entry rules for Indian passport holders",
+      "summary": "Visa-free tourism for up to 30 days. Our trip is 11 days. Re-check the week before.",
+      "body": "The Royal Thai Embassy in New Delhi says Thailand's Cabinet approved a **30-day visa exemption for Indian passport holders entering for tourism** on 14 July 2026. It replaced the earlier 60-day exemption and, per news reports, took effect on 15 September 2026. Our dates (28 Dec to 7 Jan, 11 days) are within 30 days.\n\n**Carry (per the airline's notice)**\n- Passport valid for at least 6 months from the day you leave.\n- The confirmed return ticket, proof of accommodation, and enough funds for the stay. Immigration may ask to see them.\n- A photo ID for domestic checks, if you have one.\n\n**Be aware**\n- Thai entry rules changed several times in 2026. Check the Embassy page (and thaievisa.go.th) in the week before you fly.\n- Staying longer than 30 days needs an e-visa.",
+      "links": [
+        {
+          "label": "Royal Thai Embassy, New Delhi: 30-day exemption",
+          "url": "https://newdelhi.thaiembassy.org/en/content/latest-update-on-revision-to-thailand-s-visa-exemp"
+        },
+        {
+          "label": "Thailand e-visa site",
+          "url": "https://www.thaievisa.go.th"
+        }
+      ],
+      "day_numbers": [
+        1
+      ],
+      "pinned": true,
+      "sort_order": 3,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    },
+    {
+      "category": "before",
+      "city": "Everywhere",
+      "title": "Flying home: India arrival declaration",
+      "summary": "Your airline notice asks for an online arrival form before landing in India.",
+      "body": "Our flight lands in Bengaluru at 00:05 on 8 January. The airline's notice says:\n- Passengers arriving in India must complete the online arrival card (E-Arrival) within 72 hours before arrival.\n- It may also include a health declaration. Check the official site.\n\nUse the official Government of India portal named in the notice. This guide does not link to one because the portals change. We have added a dated item to the Checklist.\n\n**Plan the ride home**\n- Landing just after midnight, buses and metro are limited. Arrange a cab or pick-up before you fly.\n- Keep passports and the forms handy for the immigration desk.",
+      "links": [],
+      "day_numbers": [
+        11
+      ],
+      "pinned": false,
+      "sort_order": 4,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    },
+    {
+      "category": "before",
+      "city": "Everywhere",
+      "title": "Pack smart: bags, batteries and what not to bring",
+      "summary": "Cabin 7 kg and checked 23 kg each. Leave vapes at home.",
+      "body": "**Baggage (from our ticket)**\n- Each traveller: 1 cabin bag up to 7 kg and 1 checked bag up to 23 kg.\n- Obey the airline's size limits or you may pay extra or be denied boarding.\n\n**Do not bring**\n- E-cigarettes and vapes: banned on aircraft and illegal in Thailand (see Safety).\n- Lighters or matches in checked bags, flammable liquids and gas, pepper spray, and other items on the airline's prohibited list.\n- Power banks: carry them in your cabin bag, never in checked luggage, and check the airline's current rules.\n\n**Do bring**\n- Reef-safe sunscreen (needed in marine parks: see Safety), a light rain jacket, a power adapter (see Essentials), a small day bag, and a layer for cold air-conditioned buses.",
+      "links": [],
+      "day_numbers": [
+        1
+      ],
+      "pinned": false,
+      "sort_order": 5,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    },
+    {
+      "category": "airport",
+      "city": "Bangalore",
+      "title": "Leaving Bengaluru (BLR): Terminal 2",
+      "summary": "International flights use Terminal 2. Aim to arrive about 3 hours before 16:15.",
+      "body": "Our ticket says departure is from Kempegowda International Airport, **Terminal 2**.\n\n**Timing**\n- Plan to be at the airport around 13:15 for the 16:15 departure (about 3 hours is a common recommendation for international flights).\n- Thai's check-in counter closes 50 minutes before departure (15:25). Bag drop must be done at least 60 minutes before.\n- If you check in online first, you can go straight to bag drop.\n\n**Remember**\n- Passport, e-ticket / boarding pass, and the proof of accommodation and return ticket that Thai immigration may ask to see.",
+      "links": [
+        {
+          "label": "Terminal 2 on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Kempegowda%20International%20Airport%20Bengaluru%20Terminal%202"
+        }
+      ],
+      "day_numbers": [
+        1
+      ],
+      "pinned": false,
+      "sort_order": 6,
+      "photo_path": "guide/bangalore-airport-t2.webp",
+      "photo_credit": "Sameer2905",
+      "photo_license": "CC BY-SA 4.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Terminal_2_Departure_of_Kempegowda_International_Airport.jpg"
+    },
+    {
+      "category": "airport",
+      "city": "Bangkok",
+      "title": "Arriving at Suvarnabhumi (BKK)",
+      "summary": "Immigration, baggage, a SIM counter and ATMs, then a taxi. Allow time at night.",
+      "body": "We land at 21:30. What to expect:\n\n- **Immigration**: queues can reach 30–45 minutes at busy times. Have your passport, the TDAC confirmation and your accommodation address ready.\n- **Baggage** then customs. Everything we carry is allowed, but leave vapes at home (see Safety).\n- **SIM counters** (AIS, TrueMove H, dtac) are in the arrivals hall, open 24 hours: see \"Phone data\".\n- **ATMs and money exchange** are in arrivals. Check the fee on the ATM screen and decline conversion (see Money).\n- **Transport**: see \"Airport to Sukhumvit\". The Airport Rail Link stops around midnight, so plan on a taxi or Grab.\n\n**Tip**: message the host of the first apartment when you land. Check-in there ends at midnight.",
+      "links": [
+        {
+          "label": "Suvarnabhumi on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Suvarnabhumi%20Airport%20BKK"
+        }
+      ],
+      "day_numbers": [
+        1
+      ],
+      "pinned": false,
+      "sort_order": 7,
+      "photo_path": "guide/suvarnabhumi-terminal.webp",
+      "photo_credit": "Supanut Arunoprayote",
+      "photo_license": "CC BY 4.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by/4.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Suvarnabhumi_Airport_Terminal_C_interior_(I).jpg"
+    },
+    {
+      "category": "airport",
+      "city": "Bangkok",
+      "title": "Airport to Sukhumvit: taxi or Grab (we land late)",
+      "summary": "The train will be closing. Use the official taxi queue or Grab, and use the meter.",
+      "body": "**Why not the train**\n- The Airport Rail Link runs from about 05:30 until around midnight, and there is no direct train to Sukhumvit (you change at Phaya Thai or Makkasan). After immigration and baggage you may miss it.\n\n**Taxi (official queue, Level 1)**\n- Runs 24 hours and is metered. Late at night the queue is usually short.\n- Expect roughly THB 400–700 all-in to Sukhumvit (meter plus the airport surcharge and expressway tolls, which you pay). Sources vary, so treat this as a guide.\n- Say \"meter, please\" before you set off. Keep some small notes for the tolls.\n\n**Grab**\n- Runs all night. Compare the app's price with the taxi meter; at night Grab is often the cheaper of the two.\n\n**Five people + luggage**\n- A normal taxi seats four. Book a larger car or van in the app, or take two taxis.\n\n**Landing and arrival**\n- Our first apartment's check-in window closes at midnight. Message the host if the queue is long.",
+      "links": [
+        {
+          "label": "Grab Thailand",
+          "url": "https://www.grab.com/th/"
+        },
+        {
+          "label": "Bangkok airport transfer guide (Wego)",
+          "url": "https://blog.wego.com/bangkok-airport-transfer/"
+        }
+      ],
+      "day_numbers": [
+        1
+      ],
+      "pinned": true,
+      "sort_order": 8,
+      "photo_path": "guide/airport-rail-link.webp",
+      "photo_credit": "Wiki05",
+      "photo_license": "Public domain",
+      "photo_license_url": null,
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:ARL_Bangkok_CityLine1.JPG"
+    },
+    {
+      "category": "airport",
+      "city": "Bangkok",
+      "title": "Heading home from BKK (7 Jan, 21:50)",
+      "summary": "Leave Sukhumvit by about 17:30. Check-in counter closes at 21:00.",
+      "body": "Flight TG 325 leaves at **21:50** (this replaces the 21:30 we assumed earlier).\n\n**Working back from take-off**\n- 21:50 departure; the gate closes at 21:40.\n- Check-in counter closes 50 minutes before: **21:00**. Bag drop by 20:50 at the latest.\n- Be at the airport around 18:45–19:00 (about 3 hours before), so leave Sukhumvit around 17:30. Evening Bangkok traffic is slow.\n\n**Getting there**\n- Taxi or Grab is easiest with five people and luggage. The Airport Rail Link (from Phaya Thai or Makkasan) avoids road traffic but is awkward with big bags.\n- Check out of the apartment by 11:00 and arrange luggage storage for the day.\n\n**Do online first**\n- Web check-in opens 24 hours before. Complete India's online arrival form too (see Before you fly).",
+      "links": [
+        {
+          "label": "Thai Airways check-in",
+          "url": "https://www.thaiairways.com/en-th/content/check-in/"
+        }
+      ],
+      "day_numbers": [
+        11
+      ],
+      "pinned": false,
+      "sort_order": 9,
+      "photo_path": "guide/thai-airways-aircraft.webp",
+      "photo_credit": "Mattes",
+      "photo_license": "Public domain",
+      "photo_license_url": null,
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Thai_Airways_aircraft_new_paint_design.JPG"
+    },
+    {
+      "category": "getting-around",
+      "city": "Everywhere",
+      "title": "Grab, metered taxis and tuk-tuks",
+      "summary": "Use Grab or a metered taxi. Agree a tuk-tuk price before you get in.",
+      "body": "**Grab** is the most widely used ride app and has the most drivers. **Bolt** is often cheaper but has fewer drivers. Check the app's quote first; it is a good benchmark when a taxi driver names a price.\n\n**Taxis**\n- Insist on the meter (\"meter, please\"). Politely leave if the driver refuses.\n- Pay tolls yourself when the driver takes an expressway.\n\n**Tuk-tuks**\n- Fun for a short ride, but there is no meter. Agree the price **before** you get in.\n- Be sceptical of anyone who says a temple or market is \"closed today\" and offers a cheap tour.\n\n**Songthaews** (shared pick-up trucks) run set routes in Phuket and Krabi; ask the fare before boarding and carry small notes.",
+      "links": [
+        {
+          "label": "Grab Thailand",
+          "url": "https://www.grab.com/th/"
+        }
+      ],
+      "day_numbers": [],
+      "pinned": false,
+      "sort_order": 10,
+      "photo_path": "guide/tuk-tuk.webp",
+      "photo_credit": "miketnorton",
+      "photo_license": "CC BY 2.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by/2.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:View_from_a_Bangkok_Tuk_Tuk.jpg"
+    },
+    {
+      "category": "getting-around",
+      "city": "Bangkok",
+      "title": "Sukhumvit Soi 31: your base",
+      "summary": "The nearest BTS stop is Phrom Phong. Asok is the next stop along.",
+      "body": "Both Bangkok apartments are on Sukhumvit Soi 31.\n\n- **BTS Phrom Phong** is the closest station: about 7–8 minutes on foot (hotel sites quote this from their entrances, so treat it as rough).\n- **BTS Asok** is next along, about 9–11 minutes on foot. Asok connects to the MRT.\n- **EmQuartier** and **The Emporium** (malls) sit at Phrom Phong, handy for food and shopping on the relaxed days.\n- Taxis and Grab are easy to catch on Sukhumvit Road.\n\nCheck-in and check-out details, and the door code or PIN, are on the Stays tab.",
+      "links": [
+        {
+          "label": "Soi 31 on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Sukhumvit%20Soi%2031%20Bangkok"
+        }
+      ],
+      "day_numbers": [
+        1,
+        2,
+        10,
+        11
+      ],
+      "pinned": false,
+      "sort_order": 11,
+      "photo_path": "guide/sukhumvit-night.webp",
+      "photo_credit": "OPK-Photography",
+      "photo_license": "CC BY-SA 4.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Bangkok,_Thailand,_Sukhumvit_Road,_2024.jpg"
+    },
+    {
+      "category": "getting-around",
+      "city": "Bangkok",
+      "title": "Bangkok by BTS, MRT and river boat",
+      "summary": "Skytrain for Sukhumvit, a river boat for the old city.",
+      "body": "- The **BTS Skytrain** runs above Sukhumvit Road and beats the traffic.\n- The **MRT** (underground) links with the BTS at Asok (the MRT station there is Sukhumvit).\n- For the old city and Wat Arun, the usual route is the BTS to **Saphan Taksin**, then a river boat on the Chao Phraya to **Tha Tien** pier (next to Wat Pho). The short cross-river ferry to Wat Arun costs a few baht (sources say THB 3–5).\n- Rush hours are about 07:00–09:30 and 16:30–19:30: avoid taxis then if you can.\n- Look at each station's exit signs before leaving; Bangkok stations have many exits.\n\nAlways keep small notes and coins for ticket machines and boats.",
+      "links": [],
+      "day_numbers": [
+        2,
+        10
+      ],
+      "pinned": false,
+      "sort_order": 12,
+      "photo_path": "guide/bangkok-skytrain-sunset.webp",
+      "photo_credit": "Diliff",
+      "photo_license": "CC BY-SA 3.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Bangkok_skytrain_sunset.jpg"
+    },
+    {
+      "category": "getting-around",
+      "city": "Bangkok",
+      "title": "Overnight bus: Bangkok to Phuket (30 Dec)",
+      "summary": "Not booked yet. About 11–14 hours; leave for the terminal early.",
+      "body": "**Status: not booked, times unconfirmed.** Plan: a VIP bus from the Southern Bus Terminal (Sai Tai Mai).\n\n**What sources say**\n- Journey time about 11–14 hours depending on operator and traffic (one booking site lists 12 hours). Overnight buses usually arrive in Phuket between 04:00 and 07:00, most often at **Phuket Bus Terminal 2**.\n- I could not find a confirmed Transport Co timetable for this route. Check the operator, 12Go or BusOnlineTicket.\n\n**Book it**\n- Buy on 12Go, BusOnlineTicket, the operator's site, or at the Sai Tai Mai counters. Avoid agents on Khao San Road.\n- Choose the departure time first, then plan check-out (11:00) and luggage storage around it.\n\n**On the day**\n- Allow at least an hour to reach Sai Tai Mai in evening traffic and arrive 45–60 minutes early.\n- Bring a layer (the air-conditioning is cold), snacks, water and a charged power bank.",
+      "links": [
+        {
+          "label": "BusOnlineTicket: Bangkok to Phuket",
+          "url": "https://www.busonlineticket.co.th/booking/bangkok-to-phuket-bus-tickets"
+        },
+        {
+          "label": "12Go Asia",
+          "url": "https://12go.asia/en"
+        },
+        {
+          "label": "Southern Bus Terminal on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Southern%20Bus%20Terminal%20Sai%20Tai%20Mai%20Bangkok"
+        }
+      ],
+      "day_numbers": [
+        3
+      ],
+      "pinned": false,
+      "sort_order": 13,
+      "photo_path": "guide/longtail-boats.webp",
+      "photo_credit": "Brandon Minieri",
+      "photo_license": "CC BY-SA 4.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Longtails_of_Krabi.jpg"
+    },
+    {
+      "category": "getting-around",
+      "city": "Phuket",
+      "title": "Phuket: from the bus terminal to Patong",
+      "summary": "Taxi about THB 420–550, or the Smart Bus for much less.",
+      "body": "The overnight bus usually arrives at Phuket Bus Terminal 2, north of Phuket Town. Patong is on the west coast.\n\n- **Taxi**: roughly THB 420–550 (about 20–30 minutes per route sites). Ask the price first.\n- **Grab / Bolt**: get a live quote in the app. Grab has more drivers; Bolt is often cheaper.\n- **Phuket Smart Bus**: about THB 50 from Bus Terminal 2 to Patong (check the current timetable). Cheapest, but slower.\n- **Blue songthaews**: prices vary by source; ask the driver.\n\n**Luggage**\n- The Airbnb's check-in starts at 15:00 and we arrive in the morning: ask the host whether bags can be dropped early (their number is on the Stays tab).\n\n**New Year's Eve**\n- Roads around Patong get very busy and prices rise. Do not rely on a quick taxi that evening.",
+      "links": [
+        {
+          "label": "Phuket Smart Bus (guide)",
+          "url": "https://insideoursuitcase.com/phuket-airport-to-patong/"
+        }
+      ],
+      "day_numbers": [
+        4
+      ],
+      "pinned": false,
+      "sort_order": 14,
+      "photo_path": "guide/patong-beach.webp",
+      "photo_credit": "Ewong17",
+      "photo_license": "CC BY-SA 4.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Patong_Beach_in_Phuket.jpg"
+    },
+    {
+      "category": "getting-around",
+      "city": "Phuket",
+      "title": "Phuket to Krabi by ferry (2 Jan)",
+      "summary": "A morning boat from Rassada Pier. Confirm the timetable and book ahead.",
+      "body": "The usual route is a ferry from **Rassada Pier** (Phuket) to the **Klong Jilad** pier on the Krabi side, taking roughly 2–3 hours.\n\n**Timetables**\n- Booking sites show a first sailing around 08:30 and the last between about 11:00 and 13:00, but they disagree. Confirm with the operator when you book. Andaman Wave Master and Chureang are listed operators.\n- A direct Ao Nang to Phuket service was listed as not currently sailing.\n\n**Plan the morning**\n- Check-out at the Patong apartment is 11:00, so you will leave early. Allow about an hour from Patong to Rassada, traffic dependent, and arrive at the pier 30–45 minutes before departure.\n- The ferry lands on the Krabi side. You still need a transfer from the pier to Pak-Up Hostel in Krabi Town: check the distance and options when you book.\n- Pak-Up check-in is 15:00 onwards; ask them to hold your bags if you arrive earlier.\n\n**Not booked yet.** Book a seat for five.",
+      "links": [
+        {
+          "label": "Direct Ferries: Phuket to Krabi",
+          "url": "https://www.directferries.com/phuket_krabi_klong_jilad_pier_ferry.htm"
+        }
+      ],
+      "day_numbers": [
+        6
+      ],
+      "pinned": false,
+      "sort_order": 15,
+      "photo_path": "guide/longtail-boats.webp",
+      "photo_credit": "Brandon Minieri",
+      "photo_license": "CC BY-SA 4.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Longtails_of_Krabi.jpg"
+    },
+    {
+      "category": "getting-around",
+      "city": "Krabi",
+      "title": "Overnight bus: Krabi to Bangkok (5 Jan)",
+      "summary": "Not booked yet. Departures cluster around 16:00–17:30.",
+      "body": "**Status: not booked, times unconfirmed.** Our plan was a VIP bus leaving about 17:00.\n\n**What sources say**\n- Krabi Bus Terminal is a few kilometres north of Krabi Town. Most big buses to Bangkok leave from there in the late afternoon (16:00–17:30), and a VIP 24 bus leaves around 17:00.\n- Journey time about 10–12 hours (estimates range up to 14). Buses mostly arrive at the Southern Terminal (Sai Tai Mai).\n\n**Plan the day**\n- Pak-Up check-out is by 12:00: ask the hostel to hold the bags until you go.\n- After Railay, be back in Krabi Town with a good buffer, then allow time to reach the bus terminal.\n- Arriving in Bangkok early on 6 Jan, the apartment check-in is 15:00: arrange luggage storage, or pick a hotel lounge or café for the morning.\n\nBook through the operator, 12Go or BusOnlineTicket.",
+      "links": [
+        {
+          "label": "BusOnlineTicket: Krabi to Sai Tai Mai",
+          "url": "https://www.busonlineticket.co.th/booking/krabi-to-southern-bangkok-bus-terminal-(sai-tai-mai)-bus-tickets"
+        }
+      ],
+      "day_numbers": [
+        9
+      ],
+      "pinned": false,
+      "sort_order": 16,
+      "photo_path": "guide/krabi-town.webp",
+      "photo_credit": "kallerna",
+      "photo_license": "CC BY-SA 3.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Krabi_town_8.JPG"
+    },
+    {
+      "category": "places",
+      "city": "Bangkok",
+      "title": "Wat Arun and the river",
+      "summary": "Go by day. Cover shoulders and knees. Cross by ferry from Tha Tien.",
+      "body": "**Practicalities (check before you go)**\n- Entry is about THB 200 for foreign adults. Hours are usually 08:00–18:00, last entry about 17:30; some sources differ, and Buddhist holidays can shorten them.\n- **Dress code**: shoulders and knees covered, enforced at the entrance. Borrowable wraps may be available.\n- The ferry to the temple leaves from Tha Tien Pier, next to Wat Pho. Queues at busy times add 10–15 minutes.\n\n**Suggested day**\n- Morning: BTS to Saphan Taksin, river boat to Tha Tien, cross to Wat Arun.\n- Afternoon: wander Talat Noi's lanes and street art.\n- Evening: Yaowarat for dinner.\n\nTake water and a hat; there is little shade on the temple steps.",
+      "links": [
+        {
+          "label": "Wat Arun on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Wat%20Arun%20Bangkok"
+        }
+      ],
+      "day_numbers": [
+        2
+      ],
+      "pinned": false,
+      "sort_order": 17,
+      "photo_path": "guide/wat-arun-gate.webp",
+      "photo_credit": "BerryJ",
+      "photo_license": "CC BY-SA 4.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:The_sculptures_of_two_mythical_giant_demons,_Thotsakan_and_Sahatsadecha,_guarding_the_eastern_gate_of_the_main_chapel_of_Wat_Arun,_Bangkok.jpg"
+    },
+    {
+      "category": "places",
+      "city": "Bangkok",
+      "title": "Talat Noi: lanes, shrines and street art",
+      "summary": "An old Chinese-Thai quarter by the river, great on foot.",
+      "body": "Talat Noi sits between the river and Yaowarat. It is known for narrow lanes, old shophouses, small shrines and large murals.\n\n- Best on foot in daylight, in comfortable shoes.\n- Respect shrines: ask before photographing people and keep voices low.\n- Cafés and street-art stops make it easy to pause between Wat Arun and Chinatown.",
+      "links": [
+        {
+          "label": "Talat Noi on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Talat%20Noi%20Bangkok"
+        }
+      ],
+      "day_numbers": [
+        2
+      ],
+      "pinned": false,
+      "sort_order": 18,
+      "photo_path": "guide/talat-noi-street-art.webp",
+      "photo_credit": "Phoebus 28",
+      "photo_license": "CC BY-SA 4.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Talat_Noi_Street_Art.jpg"
+    },
+    {
+      "category": "places",
+      "city": "Bangkok",
+      "title": "Yaowarat street food after dark",
+      "summary": "Chinatown comes alive in the evening. Go hungry, carry small notes.",
+      "body": "Yaowarat Road is Bangkok's Chinatown. The neon signs and food stalls are at their best after dark.\n\n- Go hungry and share plates so you can try more.\n- Carry small notes: most stalls are cash only.\n- Choose busy stalls with quick turnover; ask \"mai phet\" for not spicy.\n- Drink bottled or sealed water; avoid ice you are unsure about.\n- Walk, don't drive: the traffic here is heavy in the evening.",
+      "links": [
+        {
+          "label": "Yaowarat on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Yaowarat%20Road%20Bangkok"
+        }
+      ],
+      "day_numbers": [
+        2
+      ],
+      "pinned": false,
+      "sort_order": 19,
+      "photo_path": "guide/yaowarat-night.webp",
+      "photo_credit": "Ninara from Helsinki, Finland",
+      "photo_license": "CC BY 2.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by/2.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Yaowarat_at_night_(32455695783).jpg"
+    },
+    {
+      "category": "places",
+      "city": "Phuket",
+      "title": "New Year's Eve in Phuket",
+      "summary": "Nothing is booked yet. Plan how you will get home before you go.",
+      "body": "The plan lists four options (none booked): Paradise Beach Full Moon Festival, The Deck Beach Club Patong, Endless Summer Beach Club, and the M Social Phuket pool party. Use the Polls tab to choose together.\n\n**Advice for a big night**\n- Check ticket details and times directly with the venue.\n- Agree a meeting point and what to do if someone loses their phone.\n- Expect crowds, closed roads and higher taxi and Grab prices. Settle your route home before midnight.\n- Keep passports and valuables locked in the apartment.\n- Drink water, watch your drinks, and look after each other.",
+      "links": [
+        {
+          "label": "Patong on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Patong%20Beach%20Phuket"
+        }
+      ],
+      "day_numbers": [
+        4
+      ],
+      "pinned": false,
+      "sort_order": 20,
+      "photo_path": "guide/patong-beach.webp",
+      "photo_credit": "Ewong17",
+      "photo_license": "CC BY-SA 4.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Patong_Beach_in_Phuket.jpg"
+    },
+    {
+      "category": "places",
+      "city": "Phuket",
+      "title": "A slow day: Kata, Karon and Old Town",
+      "summary": "Beach in the morning, shophouses and massage after.",
+      "body": "- **Kata and Karon** are neighbouring beaches south of Patong. Allow roughly 30–45 minutes by road depending on traffic.\n- **Phuket Old Town** has pastel Sino-Portuguese shophouses along Thalang Road, with cafés and shops.\n- A massage is easy to find; agree the price and length first.\n- It is 1 January: many places open late, so have a plan for lunch.\n\nKeep this day relaxed: the next morning is an early ferry.",
+      "links": [
+        {
+          "label": "Kata Beach on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Kata%20Beach%20Phuket"
+        },
+        {
+          "label": "Phuket Old Town on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Phuket%20Old%20Town%20Thalang%20Road"
+        }
+      ],
+      "day_numbers": [
+        5
+      ],
+      "pinned": false,
+      "sort_order": 21,
+      "photo_path": "guide/kata-beach.webp",
+      "photo_credit": "Radek Kucharski",
+      "photo_license": "CC BY 2.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by/2.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Kata_Beach1.jpg"
+    },
+    {
+      "category": "places",
+      "city": "Phuket",
+      "title": "Phuket Old Town: Thalang Road",
+      "summary": "Colourful shophouses, cafés and a good place for dinner.",
+      "body": "Thalang Road is the heart of Old Town: restored Sino-Portuguese shophouses, cafés and small shops.\n\n- Walk it in the late afternoon for softer light and cooler air.\n- Many cafés and restaurants here are good for a relaxed dinner.\n- Taxis and Grab take you back to Patong; settle the fare or use the app.",
+      "links": [
+        {
+          "label": "Thalang Road on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Thalang%20Road%20Phuket%20Old%20Town"
+        }
+      ],
+      "day_numbers": [
+        5
+      ],
+      "pinned": false,
+      "sort_order": 22,
+      "photo_path": "guide/phuket-old-town.webp",
+      "photo_credit": "Slleong",
+      "photo_license": "CC0",
+      "photo_license_url": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Thalang_Road_3.jpg"
+    },
+    {
+      "category": "places",
+      "city": "Krabi",
+      "title": "Krabi Town and the weekend night market",
+      "summary": "The walking street runs Friday to Sunday, and 2 Jan is a Saturday.",
+      "body": "- Krabi Town's weekend night market (\"walking street\") runs Friday to Sunday, usually about 17:00–22:00. Check its location relative to Pak-Up Hostel on the map.\n- **2 January 2027 is a Saturday**, so it should be open on our first evening. Hours can change: check locally.\n- Ao Nang has a separate night market every day, about 17:00–23:00.\n- Bring cash in small notes. Good for dinner, snacks and souvenirs.",
+      "links": [
+        {
+          "label": "Krabi Night Markets (guide)",
+          "url": "https://krabinature.com/krabi-night-markets-in-town-and-ao-nang-beach/"
+        }
+      ],
+      "day_numbers": [
+        6
+      ],
+      "pinned": false,
+      "sort_order": 23,
+      "photo_path": "guide/krabi-night-market.webp",
+      "photo_credit": "Stefan Fussan",
+      "photo_license": "CC BY-SA 4.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Black_Crab_Night_Market,_Krabi_SF0003.jpg"
+    },
+    {
+      "category": "places",
+      "city": "Krabi",
+      "title": "Ao Thalane kayaking (2 Jan)",
+      "summary": "Mangrove channels and limestone cliffs. Not booked yet.",
+      "body": "A guided half-day kayak through mangrove channels and beside limestone formations.\n\n**Status: not booked.** Confirm: operator, price, start time, and pick-up from Pak-Up.\n\n**Bring**\n- Quick-dry clothes, a hat, sunglasses and water.\n- Reef-safe sunscreen (see Safety).\n- A waterproof pouch for your phone, and a dry bag for valuables.\n- Cash for any park or tip.\n\nTides can affect the route and timing, so keep the schedule flexible.",
+      "links": [
+        {
+          "label": "Ao Thalane on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Ao%20Thalane%20Krabi"
+        }
+      ],
+      "day_numbers": [
+        6
+      ],
+      "pinned": false,
+      "sort_order": 24,
+      "photo_path": "guide/ao-thalane.webp",
+      "photo_credit": "Christophe95",
+      "photo_license": "CC BY-SA 4.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Ao_Thalane.jpg"
+    },
+    {
+      "category": "places",
+      "city": "Krabi",
+      "title": "Discover Scuba Diving (3 Jan)",
+      "summary": "Beginner, supervised. Not booked yet. Do the medical form honestly.",
+      "body": "A Discover Scuba Diving session is a supervised introductory dive, with a briefing and practice in shallow water first. The operator we considered was The Dive Ao Nang (not booked).\n\n**Before you book, confirm**\n- The instructor ratio and who looks after first-time divers.\n- Pick-up from Pak-Up and what time you are back.\n- The medical and safety requirements.\n\n**Medical form**\n- You will complete a medical questionnaire. Answer honestly. Some \"yes\" answers need a doctor's sign-off before diving.\n- Do not dive with a cold or blocked ears or sinuses.\n\n**Flying after diving**\n- Divers Alert Network recommends waiting at least 12 hours after a single no-stop dive, and 18 hours or more after repeated dives. Our flight home is on 7 Jan, so this is not a problem, but keep it in mind if plans change.",
+      "links": [
+        {
+          "label": "DAN: guidelines for flying after diving",
+          "url": "https://dan.org/health-medicine/health-resource/health-safety-guidelines/guidelines-for-flying-after-diving/"
+        }
+      ],
+      "day_numbers": [
+        7
+      ],
+      "pinned": false,
+      "sort_order": 25,
+      "photo_path": "guide/dive-boat-andaman.webp",
+      "photo_credit": "Hanumanix at English Wikipedia",
+      "photo_license": "Public domain",
+      "photo_license_url": null,
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Dive_Boat_in_the_Similans.JPG"
+    },
+    {
+      "category": "places",
+      "city": "Krabi",
+      "title": "Phi Phi Islands by speedboat (4 Jan)",
+      "summary": "Full day. Not booked yet. Confirm stops, fees and pick-up.",
+      "body": "**Status: not booked.** Ask the operator for: the exact itinerary, whether national park fees are included, the departure point, pick-up from Pak-Up, snorkel gear, and lunch.\n\n**Likely stops** (confirm): Maya Bay, Pileh Lagoon, snorkelling, Phi Phi Don, and Bamboo Island if included. There is no overnight on Phi Phi.\n\n**Bring**\n- Reef-safe sunscreen only (see Safety), a hat, towel and a change of clothes.\n- A waterproof phone pouch: speedboats are splashy.\n- Motion-sickness tablets if you are prone to it.\n- Cash for the park fee if it is not included.\n\nSee the separate card for Maya Bay's rules.",
+      "links": [
+        {
+          "label": "Phi Phi on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Phi%20Phi%20Islands"
+        }
+      ],
+      "day_numbers": [
+        8
+      ],
+      "pinned": false,
+      "sort_order": 26,
+      "photo_path": "guide/phi-phi-lagoon.webp",
+      "photo_credit": "Diego Delso",
+      "photo_license": "CC BY-SA 3.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Isla_Phi_Phi_Lay,_Tailandia,_2013-08-19,_DD_04.JPG"
+    },
+    {
+      "category": "places",
+      "city": "Krabi",
+      "title": "Maya Bay: what's allowed",
+      "summary": "Open again since 1 Oct 2026. No swimming in the bay.",
+      "body": "Maya Bay (on Koh Phi Phi Leh) closes every August and September for the coral to recover, and **reopened on 1 October 2026**.\n\n- **No swimming in Maya Bay** (banned since 2022); you can only wade in about to your knees.\n- Boats do not enter the bay. Tour boats anchor at Loh Samah Bay and visitors walk in along a boardwalk.\n- Time on the beach is limited (about an hour), and visitor numbers are capped (sources say roughly 300–380 at a time).\n- The national park fee is about THB 400 for foreign adults (check; it may or may not be in your tour price).\n- Swimming and snorkelling happen at other stops such as Pileh Lagoon and Bamboo Island.\n\nThe rules come from the national park authority and can change.",
+      "links": [
+        {
+          "label": "Maya Bay: what to know (guide)",
+          "url": "https://www.nomadotravel.app/en/attractions/maya-bay-krabi"
+        }
+      ],
+      "day_numbers": [
+        8
+      ],
+      "pinned": false,
+      "sort_order": 27,
+      "photo_path": "guide/maya-bay.webp",
+      "photo_credit": "Fabio Achilli from Milano, Italy",
+      "photo_license": "CC BY 2.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by/2.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Phi_Phi_Island,_Maya_Bay_on_Phi_Phi_Leh_(6222526031).jpg"
+    },
+    {
+      "category": "places",
+      "city": "Krabi",
+      "title": "Railay: beginner rock climbing (5 Jan)",
+      "summary": "Reached by boat. Not booked yet. Be back in time for the bus.",
+      "body": "**Status: not booked.** Beginner guided climbing at Railay, with a longtail boat transfer.\n\n**Getting to Railay**\n- Shared longtail from Ao Nang beach: about THB 100 one way (+50 after 18:00), roughly 10–30 minutes. It usually lands at Railay West with a wet landing (no pier). Pay cash, preferably at the boat-club booth.\n- Speedboats from the Ao Nam Mao pier go to Railay East (about THB 150 one way, per one source).\n- A guiding company will often arrange the transfer. Ask.\n\n**Plan the day**\n- The bus to Bangkok leaves around 17:00: set a hard \"leave Railay by\" time and agree it with the guides.\n- Wear shoes you can climb in, and bring water, a hat and reef-safe sunscreen.\n\nCheck prices and times locally.",
+      "links": [
+        {
+          "label": "Railay on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Railay%20Beach%20Krabi"
+        }
+      ],
+      "day_numbers": [
+        9
+      ],
+      "pinned": false,
+      "sort_order": 28,
+      "photo_path": "guide/railay.webp",
+      "photo_credit": "Krzysztof Golik",
+      "photo_license": "CC BY-SA 4.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:West_Rai_Leh_(11).jpg"
+    },
+    {
+      "category": "places",
+      "city": "Krabi",
+      "title": "Phra Nang Beach (optional)",
+      "summary": "A short beach stop beside Railay, with a huge limestone cliff.",
+      "body": "Phra Nang is a postcard beach beside Railay, with a towering limestone cliff and a cave.\n\n- Optional on the climbing day, if time allows.\n- Respect the shrine at the cave and dress modestly there.\n- Tides change how much beach you get.\n- Keep a close eye on the clock for the bus.",
+      "links": [
+        {
+          "label": "Phra Nang on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Phra%20Nang%20Beach%20Krabi"
+        }
+      ],
+      "day_numbers": [
+        9
+      ],
+      "pinned": false,
+      "sort_order": 29,
+      "photo_path": "guide/phra-nang-beach.webp",
+      "photo_credit": "kallerna",
+      "photo_license": "CC BY-SA 3.0",
+      "photo_license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+      "photo_source_url": "https://commons.wikimedia.org/wiki/File:Phra_Nang_beach_1.jpg"
+    },
+    {
+      "category": "essentials",
+      "city": "Everywhere",
+      "title": "Phone data: SIM or eSIM",
+      "summary": "Counters at BKK work 24/7. Or set up an eSIM before you fly.",
+      "body": "**At Suvarnabhumi**\n- AIS, TrueMove H and dtac have counters in arrivals, open 24 hours.\n- A physical tourist SIM needs your passport and a registration (often with a selfie). Operator eSIMs bought direct are registered the same way.\n\n**Before you fly**\n- Third-party eSIMs (Airalo, Saily, Holafly and similar) can be installed at home, with no queue. Vendors say they need no passport registration: check with the seller.\n- Typical validity is 7 to 30 days; compare data allowances.\n\n**Advice**\n- Many guides favour AIS for coverage and TrueMove H for heavy data use. All three major networks work in the places we are going.\n- Keep your Indian number working (roaming pack or Wi-Fi calling) for bank OTPs.\n- Prices and plans change often: check the operator before buying.",
+      "links": [
+        {
+          "label": "Best SIM cards in Thailand (Thaiger)",
+          "url": "https://thethaiger.com/guides/best-of/best-sim-card-thailand"
+        }
+      ],
+      "day_numbers": [
+        1
+      ],
+      "pinned": false,
+      "sort_order": 30,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    },
+    {
+      "category": "essentials",
+      "city": "Everywhere",
+      "title": "Money: baht, ATMs and cards",
+      "summary": "ATM fees are around THB 220–250+. Choose baht and decline conversion.",
+      "body": "- Thai ATMs charge a flat fee per withdrawal, commonly THB 220–250, and some banks' schedules are higher (one bank lists THB 250 for Visa and THB 350 for Mastercard from March 2026). Check the fee on screen before confirming.\n- **AEON** ATMs charge less (about THB 150, limit THB 20,000) but are harder to find.\n- Because the fee is flat, fewer, larger withdrawals cost less overall.\n- Always choose to be charged **in baht** and decline \"dynamic currency conversion\".\n- Check your own bank's daily overseas withdrawal limit and any fees before you leave.\n- Carry baht cash for markets, songthaews, boat tickets and small shops; many only take cash.\n- Tipping is not obligatory; rounding up or leaving THB 20–50 for good service is appreciated.",
+      "links": [
+        {
+          "label": "ATMs in Thailand (Wise)",
+          "url": "https://wise.com/us/blog/atms-in-thailand"
+        }
+      ],
+      "day_numbers": [],
+      "pinned": false,
+      "sort_order": 31,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    },
+    {
+      "category": "essentials",
+      "city": "Everywhere",
+      "title": "Power plugs and voltage",
+      "summary": "Same voltage as India. Bring a plug adapter for 3-pin chargers.",
+      "body": "- Thailand uses about 220–230 V at 50 Hz, the same as India, so Indian appliances work without a converter. Look for \"100–240 V\" on laptop and phone chargers.\n- Sockets are types A, B, C, F and O (many are hybrid sockets that take several plug shapes).\n- A two-round-pin plug (type C) usually fits directly. A **three-pin Indian plug (type D)** generally needs an adapter.\n- Pack a multi-socket adapter for the apartments so five of you can charge overnight.",
+      "links": [
+        {
+          "label": "Thailand plugs and voltage",
+          "url": "https://www.worldstandards.eu/electricity/plug-voltage-by-country/thailand/"
+        }
+      ],
+      "day_numbers": [
+        1
+      ],
+      "pinned": false,
+      "sort_order": 32,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    },
+    {
+      "category": "essentials",
+      "city": "Everywhere",
+      "title": "Weather: late December and early January",
+      "summary": "Dry, high season. Warm days, calm Andaman sea, short showers possible.",
+      "body": "- The Andaman coast (Phuket, Krabi, Phi Phi) is in its dry high season: sea around 27–29 degrees and generally calm.\n- Days are hot (highs around 32–33 degrees) and nights warm (lows around 25).\n- Rain, when it comes, is usually a short shower. Rainfall figures vary widely between sources, so treat them as rough.\n- Bangkok is in its drier, cooler stretch.\n\n**Pack**: light breathable clothes, a rain jacket, a hat, sunglasses, reef-safe sunscreen, a swimsuit, sandals, and a layer for freezing air-conditioned buses and malls.",
+      "links": [],
+      "day_numbers": [],
+      "pinned": false,
+      "sort_order": 33,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    },
+    {
+      "category": "essentials",
+      "city": "Everywhere",
+      "title": "Temple etiquette and local manners",
+      "summary": "Cover shoulders and knees, remove shoes, and be respectful.",
+      "body": "- **Temples**: shoulders and knees covered. Take off shoes where signs or other visitors do. Speak quietly.\n- **Greeting**: the \"wai\" (palms together, slight bow) is polite. A smile goes a long way.\n- **Heads and feet**: do not touch people's heads, and do not point your feet at people or Buddha images.\n- **Buddha images** are sacred: do not climb on them or pose disrespectfully.\n- **The monarchy** is treated with great respect in Thailand. Do not joke about or criticise the royal family.\n- Stay calm if there is a misunderstanding; raised voices are considered rude.",
+      "links": [],
+      "day_numbers": [],
+      "pinned": false,
+      "sort_order": 34,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    },
+    {
+      "category": "essentials",
+      "city": "Everywhere",
+      "title": "A few Thai phrases",
+      "summary": "Hello, thank you, not spicy, how much, toilet.",
+      "body": "Men end polite phrases with \"khrap\" (ครับ); women use \"kha\" (ค่ะ). All of us can say \"khrap\".\n\n- Hello: **sawasdee khrap**\n- Thank you: **khop khun khrap**\n- No problem / never mind: **mai pen rai**\n- How much?: **tao rai?**\n- Not spicy: **mai phet**\n- Delicious: **aroy**\n- Toilet: **hong nam**\n\nA phrase said with a smile, even clumsily, is warmly received.",
+      "links": [],
+      "day_numbers": [],
+      "pinned": false,
+      "sort_order": 35,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    },
+    {
+      "category": "safety",
+      "city": "Everywhere",
+      "title": "Emergency numbers and the Indian Embassy",
+      "summary": "Police 191, Tourist Police 1155, ambulance 1669. Save these offline.",
+      "body": "**Thailand**\n- Police: **191**. Tourist Police (English-speaking, 24 hours): **1155**.\n- Ambulance / medical emergency: **1669**. Fire: **199**.\n\n**Embassy of India, Bangkok** (from the embassy's official page)\n- Address: 46 Prasarnmitr, Sukhumvit Soi 23, Bangkok 10110.\n- Telephone: 02-2580300-5, 022580307, 022604166.\n- Consular email: cons.bangkok@mea.gov.in\n- **Emergency helpline for Indian nationals in distress, after hours and on holidays: +66-618819218.** Not for passport or visa queries.\n- Consular hours are around 09:00–12:00. The embassy is closed on Thai and Indian public holidays.\n\nSave these numbers in your phone and screenshot this page for offline use.",
+      "links": [
+        {
+          "label": "Embassy of India Bangkok: consular contacts",
+          "url": "https://embassyofindiabangkok.gov.in/eoibk_pages/OTM"
+        },
+        {
+          "label": "Embassy on Google Maps",
+          "url": "https://www.google.com/maps/search/?api=1&query=Embassy%20of%20India%20Bangkok%20Sukhumvit%20Soi%2023"
+        }
+      ],
+      "day_numbers": [],
+      "pinned": true,
+      "sort_order": 36,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    },
+    {
+      "category": "safety",
+      "city": "Everywhere",
+      "title": "If something goes wrong: your travel insurance",
+      "summary": "Keep reports and receipts. Claims start online or by phone.",
+      "body": "Our group travel insurance is by ACKO (bought through MakeMyTrip). The certificates, policy numbers and full cover are in Wallet → Documents.\n\n**If something happens**\n- In an emergency, get help first (see emergency numbers), then contact the insurer.\n- Notify them promptly. Keep receipts, medical reports and police reports.\n- **Baggage delay or loss**: get a Property Irregularity Report (PIR) from the airline at the airport; the details must match your baggage tag.\n- **Medical cover** reimburses expenses if you are hospitalised for at least 24 hours, with a deductible. Pre-existing conditions are generally not covered.\n- Claims start with the registered mobile number and the policy number.\n\n**Contacts (from the policy)**\n- Rest of the world: +91-22-69635374. Toll-free in India: 1800 266 2256.\n- WhatsApp: +91-8828254935 (send \"Hi\"). Email: acko@europ-assistance.in.\n\nThe policy is valid for travellers with an Indian passport and Indian bank account.",
+      "links": [
+        {
+          "label": "Start a claim",
+          "url": "https://tinyurl.com/mpm249tc"
+        }
+      ],
+      "day_numbers": [],
+      "pinned": false,
+      "sort_order": 37,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    },
+    {
+      "category": "safety",
+      "city": "Everywhere",
+      "title": "Vapes, alcohol and other rules",
+      "summary": "Vapes are illegal. Alcohol rules have changed: ask on the spot.",
+      "body": "- **E-cigarettes and vapes** are completely banned in Thailand: possession, import and sale. Fines and prison are possible, and tourists are not treated differently. Leave them at home, and do not carry them through the airport.\n- **Alcohol**: sale and consumption rules were updated in 2025–2026 (the old afternoon sales ban has been lifted or changed). Hours differ between sources, so ask the venue rather than relying on a fixed rule.\n- **Drugs**: penalties are severe and rules are in flux. Stay away from them.\n- Do not carry anything for a stranger.",
+      "links": [
+        {
+          "label": "Bangkok Post: tourists warned of e-cigarette fines",
+          "url": "https://www.bangkokpost.com/news/general/1572378/tourists-warned-of-e-cigarette-fines"
+        },
+        {
+          "label": "TAT: alcohol rules updated",
+          "url": "https://thailand.go.th/guide-book-detail/alcohol-sales-and-consumption-rules-updated-in-thailand"
+        }
+      ],
+      "day_numbers": [],
+      "pinned": false,
+      "sort_order": 38,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    },
+    {
+      "category": "safety",
+      "city": "Everywhere",
+      "title": "Marine-park sunscreen rule",
+      "summary": "Some sunscreens are banned in Thai marine parks. Fines up to THB 100,000.",
+      "body": "Since August 2021, sunscreens with certain ingredients are banned in Thai marine national parks, and the rule was re-emphasised in October 2025. Fines can reach THB 100,000.\n\n**Banned ingredients**: oxybenzone, octinoxate, 4-methylbenzylidene camphor (4MBC) and butylparaben.\n\n**What to do**\n- Check the ingredient list before you pack.\n- Use a zinc-oxide product, or one marked \"reef safe\" or \"reef friendly\".\n- Apply sunscreen before you reach the boat, and wear a rash vest or long sleeves.\n\nThis applies on the Phi Phi trip, snorkelling and diving days.",
+      "links": [
+        {
+          "label": "Bangkok Post: coral-damaging sunscreens banned",
+          "url": "https://www.bangkokpost.com/travel/2160047/coral-damaging-sunscreens-banned-in-marine-parks"
+        }
+      ],
+      "day_numbers": [
+        7,
+        8,
+        9
+      ],
+      "pinned": false,
+      "sort_order": 39,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    },
+    {
+      "category": "safety",
+      "city": "Everywhere",
+      "title": "Common scams and sensible safety",
+      "summary": "Use meters, agree prices, lock up passports and watch the sea.",
+      "body": "**Scams to expect**\n- \"The temple is closed today\": a tuk-tuk or stranger offers a cheap tour instead. Ignore it.\n- Taxis without a meter or a very high fixed price: ask for the meter or use Grab.\n- Jet-ski or scooter \"damage\" claims in beach towns: do not rent them, or photograph everything before and after.\n- Overpriced drinks or add-on charges in bars: check the menu price first.\n\n**Stay safe**\n- Keep your passport locked up; carry a photo of it on your phone.\n- Do not rent a scooter unless you hold the right licence: insurance may not cover you without one.\n- Obey beach flags and lifeguards, and never swim alone at night.\n- Drink bottled water, use mosquito repellent, and rehydrate in the heat.\n- Share your live location with each other on busy nights.",
+      "links": [],
+      "day_numbers": [],
+      "pinned": false,
+      "sort_order": 40,
+      "photo_path": null,
+      "photo_credit": null,
+      "photo_license": null,
+      "photo_license_url": null,
+      "photo_source_url": null
+    }
+  ]
+}

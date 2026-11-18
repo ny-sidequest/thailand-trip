@@ -204,3 +204,11 @@ Fixed here by using `animation-fill-mode: backwards`. The same `both` fill exist
 - Pushed to GitHub; CI (tests + build + Pages deploy) runs on push.
 - Design worktree removed. Third-party design skill remains local-only (git-ignored).
 **Next:** nothing pending. Ideas: real destination photos, trip switcher UI, "save documents for offline", optional login throttling.
+
+## Destination guide (2026-11-18; built locally, NOT yet pushed)
+- Migration `0011_guide.sql` (table `guide_items`; members read, admins write, soft delete only, https-only links, photo path pinned to `guide/*.webp`, realtime) + `supabase/guide_seed.sql` (40 items, idempotent).
+- Content: `supabase/guide/thailand-2026.json` (generated seed via `scripts/build-guide-seed.mjs`). Researched from official/secondary sources; uncertain items say "confirm"; bus and ferry times flagged unconfirmed; no booking refs, PINs or policy numbers. Booking-specific facts (check-in windows, baggage, insurance contacts) cross-checked against the private manifest.
+- 23 Wikimedia Commons photos (CC BY / CC BY-SA / CC0 / PD) in `public/guide/` (~2.4 MB), each credited in the guide. Service worker caches them (CacheFirst, `guide-photos`); API data is still never cached by the SW.
+- UI: Guide page (search, section + city chips, cards, detail sheet), "Good to know" strip on Itinerary days, Home quick link, More/sidebar entry, Admin → Destination guide (add/edit/remove), offline copy of the text.
+- Checks: unit 83, DB 177 (guide RLS, seed idempotent, link/photo/category checks, no private identifiers), build OK, browser smoke (guide, sheet, itinerary day, admin) no errors/overflow.
+- [ ] User applies 0011 then guide_seed.sql live, tests, then push + deploy.

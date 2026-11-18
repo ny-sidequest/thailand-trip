@@ -74,3 +74,12 @@ Before testing, confirm every migration up to the latest one has been applied (s
 7. Install to the home screen (iOS: Share → Add to Home Screen; Android: Install app); it opens full-screen with the icon.
 8. Auth → Providers → Email: "Secure password change" is ON; run `node scripts/rotate-emails.mjs`; everyone can still sign in with their username.
 9. Mobile: Home, Itinerary, Expenses, Feed fit the screen without zooming or sideways scrolling.
+
+## Destination guide  (migration 0011 + guide_seed.sql)
+1. Guide shows in More (phone) / sidebar (desktop) and as "Destination guide" on Home. Sections show photos; open a card: detail sheet with links and a photo credit.
+2. Search "eSIM" and "taxi": relevant cards only. Chips filter by section and city.
+3. Itinerary → Day 1: "Good to know" strip lists check-in, TDAC, entry rules, etc.; tapping opens the guide item.
+4. Checks as a non-admin: no Admin → Destination guide tile; guide items cannot be edited.
+5. As admin: Admin → Destination guide → edit a title, add an item with a link (`Label | https://…`), remove it. Another phone sees it without refreshing.
+6. Offline: open the guide, turn on airplane mode, reload: text and visited photos still show with the "Offline copy" note.
+7. Read the practical facts once yourself (flight check-in, TDAC, entry rules) and fix anything you know to be wrong in Admin.

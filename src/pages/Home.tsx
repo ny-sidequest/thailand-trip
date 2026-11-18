@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Bed, Bell, Bus, CalendarClock, CheckSquare, FileText, Map as MapIcon, MapPin, Plane, Ship, Sparkles } from 'lucide-react'
+import { Bed, Bell, Bus, CalendarClock, CheckSquare, FileText, BookOpen, Map as MapIcon, MapPin, Plane, Ship } from 'lucide-react'
 import { supabase, unwrap } from '@/lib/supabase'
 import { useAuth } from '@/context/AuthContext'
 import { useTrip } from '@/context/TripContext'
@@ -132,7 +132,7 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
           { to: '/wallet', icon: FileText, label: 'Tickets & docs' },
           { to: '/itinerary', icon: MapIcon, label: 'Itinerary' },
           { to: '/checklist', icon: CheckSquare, label: 'My checklist' },
-          { to: '/feed', icon: Sparkles, label: 'Group feed' },
+          { to: '/guide', icon: BookOpen, label: 'Destination guide' },
         ].map(({ to, icon: I, label }) => (
           <Link key={to} to={to} className="glass hover-lift flex items-center gap-3 rounded-2xl px-3.5 min-h-[64px] font-semibold text-ink-50 active:scale-[.98] transition">
             <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-jungle-400/30 to-jungle-600/15 text-jungle-300 ring-1 ring-inset ring-jungle-500/20"><I className="h-5 w-5" aria-hidden="true" /></span>{label}
