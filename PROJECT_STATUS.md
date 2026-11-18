@@ -176,3 +176,10 @@ CSP/console/overflow/crash checks) run from the scratchpad (not part of the repo
 **Mobile Home overflow (reported by user in Phase 1): fixed.** Cause: grid items kept `min-width:auto`, so a long booking title
 stretched the page to 684 px on phones. Fixed with `min-w-0` on the Home grids. Verified in a real browser at 320/360/390/430 px;
 all 24 routes x 5 viewports render with no crashes, console/CSP errors or horizontal overflow (backend mocked).
+
+## Live setup for Phases 4-8 (2026-11-18)
+- [x] Migrations 0006-0010 applied live and verified by diagnostic queries (0010 fully present: 3 functions, 2 triggers, pings table + realtime, MIME limits, anon cannot call helpers).
+- [x] `admin-users` redeployed (v2, active, rejects unauthenticated calls).
+- [x] `scripts/rotate-emails.mjs` run: all 5 accounts now have random sign-in emails; sign-in confirmed working.
+- [x] Auth "Secure password change" enabled.
+- [ ] Manual live test round (`docs/TEST_PLAN.md`, Phases 4-8) -> then push + deploy (8 local commits not pushed).
