@@ -7,8 +7,10 @@ import { useAsync } from '@/hooks/useAsync'
 import { useAnnouncements } from '@/hooks/useSocial'
 import { AnnouncementCard } from '@/components/social/Announcements'
 import { useRealtime } from '@/hooks/useRealtime'
+import { useNow } from '@/hooks/useNow'
+import CityScene from '@/components/CityScene'
 import { Avatar, Card, EmptyState, ErrorState, ProgressBar, SectionTitle, Skeleton, StatusBadge } from '@/components/ui'
-import { cityRuns, daysUntil, fmtDate, fmtDateLong, fmtTime, mapsDirectionsUrl, safeUrl, timeAgo } from '@/lib/format'
+import { cityRuns, tripClock, fmtDate, fmtDateLong, fmtTime, mapsDirectionsUrl, safeUrl, timeAgo } from '@/lib/format'
 import type { Accommodation, Activity, Day, FeedItem, Transport } from '@/lib/types'
 
 interface Progress { user_id: string; completed: number; total: number }
@@ -38,27 +40,43 @@ export default function Home() {
 
   useRealtime(tripId, ['itinerary_activities', 'itinerary_days', 'accommodation_bookings', 'transport_bookings', 'activity_feed', 'checklist_pings', 'checklist_items'], q.reload)
 
-  const left = daysUntil(trip!.start_date)
-  const over = daysUntil(trip!.end_date) < 0
-  const countdown = over ? 'Trip complete' : left > 0 ? `${left}` : left === 0 ? 'Today' : 'On the trip'
+  const clock = tripClock(trip!.start_date, trip!.end_date, useNow())
 
   return (
     <div className="space-y-8">
-      {/* Hero */}
-      <section className="relative overflow-hidden rounded-3xl bg-navy-800 text-white p-6 sm:p-8"
-        style={trip!.hero_image_url ? { backgroundImage: `linear-gradient(rgba(11,31,58,.72),rgba(11,31,58,.85)), url(${safeUrl(trip!.hero_image_url)})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}>
-        <div className="absolute -top-16 -right-10 h-56 w-56 rounded-full bg-ember-500 opacity-30 blur-3xl" />
-        <p className="relative text-sand-300 text-sm font-semibold uppercase tracking-widest">{fmtDate(trip!.start_date, { day: 'numeric', month: 'short' })} – {fmtDate(trip!.end_date, { day: 'numeric', month: 'short', year: 'numeric' })}</p>
-        <h1 className="relative font-display text-4xl sm:text-5xl font-bold mt-2">{trip!.name}</h1>
-        {trip!.tagline && <p className="relative text-navy-100 mt-2 max-w-xl text-lg">{trip!.tagline}</p>}
-        <div className="relative mt-6 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="font-display text-6xl font-bold leading-none">{countdown}</p>
-            {!over && left > 0 && <p className="text-navy-100 mt-1">{left === 1 ? 'day' : 'days'} until departure</p>}
+      {/* Hero: aurora glass over destination art, live countdown */}
+      <section className="relative overflow-hidden rounded-[32px] glass-dark text-white min-h-[22rem]"
+        style={safeUrl(trip!.hero_image_url) ? { backgroundImage: `linear-gradient(rgba(11,31,58,.55),rgba(11,31,58,.8)), url(${safeUrl(trip!.hero_image_url)})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}>
+        {!trip!.hero_image_url && <CityScene city={trip!.route_stops[1] ?? trip!.route_stops[0] ?? 'Bangkok'} className="absolute inset-0 h-full w-full opacity-90" />}
+        <div className="absolute inset-0 bg-gradient-to-b from-navy-900/80 via-navy-900/35 to-navy-900/10" />
+        <div className="absolute -top-20 -right-12 h-64 w-64 rounded-full bg-ember-500/40 blur-3xl animate-float" />
+        <div className="relative p-6 sm:p-8 flex flex-col min-h-[22rem]">
+          <p className="eyebrow !text-sand-200">{fmtDate(trip!.start_date, { day: 'numeric', month: 'short' })} – {fmtDate(trip!.end_date, { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+          <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight mt-2 leading-[1.05]">{trip!.name}</h1>
+          {trip!.tagline && <p className="text-white/80 mt-2 max-w-xl text-lg">{trip!.tagline}</p>}
+
+          <div className="mt-auto pt-8 flex flex-wrap items-end justify-between gap-4">
+            {clock.state === 'before' ? (
+              <div className="grid grid-cols-3 gap-2 w-full max-w-[19rem]" role="timer" aria-label={`${clock.days} days, ${clock.hours} hours, ${clock.minutes} minutes until departure`}>
+                {([['days', clock.days], ['hrs', clock.hours], ['min', clock.minutes]] as const).map(([l, v]) => (
+                  <div key={l} className="glass-chip-dark rounded-2xl py-2.5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,.25)]">
+                    <p className="font-display text-3xl sm:text-4xl font-bold leading-none num">{String(v).padStart(2, '0')}</p>
+                    <p className="mt-1 text-xs font-semibold uppercase tracking-[.14em] text-white/70">{l}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="glass-chip-dark rounded-2xl px-5 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,.25)]">
+                <p className="font-display text-3xl font-bold leading-none">{clock.state === 'during' ? `Day ${clock.day} of ${clock.total}` : 'Trip complete'}</p>
+                <p className="mt-1 text-xs font-semibold uppercase tracking-[.14em] text-white/70">{clock.state === 'during' ? 'Enjoy it' : 'See you next time'}</p>
+              </div>
+            )}
+            <div className="glass-chip-dark rounded-full pl-1.5 pr-4 py-1.5 flex items-center gap-3">
+              <div className="flex -space-x-2">{members.map((m) => <Avatar key={m.user_id} profile={m.profile} size={32} />)}</div>
+              <span className="text-sm font-semibold text-white/90">Hi, {profile?.display_name.split(' ')[0]}</span>
+            </div>
           </div>
-          <div className="flex -space-x-2">{members.map((m) => <Avatar key={m.user_id} profile={m.profile} size={44} />)}</div>
         </div>
-        <p className="relative mt-4 text-navy-200 text-sm">Hi {profile?.display_name.split(' ')[0]} 👋</p>
       </section>
 
       {q.error && <ErrorState message={q.error} onRetry={q.reload} />}
@@ -110,38 +128,40 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
           { to: '/checklist', icon: CheckSquare, label: 'My checklist' },
           { to: '/feed', icon: Sparkles, label: 'Group feed' },
         ].map(({ to, icon: I, label }) => (
-          <Link key={to} to={to} className="flex items-center gap-3 rounded-2xl bg-white border border-sand-200/60 shadow-card px-4 min-h-[60px] font-semibold text-navy-800 hover:border-jungle-400 transition">
-            <I className="h-5 w-5 text-jungle-600" />{label}
+          <Link key={to} to={to} className="glass hover-lift flex items-center gap-3 rounded-2xl px-3.5 min-h-[64px] font-semibold text-navy-800 active:scale-[.98] transition">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-jungle-400/30 to-jungle-600/15 text-jungle-700 ring-1 ring-inset ring-jungle-500/20"><I className="h-5 w-5" aria-hidden="true" /></span>{label}
           </Link>
         ))}
       </div>
 
-      {/* Route */}
+      {/* Route: journey path + destination cards */}
       <section>
         <SectionTitle>Route</SectionTitle>
         <Card className="p-5">
-          <ol className="flex flex-wrap items-center gap-x-2 gap-y-3">
+          <ol className="flex items-center overflow-x-auto no-scrollbar -mx-5 px-5 pb-1" aria-label="Route">
             {stops.map((s, i) => (
-              <li key={i} className="flex items-center gap-2">
-                <span className="rounded-full bg-navy-800 text-white px-3.5 py-1.5 font-semibold">{s}</span>
-                {i < stops.length - 1 && <ArrowRight className="h-4 w-4 text-ember-500" />}
+              <li key={i} className="flex items-center shrink-0">
+                <span className="glass-chip rounded-full px-3.5 py-1.5 font-semibold text-navy-800 shadow-sm">{s}</span>
+                {i < stops.length - 1 && <span aria-hidden="true" className="mx-1.5 flex items-center text-ember-500"><span className="h-px w-3 bg-current opacity-60" /><ArrowRight className="h-4 w-4 -ml-0.5" /></span>}
               </li>
             ))}
           </ol>
           {runs.length > 0 && (
-            <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 [&>*]:min-w-0">
+            <div className="mt-5 -mx-5 px-5 flex gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-1 lg:mx-0 lg:px-0 lg:grid lg:grid-cols-4 lg:overflow-visible">
               {runs.map((r, i) => (
-                <div key={i} className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-jungle-700 to-navy-700 text-white p-4 min-h-[96px]"
-                  style={safeUrl(r.image_url) ? { backgroundImage: `linear-gradient(rgba(11,31,58,.55),rgba(11,31,58,.8)), url(${safeUrl(r.image_url)})`, backgroundSize: 'cover' } : undefined}>
-                  <p className="font-display text-xl font-bold">{r.city}</p>
-                  <p className="text-sm text-navy-100">{r.from === r.to ? fmtDate(r.from) : `${fmtDate(r.from)} – ${fmtDate(r.to)}`}</p>
+                <div key={i} className="relative snap-start shrink-0 w-[72%] sm:w-[44%] lg:w-auto h-36 overflow-hidden rounded-2xl text-white shadow-glass"
+                  style={safeUrl(r.image_url) ? { backgroundImage: `linear-gradient(rgba(11,31,58,.35),rgba(11,31,58,.75)), url(${safeUrl(r.image_url)})`, backgroundSize: 'cover' } : undefined}>
+                  {!safeUrl(r.image_url) && <CityScene city={r.city} className="absolute inset-0 h-full w-full" />}
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy-900/80 via-navy-900/10 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-3.5"><p className="font-display text-xl font-bold leading-tight">{r.city}</p><p className="text-sm text-white/80">{r.from === r.to ? fmtDate(r.from) : `${fmtDate(r.from)} – ${fmtDate(r.to)}`}</p></div>
+                  <span className="absolute top-3 left-3 glass-chip-dark rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-[.12em]">Stop {i + 1}</span>
                 </div>
               ))}
             </div>
           )}
           <a className="mt-4 inline-flex items-center gap-2 text-jungle-700 font-semibold min-h-[44px]" target="_blank" rel="noopener noreferrer"
             href={mapsDirectionsUrl([...new Set(runs.map((r) => r.city))].map((c) => `${c}, Thailand`).filter((c) => !c.startsWith('Bangalore')))}>
-            <MapPin className="h-4 w-4" /> Open route in Google Maps
+            <MapPin className="h-4 w-4" aria-hidden="true" /> Open route in Google Maps
           </a>
         </Card>
       </section>
@@ -153,7 +173,7 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
           <Card className="p-5">
             {next ? (
               <>
-                <div className="flex items-center gap-2 text-sm font-semibold text-ember-600"><CalendarClock className="h-4 w-4" />Day {next.day.day_number} · {fmtDateLong(next.day.day_date)}</div>
+                <div className="flex items-center gap-2 text-sm font-semibold text-ember-700"><CalendarClock className="h-4 w-4" />Day {next.day.day_number} · {fmtDateLong(next.day.day_date)}</div>
                 <Link to={`/itinerary/activity/${next.a.id}`}><h3 className="font-display text-2xl font-bold text-navy-800 mt-1 hover:underline">{next.a.title}</h3></Link>
                 <p className="text-navy-600 mt-1">{[fmtTime(next.a.start_time) ?? next.a.time_note, next.a.location_name].filter(Boolean).join(' · ')}</p>
                 <div className="mt-3 flex items-center gap-3 flex-wrap">

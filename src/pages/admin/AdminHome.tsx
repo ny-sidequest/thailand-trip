@@ -37,10 +37,10 @@ export default function AdminHome() {
 
   return (
     <div className="space-y-6">
-      <div><h1 className="font-display text-3xl font-bold text-navy-800">Admin</h1><p className="text-navy-500">{trip!.name} · {members.length} travellers. Changes are shared with everyone instantly.</p></div>
+      <div><h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">Admin</h1><p className="text-navy-500">{trip!.name} · {members.length} travellers. Changes are shared with everyone instantly.</p></div>
       <div className="grid gap-3 sm:grid-cols-2">
         {TILES.map(({ to, icon: I, title, desc }) => (
-          <Link key={to} to={to} className="flex items-start gap-3 rounded-3xl bg-white border border-sand-200/60 shadow-card p-4 hover:border-jungle-400 transition">
+          <Link key={to} to={to} className="flex items-start gap-3 glass rounded-3xl p-4 hover:border-jungle-400 transition">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-jungle-50 text-jungle-700"><I className="h-5 w-5" /></span>
             <span><span className="block font-bold text-navy-800">{title}</span><span className="block text-navy-500 text-sm">{desc}</span></span>
           </Link>

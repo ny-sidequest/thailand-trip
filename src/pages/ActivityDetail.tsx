@@ -19,7 +19,7 @@ import type { Activity, ActivityBooking, Day } from '@/lib/types'
 function Row({ icon, label, children }: { icon: ReactNode; label: string; children: ReactNode }) {
   return (
     <div className="flex gap-3 py-3">
-      <span className="mt-0.5 text-navy-300 shrink-0">{icon}</span>
+      <span className="mt-0.5 text-navy-400 shrink-0">{icon}</span>
       <div className="min-w-0"><p className="text-sm font-semibold text-navy-400">{label}</p><p className="text-navy-800 break-words whitespace-pre-wrap">{children}</p></div>
     </div>
   )
@@ -70,11 +70,11 @@ export default function ActivityDetail() {
         <div className="flex items-start gap-3">
           <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-jungle-50 text-jungle-700"><KindIcon kind={a.kind} className="h-6 w-6" /></span>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-ember-600">{fmtDateLong(day.day_date)}</p>
+            <p className="text-sm font-semibold text-ember-700">{fmtDateLong(day.day_date)}</p>
             <h1 className="font-display text-2xl font-bold text-navy-800 leading-tight">{a.title}</h1>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <StatusBadge status={a.status} />
-              {a.is_optional && <span className="rounded-full bg-ember-100 text-ember-600 px-2.5 py-0.5 text-sm font-semibold">Optional</span>}
+              {a.is_optional && <span className="rounded-full bg-ember-100 text-ember-700 px-2.5 py-0.5 text-sm font-semibold">Optional</span>}
             </div>
           </div>
         </div>
@@ -87,7 +87,7 @@ export default function ActivityDetail() {
 
       {a.reminders && (
         <div className="rounded-2xl bg-ember-50 border border-ember-100 p-4 flex gap-3">
-          <AlertCircle className="h-5 w-5 text-ember-600 shrink-0 mt-0.5" />
+          <AlertCircle className="h-5 w-5 text-ember-700 shrink-0 mt-0.5" />
           <div><p className="font-semibold text-navy-800">Reminder</p><p className="text-navy-700 whitespace-pre-wrap">{a.reminders}</p></div>
         </div>
       )}

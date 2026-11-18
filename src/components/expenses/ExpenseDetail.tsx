@@ -47,11 +47,11 @@ export default function ExpenseDetail({ expense: e, onClose, onEdit, onChanged }
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-navy-900/60 flex items-end sm:items-center justify-center" onClick={onClose}>
-      <div role="dialog" aria-label={e.description} onClick={(ev) => ev.stopPropagation()} className="bg-white w-full sm:max-w-lg max-h-[94vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
+    <div className="fixed inset-0 z-50 bg-navy-900/45 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
+      <div role="dialog" aria-label={e.description} onClick={(ev) => ev.stopPropagation()} className="glass-sheet w-full sm:max-w-lg max-h-[94vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-ember-600 inline-flex items-center gap-1"><cat.icon className="h-4 w-4" />{cat.label}{e.is_personal ? ' · Personal' : ''}</p>
+            <p className="text-sm font-semibold text-ember-700 inline-flex items-center gap-1"><cat.icon className="h-4 w-4" />{cat.label}{e.is_personal ? ' · Personal' : ''}</p>
             <h2 className="font-display text-xl font-bold text-navy-800 break-words">{e.description}</h2>
             <p className="font-display text-3xl font-bold text-navy-800 mt-1">{formatMoney(e.amount, e.currency)}</p>
             {e.currency !== base && <p className="text-navy-500">{formatMoney(e.amount_base, base)} at 1 {e.currency} = {e.fx_rate_to_base} {base}</p>}

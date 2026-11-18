@@ -30,7 +30,7 @@ export default function TripSettings() {
 
   return (
     <form onSubmit={save} className="max-w-xl space-y-4">
-      <h1 className="font-display text-3xl font-bold text-navy-800">Trip settings</h1>
+      <h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">Trip settings</h1>
       <Card className="p-5 space-y-4">
         <Field label="Trip name"><input className={inputCls} maxLength={120} value={f.name} onChange={set('name')} required /></Field>
         <Field label="Tagline"><input className={inputCls} maxLength={200} value={f.tagline} onChange={set('tagline')} /></Field>

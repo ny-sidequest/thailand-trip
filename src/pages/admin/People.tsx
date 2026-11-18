@@ -12,7 +12,7 @@ function Credentials({ username, password, onClose }: { username: string; passwo
   const [copied, setCopied] = useState(false)
   return (
     <div className="fixed inset-0 z-50 bg-navy-900/60 grid place-items-center p-4">
-      <div role="dialog" aria-label="Temporary credentials" className="bg-white rounded-3xl p-6 w-full max-w-sm space-y-3">
+      <div role="dialog" aria-label="Temporary credentials" className="glass-sheet rounded-3xl p-6 w-full max-w-sm space-y-3">
         <h2 className="font-display text-xl font-bold text-navy-800">Share these privately</h2>
         <p className="text-navy-600">Shown once and never stored. They can change the password in their Profile.</p>
         <div className="rounded-2xl bg-sand-100 p-4 font-mono text-navy-900 break-all"><p>Username: {username}</p><p>Password: {password}</p></div>
@@ -33,7 +33,7 @@ function Drill({ userId, items }: { userId: string; items: ChecklistItem[] }) {
     <div className="mt-3 space-y-3">
       {groupByCategory(items).map((g) => (
         <div key={g.category}><p className="text-sm font-semibold text-navy-500">{g.category}</p>
-          <ul>{g.items.map((i) => <li key={i.id} className="flex items-center gap-2 min-h-[32px] text-navy-800">{q.data!.has(i.id) ? <Check className="h-4 w-4 text-jungle-600" /> : <X className="h-4 w-4 text-navy-300" />}<span className={q.data!.has(i.id) ? '' : 'text-navy-500'}>{i.title}</span></li>)}</ul></div>
+          <ul>{g.items.map((i) => <li key={i.id} className="flex items-center gap-2 min-h-[32px] text-navy-800">{q.data!.has(i.id) ? <Check className="h-4 w-4 text-jungle-600" /> : <X className="h-4 w-4 text-navy-400" />}<span className={q.data!.has(i.id) ? '' : 'text-navy-500'}>{i.title}</span></li>)}</ul></div>
       ))}
     </div>
   )
@@ -62,7 +62,7 @@ export default function People() {
 
   return (
     <div className="space-y-5 max-w-2xl">
-      <div className="flex items-center justify-between gap-3"><h1 className="font-display text-3xl font-bold text-navy-800">People & access</h1><Button onClick={() => setAdding(true)}><UserPlus className="h-4 w-4" />Add traveller</Button></div>
+      <div className="flex items-center justify-between gap-3"><h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">People & access</h1><Button onClick={() => setAdding(true)}><UserPlus className="h-4 w-4" />Add traveller</Button></div>
       {err && <p role="alert" className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-red-800">{err}</p>}
       <div className="space-y-3">
         {members.map((m) => {
@@ -107,8 +107,8 @@ function AddTraveller({ onClose, onCreated }: { onClose: () => void; onCreated: 
     catch (e2) { setErr(e2 instanceof Error ? e2.message : String(e2)); setBusy(false) }
   }
   return (
-    <div className="fixed inset-0 z-50 bg-navy-900/50 flex items-end sm:items-center justify-center" onClick={onClose}>
-      <form onSubmit={submit} role="dialog" aria-label="Add traveller" onClick={(e) => e.stopPropagation()} className="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
+    <div className="fixed inset-0 z-50 bg-navy-900/40 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
+      <form onSubmit={submit} role="dialog" aria-label="Add traveller" onClick={(e) => e.stopPropagation()} className="glass-sheet w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
         <div className="flex items-center justify-between"><h2 className="font-display text-xl font-bold text-navy-800">Add traveller</h2><button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button></div>
         <Field label="Display name"><input className={inputCls} maxLength={60} value={name} onChange={(e) => setName(e.target.value)} required /></Field>
         <Field label="Username" hint="Used to sign in. Cannot be changed later."><input className={inputCls} autoCapitalize="none" autoCorrect="off" value={username} onChange={(e) => setUsername(e.target.value)} required /></Field>

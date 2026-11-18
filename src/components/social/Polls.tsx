@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Lock, Plus, Trash2, X } from 'lucide-react'
+import { Lock, Plus, Trash2, Trophy, X } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/context/AuthContext'
 import { useTrip } from '@/context/TripContext'
@@ -51,7 +51,7 @@ function PollCard({ poll, options, votes, reload }: { poll: PollRow; options: Po
                 <span className={cx('absolute inset-y-0 left-0 transition-all', on ? 'bg-jungle-100' : 'bg-sand-100')} style={{ width: `${r.percent[o.id]}%` }} />
                 <span className="relative flex items-center gap-3">
                   <span className={cx('grid h-5 w-5 shrink-0 place-items-center border-2', poll.multiple_choice ? 'rounded-md' : 'rounded-full', on ? 'bg-jungle-500 border-jungle-500 text-white' : 'border-navy-200 bg-white')}>{on && <span className="text-xs leading-none">✓</span>}</span>
-                  <span className={cx('flex-1 font-semibold', closed && n === top && n > 0 ? 'text-jungle-800' : 'text-navy-800')}>{o.label}{closed && n === top && n > 0 ? ' 🏆' : ''}</span>
+                  <span className={cx('flex-1 font-semibold', closed && n === top && n > 0 ? 'text-jungle-800' : 'text-navy-800')}>{o.label}{closed && n === top && n > 0 && <Trophy className="inline h-4 w-4 ml-1.5 -mt-0.5 text-ember-700" aria-label="Winner" />}</span>
                   <span className="tabular-nums text-navy-600 font-semibold">{n} · {r.percent[o.id]}%</span>
                 </span>
               </button>
@@ -66,7 +66,7 @@ function PollCard({ poll, options, votes, reload }: { poll: PollRow; options: Po
         <ReactionBar targetType="poll" targetId={poll.id} />
         <span className="text-sm text-navy-400 ml-auto">{timeAgo(poll.created_at)}</span>
         {isAdmin && !closed && <Button variant="soft" onClick={() => confirm('Close this poll? Nobody can vote after this.') && void patch({ closed_at: new Date().toISOString() })}>Close poll</Button>}
-        {isAdmin && <button onClick={() => confirm('Delete this poll?') && void patch({ deleted_at: new Date().toISOString() })} aria-label="Delete poll" className="p-2 text-navy-300 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>}
+        {isAdmin && <button onClick={() => confirm('Delete this poll?') && void patch({ deleted_at: new Date().toISOString() })} aria-label="Delete poll" className="p-2 text-navy-400 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>}
       </div>
     </Card>
   )
@@ -88,15 +88,15 @@ function CreatePoll({ onClose, onDone }: { onClose: () => void; onDone: () => vo
     onDone(); onClose()
   }
   return (
-    <div className="fixed inset-0 z-50 bg-navy-900/50 flex items-end sm:items-center justify-center" onClick={onClose}>
-      <form onSubmit={submit} role="dialog" aria-label="New poll" onClick={(e) => e.stopPropagation()} className="bg-white w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
+    <div className="fixed inset-0 z-50 bg-navy-900/40 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
+      <form onSubmit={submit} role="dialog" aria-label="New poll" onClick={(e) => e.stopPropagation()} className="glass-sheet w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
         <div className="flex items-center justify-between"><h2 className="font-display text-xl font-bold text-navy-800">New poll</h2><button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button></div>
         <Field label="Question"><input className={inputCls} maxLength={200} value={q} onChange={(e) => setQ(e.target.value)} placeholder="Which New Year's Eve party?" required /></Field>
         <div className="space-y-2">
           <span className="block text-sm font-semibold text-navy-700">Options</span>
           {opts.map((o, i) => (
             <div key={i} className="flex gap-2"><input className={inputCls} aria-label={`Option ${i + 1}`} maxLength={160} value={o} onChange={(e) => setOpts(opts.map((x, j) => (j === i ? e.target.value : x)))} placeholder={`Option ${i + 1}`} />
-              {opts.length > 2 && <button type="button" aria-label={`Remove option ${i + 1}`} onClick={() => setOpts(opts.filter((_, j) => j !== i))} className="p-2 text-navy-300 hover:text-red-600"><X className="h-5 w-5" /></button>}</div>
+              {opts.length > 2 && <button type="button" aria-label={`Remove option ${i + 1}`} onClick={() => setOpts(opts.filter((_, j) => j !== i))} className="p-2 text-navy-400 hover:text-red-600"><X className="h-5 w-5" /></button>}</div>
           ))}
           {opts.length < 10 && <Button type="button" variant="ghost" onClick={() => setOpts([...opts, ''])}><Plus className="h-4 w-4" />Add option</Button>}
         </div>

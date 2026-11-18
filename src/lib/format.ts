@@ -56,3 +56,18 @@ export function cityRuns(days: { city: string; day_date: string; image_url: stri
   }
   return runs
 }
+
+/** Time left until local midnight at the start of `startDate`, or trip-progress once it has begun. */
+export function tripClock(startDate: string, endDate: string, now = new Date()) {
+  const start = parseDate(startDate).getTime()
+  const end = parseDate(endDate).getTime() + 86_400_000
+  const t = now.getTime()
+  if (t >= end) return { state: 'over' as const }
+  if (t >= start) {
+    const day = Math.floor((t - start) / 86_400_000) + 1
+    const total = Math.round((end - start) / 86_400_000)
+    return { state: 'during' as const, day, total }
+  }
+  const ms = start - t
+  return { state: 'before' as const, days: Math.floor(ms / 86_400_000), hours: Math.floor((ms % 86_400_000) / 3_600_000), minutes: Math.floor((ms % 3_600_000) / 60_000) }
+}

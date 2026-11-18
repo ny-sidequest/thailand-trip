@@ -61,16 +61,16 @@ export default function UploadDocumentSheet({ preset, replaces, stays, transport
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-navy-900/50 flex items-end sm:items-center justify-center" onClick={onClose}>
+    <div className="fixed inset-0 z-50 bg-navy-900/40 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
       <form onSubmit={submit} role="dialog" aria-label={replaces ? 'Upload new version' : 'Upload document'} onClick={(e) => e.stopPropagation()}
-        className="bg-white w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
+        className="glass-sheet w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
         <div className="flex items-center justify-between">
           <h2 className="font-display text-xl font-bold text-navy-800">{replaces ? `New version of “${replaces.name}”` : 'Upload document'}</h2>
           <button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button>
         </div>
 
         <label className="block rounded-2xl border-2 border-dashed border-sand-300 bg-sand-50 p-5 text-center cursor-pointer hover:border-jungle-400">
-          <Upload className="mx-auto h-6 w-6 text-navy-300" />
+          <Upload className="mx-auto h-6 w-6 text-navy-400" />
           <span className="mt-1 block font-semibold text-navy-700">{file ? file.name : 'Choose a file or take a photo'}</span>
           <span className="block text-sm text-navy-400">{file ? formatBytes(file.size) : 'PDF, JPG, PNG, WebP, HEIC, Word, Excel · max 20 MB'}</span>
           <input type="file" accept={ACCEPT} hidden onChange={(e) => pick(e.target.files?.[0])} />

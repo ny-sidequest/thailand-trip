@@ -11,7 +11,7 @@ const statusOptions = (Object.keys(STATUS_LABEL) as BookingStatus[]).map((s) => 
 const isPhone = (s: string) => /^[+\d][\d\s()-]{6,}$/.test(s.trim())
 
 function Line({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
-  return <div className="flex gap-3 py-2"><span className="mt-0.5 text-navy-300 shrink-0">{icon}</span><div className="min-w-0"><p className="text-sm font-semibold text-navy-400">{label}</p><div className="text-navy-800 break-words whitespace-pre-wrap">{children}</div></div></div>
+  return <div className="flex gap-3 py-2"><span className="mt-0.5 text-navy-400 shrink-0">{icon}</span><div className="min-w-0"><p className="text-sm font-semibold text-navy-400">{label}</p><div className="text-navy-800 break-words whitespace-pre-wrap">{children}</div></div></div>
 }
 function Docs({ docs, onOpen, onAdd }: { docs: DocumentRow[]; onOpen: (d: DocumentRow) => void; onAdd: () => void }) {
   return (

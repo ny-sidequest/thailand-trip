@@ -52,8 +52,8 @@ export default function DocumentViewer({ doc, allDocs, onClose, onReplace, onCha
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-navy-900/60 flex items-end sm:items-center justify-center" onClick={onClose}>
-      <div role="dialog" aria-label={cur.name} onClick={(e) => e.stopPropagation()} className="bg-white w-full sm:max-w-2xl max-h-[94vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
+    <div className="fixed inset-0 z-50 bg-navy-900/45 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
+      <div role="dialog" aria-label={cur.name} onClick={(e) => e.stopPropagation()} className="glass-sheet w-full sm:max-w-2xl max-h-[94vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h2 className="font-display text-xl font-bold text-navy-800 break-words">{cur.name}</h2>
@@ -71,7 +71,7 @@ export default function DocumentViewer({ doc, allDocs, onClose, onReplace, onCha
             : !url ? <Spinner label="Opening securely…" />
             : isImage(cur.mime_type) ? <img src={url} alt={cur.name} className="max-h-[60vh] w-full object-contain" />
             : isPdf(cur.mime_type) ? <iframe src={url} title={cur.name} className="w-full h-[60vh] bg-white" />
-            : <div className="p-6 text-center text-navy-600"><FileText className="mx-auto h-10 w-10 text-navy-300" /><p className="mt-2">No preview for this file type. Use Download.</p></div>}
+            : <div className="p-6 text-center text-navy-600"><FileText className="mx-auto h-10 w-10 text-navy-400" /><p className="mt-2">No preview for this file type. Use Download.</p></div>}
         </div>
 
         <div className="flex flex-wrap gap-2">

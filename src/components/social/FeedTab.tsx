@@ -106,7 +106,7 @@ function PostCard({ post, comments, reload }: { post: FeedPost; comments: number
             ? post.body && <p className="mt-1 text-navy-800 whitespace-pre-wrap break-words">{post.body}</p>
             : <p className="mt-0.5 text-navy-800">{link ? <Link to={link} className="hover:underline">{post.summary}</Link> : post.summary}{post.body && <span className="block text-navy-500 truncate">{post.body}</span>}</p>}
         </div>
-        {canDelete && <button onClick={() => void remove()} aria-label="Delete post" className="p-2 -mr-2 text-navy-300 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>}
+        {canDelete && <button onClick={() => void remove()} aria-label="Delete post" className="p-2 -mr-2 text-navy-400 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>}
       </div>
       {post.photo_path && <PrivateImage bucket="photos" path={post.photo_path} alt="Shared photo" className="mt-3 w-full max-h-[70vh] object-cover rounded-2xl" />}
       <div className="mt-3 flex flex-wrap items-center gap-2">

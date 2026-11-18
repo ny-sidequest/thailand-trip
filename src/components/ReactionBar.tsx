@@ -31,7 +31,7 @@ export default function ReactionBar({ targetType, targetId }: { targetType: 'fee
     <div className="flex flex-wrap items-center gap-1.5">
       {used.map((e) => (
         <button key={e} onClick={() => void toggle(e)} aria-pressed={mine[e].includes(uid)} aria-label={`${e} ${mine[e].length}`}
-          className={cx('inline-flex items-center gap-1 rounded-full border px-2.5 min-h-[36px] text-sm font-semibold', mine[e].includes(uid) ? 'border-jungle-500 bg-jungle-50 text-jungle-800' : 'border-sand-200 bg-white text-navy-700')}>
+          className={cx('inline-flex items-center gap-1 rounded-full border px-2.5 min-h-[36px] text-sm font-semibold', mine[e].includes(uid) ? 'border-jungle-500 bg-jungle-50 text-jungle-800' : 'glass-chip text-navy-700')}>
           <span>{e}</span><span>{mine[e].length}</span>
         </button>
       ))}

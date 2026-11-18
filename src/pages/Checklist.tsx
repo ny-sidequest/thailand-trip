@@ -55,7 +55,7 @@ export default function Checklist() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-3xl font-bold text-navy-800">Checklist</h1>
+      <h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">Checklist</h1>
 
       <Card className="p-5">
         <div className="flex items-end justify-between">
@@ -88,7 +88,7 @@ export default function Checklist() {
                       {on && <Check className="h-4 w-4" strokeWidth={3} />}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className={cx('block font-semibold', on ? 'text-navy-300 line-through' : 'text-navy-800')}>{i.title}</span>
+                      <span className={cx('block font-semibold', on ? 'text-navy-400 line-through' : 'text-navy-800')}>{i.title}</span>
                       {i.description && <span className="block text-sm text-navy-500">{i.description}</span>}
                       <DueBadge item={i} done={on} />
                     </span>

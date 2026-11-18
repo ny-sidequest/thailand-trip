@@ -9,16 +9,21 @@ import OfflineBanner from './OfflineBanner'
 
 const MAIN = [
   { to: '/', label: 'Home', icon: Home, end: true },
-  { to: '/itinerary', label: 'Itinerary', icon: CalendarDays },
-  { to: '/expenses', label: 'Expenses', icon: Receipt },
+  { to: '/itinerary', label: 'Plan', icon: CalendarDays },
+  { to: '/expenses', label: 'Money', icon: Receipt },
   { to: '/feed', label: 'Feed', icon: MessagesSquare },
 ]
 const MORE = [
   { to: '/checklist', label: 'Checklist', icon: CheckSquare },
-  { to: '/wallet', label: 'Travel Wallet', icon: Wallet },
+  { to: '/wallet', label: 'Wallet', icon: Wallet },
   { to: '/group', label: 'Group', icon: Users },
   { to: '/profile', label: 'My profile', icon: UserCircle },
 ]
+const SIDEBAR_LABELS: Record<string, string> = { '/itinerary': 'Itinerary', '/expenses': 'Expenses', '/wallet': 'Travel Wallet' }
+
+function Logo({ size = 36 }: { size?: number }) {
+  return <img src={`${import.meta.env.BASE_URL}icons/icon-192.png`} alt="" width={size} height={size} className="rounded-xl shadow-sm" style={{ width: size, height: size }} />
+}
 
 export default function AppShell() {
   const { profile, signOut } = useAuth()
@@ -30,78 +35,93 @@ export default function AppShell() {
   const moreActive = moreItems.some((i) => loc.pathname.startsWith(i.to))
 
   return (
-    <div className="min-h-screen lg:pl-64">
-      {/* Desktop sidebar */}
-      <aside className="hidden lg:flex fixed inset-y-0 left-0 w-64 flex-col bg-navy-800 text-white p-5">
-        <div className="mb-8">
-          <p className="font-display text-2xl font-bold leading-tight">{trip?.name}</p>
-          <p className="text-navy-200 text-sm mt-1">Trip HQ</p>
+    <div className="min-h-screen lg:pl-[17.5rem]">
+      {/* Ambient light: slow-drifting colour blobs that the glass surfaces refract (decorative) */}
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-[1] overflow-hidden">
+        <div className="absolute -left-24 top-1/4 h-72 w-72 rounded-full bg-jungle-400/30 blur-3xl animate-float" />
+        <div className="absolute -right-20 top-10 h-80 w-80 rounded-full bg-indigo-400/25 blur-3xl animate-float [animation-delay:-3s]" />
+        <div className="absolute bottom-24 right-1/4 h-72 w-72 rounded-full bg-ember-400/25 blur-3xl animate-float [animation-delay:-6s]" />
+      </div>
+      {/* Desktop sidebar: floating dark glass */}
+      <aside className="hidden lg:flex fixed left-4 top-4 bottom-4 w-64 flex-col glass-dark rounded-[28px] text-white p-5 z-40">
+        <div className="flex items-center gap-3 mb-7">
+          <Logo size={42} />
+          <div className="min-w-0"><p className="font-display text-lg font-bold leading-tight truncate">{trip?.name}</p><p className="eyebrow !text-white/50">Trip HQ</p></div>
         </div>
-        <nav className="flex-1 space-y-1">
+        <nav className="flex-1 space-y-1" aria-label="Main">
           {sidebar.map(({ to, label, icon: I, ...r }) => (
             <NavLink key={to} to={to} end={'end' in r} className={({ isActive }) =>
-              cx('flex items-center gap-3 rounded-xl px-3 min-h-[44px] font-medium transition', isActive ? 'bg-white/15 text-white' : 'text-navy-100 hover:bg-white/10')}>
-              <I className="h-5 w-5" />{label}
+              cx('group flex items-center gap-3 rounded-2xl px-3.5 min-h-[46px] font-medium transition duration-200',
+                isActive ? 'bg-white/[.16] text-white shadow-[inset_0_1px_0_rgba(255,255,255,.22)] ring-1 ring-white/15' : 'text-white/65 hover:bg-white/[.08] hover:text-white')}>
+              <I className="h-[18px] w-[18px]" />{SIDEBAR_LABELS[to] ?? label}
             </NavLink>
           ))}
         </nav>
-        <div className="border-t border-white/10 pt-4 flex items-center gap-3">
-          <NavLink to="/profile" className="flex items-center gap-3 min-w-0 flex-1">
-            <Avatar profile={profile} size={36} />
-            <span className="truncate font-medium">{profile?.display_name}</span>
+        <div className="glass-chip-dark rounded-2xl p-2.5 space-y-1.5">
+          <NavLink to="/profile" className="flex items-center gap-3 min-w-0 rounded-xl p-1.5 hover:bg-white/10">
+            <Avatar profile={profile} size={38} />
+            <span className="min-w-0"><span className="block truncate font-semibold text-sm leading-tight">{profile?.display_name}</span><span className="block text-xs text-white/55">@{profile?.username}</span></span>
           </NavLink>
-          <NotificationBell />
-          <button onClick={() => void signOut()} aria-label="Sign out" className="p-2 rounded-lg hover:bg-white/10"><LogOut className="h-5 w-5" /></button>
+          <div className="flex items-center justify-between border-t border-white/10 pt-1.5">
+            <NotificationBell />
+            <button onClick={() => void signOut()} className="inline-flex items-center gap-2 rounded-xl px-3 min-h-[44px] text-sm font-semibold text-white/75 hover:bg-white/10 hover:text-white"><LogOut className="h-[18px] w-[18px]" aria-hidden="true" />Sign out</button>
+          </div>
         </div>
       </aside>
 
-      {/* Mobile top bar */}
-      <header className="lg:hidden sticky top-0 z-30 bg-navy-800 text-white safe-top">
-        <div className="flex items-center justify-between px-4 h-14">
-          <span className="font-display text-lg font-bold">{trip?.name}</span>
-          <div className="flex items-center gap-1">
-            <NotificationBell />
-            <NavLink to="/profile" aria-label="My profile"><Avatar profile={profile} size={32} /></NavLink>
+      {/* Mobile top bar: floating frosted pill */}
+      <header className="lg:hidden sticky top-0 z-30 safe-top px-3 pt-3">
+        <div className="glass-nav rounded-2xl h-14 px-3 flex items-center justify-between">
+          <div className="flex items-center gap-2.5 min-w-0"><Logo size={32} /><span className="font-display text-lg font-bold tracking-tight text-navy-800 truncate">{trip?.name}</span></div>
+          <div className="flex items-center gap-0.5 text-navy-700">
+            <NotificationBell className="hover:!bg-navy-900/5" />
+            <NavLink to="/profile" aria-label="My profile" className="p-1"><Avatar profile={profile} size={34} /></NavLink>
           </div>
         </div>
       </header>
 
       <OfflineBanner />
-      <main className="mx-auto max-w-5xl px-4 py-5 pb-28 lg:px-8 lg:py-8 lg:pb-10 animate-rise" key={loc.pathname}>
+      <main className="mx-auto max-w-5xl px-4 py-5 pb-36 lg:px-8 lg:py-8 lg:pb-10 animate-rise" key={loc.pathname}>
         <Suspense fallback={<Spinner />}><Outlet /></Suspense>
       </main>
 
-      {/* Mobile bottom nav */}
-      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur border-t border-sand-200 safe-bottom">
-        <ul className="grid grid-cols-5">
+      {/* Mobile bottom nav: floating frosted pill */}
+      <nav aria-label="Main" className="lg:hidden fixed bottom-0 inset-x-0 z-40 px-3 pb-3 safe-bottom pointer-events-none">
+        <ul className="glass-nav rounded-[28px] grid grid-cols-5 gap-1 p-1.5 pointer-events-auto">
           {MAIN.map(({ to, label, icon: I, ...r }) => (
             <li key={to}>
               <NavLink to={to} end={'end' in r} className={({ isActive }) =>
-                cx('flex flex-col items-center justify-center gap-0.5 min-h-[60px] text-xs font-semibold', isActive ? 'text-jungle-600' : 'text-navy-400')}>
-                <I className="h-6 w-6" />{label}
+                cx('flex flex-col items-center justify-center gap-0.5 min-h-[56px] rounded-[20px] text-xs font-semibold transition duration-200',
+                  isActive ? 'bg-gradient-to-b from-navy-600 to-navy-800 text-white shadow-[inset_0_1px_0_rgba(255,255,255,.22),0_6px_14px_-6px_rgba(11,31,58,.7)]' : 'text-navy-500 active:bg-navy-900/5')}>
+                <I className="h-[22px] w-[22px]" />{label}
               </NavLink>
             </li>
           ))}
           <li>
-            <button onClick={() => setMore(true)} className={cx('w-full flex flex-col items-center justify-center gap-0.5 min-h-[60px] text-xs font-semibold', moreActive ? 'text-jungle-600' : 'text-navy-400')}>
-              <MoreHorizontal className="h-6 w-6" />More
+            <button onClick={() => setMore(true)} aria-haspopup="dialog"
+              className={cx('w-full flex flex-col items-center justify-center gap-0.5 min-h-[56px] rounded-[20px] text-xs font-semibold transition duration-200',
+                moreActive ? 'bg-gradient-to-b from-navy-600 to-navy-800 text-white shadow-[inset_0_1px_0_rgba(255,255,255,.22)]' : 'text-navy-500 active:bg-navy-900/5')}>
+              <MoreHorizontal className="h-[22px] w-[22px]" />More
             </button>
           </li>
         </ul>
       </nav>
 
       {more && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-navy-900/50" onClick={() => setMore(false)}>
-          <div role="dialog" aria-label="More" className="absolute bottom-0 inset-x-0 rounded-t-3xl bg-white p-5 safe-bottom animate-rise" onClick={(e) => e.stopPropagation()}>
+        <div className="lg:hidden fixed inset-0 z-50 bg-navy-900/40 backdrop-blur-sm" onClick={() => setMore(false)}>
+          <div role="dialog" aria-label="More" className="glass-sheet absolute bottom-0 inset-x-0 rounded-t-[32px] p-5 safe-bottom" onClick={(e) => e.stopPropagation()}>
+            <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-navy-900/15" />
             <div className="flex items-center justify-between mb-3">
-              <h2 className="font-display text-xl font-bold text-navy-800">More</h2>
-              <button onClick={() => setMore(false)} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button>
+              <h2 className="font-display text-xl font-bold tracking-tight text-navy-800">More</h2>
+              <button onClick={() => setMore(false)} aria-label="Close" className="p-2 -mr-2 text-navy-500"><X className="h-5 w-5" /></button>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {moreItems.map(({ to, label, icon: I }) => (
-                <NavLink key={to} to={to} onClick={() => setMore(false)} className="flex items-center gap-3 rounded-2xl bg-sand-100 px-4 min-h-[56px] font-semibold text-navy-800"><I className="h-5 w-5 text-jungle-600" />{label}</NavLink>
+                <NavLink key={to} to={to} onClick={() => setMore(false)} className="glass-chip flex items-center gap-3 rounded-2xl px-4 min-h-[60px] font-semibold text-navy-800 active:scale-[.98] transition">
+                  <span className="grid h-9 w-9 place-items-center rounded-xl bg-jungle-500/10 text-jungle-700"><I className="h-5 w-5" /></span>{label}
+                </NavLink>
               ))}
-              <button onClick={() => void signOut()} className="flex items-center gap-3 rounded-2xl bg-red-50 px-4 min-h-[56px] font-semibold text-red-700"><LogOut className="h-5 w-5" />Sign out</button>
+              <button onClick={() => void signOut()} className="flex items-center gap-3 rounded-2xl px-4 min-h-[60px] font-semibold text-red-700 bg-red-50/80 border border-red-100"><span className="grid h-9 w-9 place-items-center rounded-xl bg-red-500/10"><LogOut className="h-5 w-5" /></span>Sign out</button>
             </div>
           </div>
         </div>

@@ -6,7 +6,7 @@ export default function Group() {
   const { members, trip } = useTrip()
   return (
     <div>
-      <h1 className="font-display text-3xl font-bold text-navy-800">Group</h1>
+      <h1 className="font-display text-3xl font-bold tracking-tight text-navy-800">Group</h1>
       <p className="text-navy-500 mt-1 mb-5">{members.length} travellers on {trip?.name}</p>
       <div className="grid gap-4 sm:grid-cols-2">
         {members.map((m) => (
