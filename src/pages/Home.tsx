@@ -103,7 +103,7 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
   return (
     <>
       {/* Quick links */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 [&>*]:min-w-0">
         {[
           { to: '/wallet', icon: FileText, label: 'Tickets & docs' },
           { to: '/itinerary', icon: MapIcon, label: 'Itinerary' },
@@ -129,7 +129,7 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
             ))}
           </ol>
           {runs.length > 0 && (
-            <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 [&>*]:min-w-0">
               {runs.map((r, i) => (
                 <div key={i} className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-jungle-700 to-navy-700 text-white p-4 min-h-[96px]"
                   style={safeUrl(r.image_url) ? { backgroundImage: `linear-gradient(rgba(11,31,58,.55),rgba(11,31,58,.8)), url(${safeUrl(r.image_url)})`, backgroundSize: 'cover' } : undefined}>
@@ -146,7 +146,7 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
         </Card>
       </section>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
         {/* Next up */}
         <section>
           <SectionTitle>Up next</SectionTitle>
@@ -187,7 +187,7 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
         )}
       </section>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
         {/* Bookings */}
         <section>
           <SectionTitle>Upcoming bookings</SectionTitle>

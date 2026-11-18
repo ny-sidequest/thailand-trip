@@ -172,3 +172,7 @@ CSP/console/overflow/crash checks) run from the scratchpad (not part of the repo
 **Dashboard setting:** Auth -> Email -> "Secure password change" ON.
 **Not done / accepted:** custom login throttling (lock-out risk; relies on Supabase Auth limits), trip switcher UI,
 "save documents for offline", Playwright end-to-end tests against the live project (needs credentials; manual TEST_PLAN instead).
+
+**Mobile Home overflow (reported by user in Phase 1): fixed.** Cause: grid items kept `min-width:auto`, so a long booking title
+stretched the page to 684 px on phones. Fixed with `min-w-0` on the Home grids. Verified in a real browser at 320/360/390/430 px;
+all 24 routes x 5 viewports render with no crashes, console/CSP errors or horizontal overflow (backend mocked).
