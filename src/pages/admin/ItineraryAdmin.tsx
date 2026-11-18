@@ -64,19 +64,19 @@ function DaysAdmin() {
 
   return (
     <div className="space-y-4 max-w-2xl">
-      <div className="flex items-center justify-between gap-3"><h1 className="font-display text-3xl font-bold text-navy-800">Itinerary</h1><Button onClick={() => setEdit('new')}><Plus className="h-4 w-4" />Add day</Button></div>
-      {err && <p role="alert" className="text-red-700">{err}</p>}
+      <div className="flex items-center justify-between gap-3"><h1 className="font-display text-[1.75rem] sm:text-[2rem] font-medium tracking-tight text-ink-50">Itinerary</h1><Button onClick={() => setEdit('new')}><Plus className="h-4 w-4" />Add day</Button></div>
+      {err && <p role="alert" className="text-red-300">{err}</p>}
       {q.data.days.length === 0 ? <Card><EmptyState title="No days yet" hint="Add the first day." /></Card> : (
-        <Card className="divide-y divide-sand-200/70">
+        <Card className="divide-y divide-white/10">
           {q.data.days.map((d) => (
             <div key={d.id} className="flex items-center gap-2 p-3">
               <Link to={`/admin/itinerary/${d.id}`} className="flex-1 min-w-0 flex items-center gap-3 min-h-[56px]">
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-navy-800 text-white font-bold">{d.day_number}</span>
-                <span className="min-w-0"><span className="block font-semibold text-navy-800 truncate">{d.title}</span><span className="block text-sm text-navy-500">{fmtDate(d.day_date)} · {d.city} · {q.data!.counts[d.id] ?? 0} activities</span></span>
-                <ChevronRight className="h-4 w-4 text-navy-300 ml-auto shrink-0" />
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/10 ring-1 ring-white/15 text-ink-50 font-semibold">{d.day_number}</span>
+                <span className="min-w-0"><span className="block font-semibold text-ink-50 truncate">{d.title}</span><span className="block text-sm text-ink-300">{fmtDate(d.day_date)} · {d.city} · {q.data!.counts[d.id] ?? 0} activities</span></span>
+                <ChevronRight className="h-4 w-4 text-ink-400 ml-auto shrink-0" />
               </Link>
-              <button onClick={() => setEdit(d)} aria-label={`Edit day ${d.day_number}`} className="p-2 text-navy-400 hover:text-navy-800"><Pencil className="h-4 w-4" /></button>
-              <button onClick={() => void del(d)} aria-label={`Delete day ${d.day_number}`} className="p-2 text-navy-300 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>
+              <button onClick={() => setEdit(d)} aria-label={`Edit day ${d.day_number}`} className="p-2 text-ink-400 hover:text-ink-50"><Pencil className="h-4 w-4" /></button>
+              <button onClick={() => void del(d)} aria-label={`Delete day ${d.day_number}`} className="p-2 text-ink-400 hover:text-red-400"><Trash2 className="h-4 w-4" /></button>
             </div>
           ))}
         </Card>
@@ -116,27 +116,27 @@ function DayAdmin({ dayId }: { dayId: string }) {
   if (q.error) return <ErrorState message={q.error} onRetry={q.reload} />
   if (!q.data) return <Skeleton className="h-64" />
   const { day, acts } = q.data
-  if (!day) return <p className="text-navy-600">Day not found.</p>
+  if (!day) return <p className="text-ink-200">Day not found.</p>
   const maxSort = acts.reduce((m, a) => Math.max(m, a.sort_order), 0)
 
   return (
     <div className="space-y-4 max-w-2xl">
-      <Link to="/admin/itinerary" className="inline-flex items-center gap-1 text-jungle-700 font-semibold min-h-[44px]"><ArrowLeft className="h-4 w-4" />All days</Link>
-      <div className="flex items-center justify-between gap-3"><div><p className="text-sm font-semibold text-ember-600">Day {day.day_number} · {fmtDate(day.day_date)}</p><h1 className="font-display text-2xl font-bold text-navy-800">{day.title}</h1></div><Button onClick={() => setEdit('new')}><Plus className="h-4 w-4" />Add</Button></div>
-      {err && <p role="alert" className="text-red-700">{err}</p>}
+      <Link to="/admin/itinerary" className="inline-flex items-center gap-1 text-jungle-300 font-semibold min-h-[44px]"><ArrowLeft className="h-4 w-4" />All days</Link>
+      <div className="flex items-center justify-between gap-3"><div><p className="text-sm font-semibold text-ember-300">Day {day.day_number} · {fmtDate(day.day_date)}</p><h1 className="font-display text-2xl font-medium text-ink-50">{day.title}</h1></div><Button onClick={() => setEdit('new')}><Plus className="h-4 w-4" />Add</Button></div>
+      {err && <p role="alert" className="text-red-300">{err}</p>}
       {acts.length === 0 ? <Card><EmptyState title="No activities yet" /></Card> : (
-        <Card className="divide-y divide-sand-200/70">
+        <Card className="divide-y divide-white/10">
           {acts.map((a, i) => (
             <div key={a.id} className="flex items-center gap-2 p-3">
               <div className="flex flex-col">
-                <button disabled={i === 0} onClick={() => void move(i, -1)} aria-label={`Move ${a.title} up`} className="p-1.5 text-navy-400 disabled:opacity-25"><ArrowUp className="h-4 w-4" /></button>
-                <button disabled={i === acts.length - 1} onClick={() => void move(i, 1)} aria-label={`Move ${a.title} down`} className="p-1.5 text-navy-400 disabled:opacity-25"><ArrowDown className="h-4 w-4" /></button>
+                <button disabled={i === 0} onClick={() => void move(i, -1)} aria-label={`Move ${a.title} up`} className="p-1.5 text-ink-400 disabled:opacity-25"><ArrowUp className="h-4 w-4" /></button>
+                <button disabled={i === acts.length - 1} onClick={() => void move(i, 1)} aria-label={`Move ${a.title} down`} className="p-1.5 text-ink-400 disabled:opacity-25"><ArrowDown className="h-4 w-4" /></button>
               </div>
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-jungle-50 text-jungle-700"><KindIcon kind={a.kind} className="h-4 w-4" /></span>
-              <div className="min-w-0 flex-1"><p className="font-semibold text-navy-800 truncate">{a.title}</p><p className="text-sm text-navy-500 truncate">{fmtTime(a.start_time) ?? a.time_note ?? 'Time TBC'}{a.is_optional ? ' · Optional' : ''}</p></div>
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-jungle-500/10 text-jungle-300"><KindIcon kind={a.kind} className="h-4 w-4" /></span>
+              <div className="min-w-0 flex-1"><p className="font-semibold text-ink-50 truncate">{a.title}</p><p className="text-sm text-ink-300 truncate">{fmtTime(a.start_time) ?? a.time_note ?? 'Time TBC'}{a.is_optional ? ' · Optional' : ''}</p></div>
               <StatusBadge status={a.status} />
-              <button onClick={() => setEdit(a)} aria-label={`Edit ${a.title}`} className="p-2 text-navy-400 hover:text-navy-800"><Pencil className="h-4 w-4" /></button>
-              <button onClick={() => void del(a)} aria-label={`Delete ${a.title}`} className="p-2 text-navy-300 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>
+              <button onClick={() => setEdit(a)} aria-label={`Edit ${a.title}`} className="p-2 text-ink-400 hover:text-ink-50"><Pencil className="h-4 w-4" /></button>
+              <button onClick={() => void del(a)} aria-label={`Delete ${a.title}`} className="p-2 text-ink-400 hover:text-red-400"><Trash2 className="h-4 w-4" /></button>
             </div>
           ))}
         </Card>

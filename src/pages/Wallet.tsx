@@ -34,27 +34,27 @@ export default function Wallet() {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="font-display text-3xl font-bold text-navy-800">Travel Wallet</h1>
+        <h1 className="font-display text-[1.75rem] sm:text-[2rem] font-medium tracking-tight text-ink-50">Travel Wallet</h1>
         <Button onClick={() => setUpload({})}><Plus className="h-4 w-4" />Upload</Button>
       </div>
 
-      <nav className="flex gap-2 rounded-2xl bg-white p-1.5 border border-sand-200/60 shadow-card" aria-label="Wallet sections">
+      <nav className="flex gap-2 glass rounded-2xl p-1.5" aria-label="Wallet sections">
         {TABS.map((t) => (
           <Link key={t.key} to={t.to} aria-current={tab === t.key ? 'page' : undefined}
-            className={cx('flex-1 text-center rounded-xl min-h-[44px] grid place-items-center font-semibold', tab === t.key ? 'bg-navy-800 text-white' : 'text-navy-600 hover:bg-sand-100')}>{t.label}</Link>
+            className={cx('flex-1 text-center rounded-xl min-h-[44px] grid place-items-center font-semibold', tab === t.key ? 'bg-gradient-to-b from-jungle-500 to-jungle-700 text-white shadow-[inset_0_1px_0_rgba(255,255,255,.28),0_8px_20px_-8px_rgba(31,157,107,.75)]' : 'text-ink-200 hover:bg-white/[.07]')}>{t.label}</Link>
         ))}
       </nav>
 
       {tab === '' && (
         <>
           <div className="relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-navy-300" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-ink-400" />
             <input className={`${inputCls} pl-11`} type="search" placeholder="Search documents" value={search} onChange={(e) => setSearch(e.target.value)} aria-label="Search documents" />
           </div>
           <div className="-mx-4 px-4 lg:mx-0 lg:px-0 flex gap-2 overflow-x-auto pb-1">
             {[{ value: '', label: 'All' }, ...DOC_CATEGORIES.filter((c) => counts.has(c.value))].map((c) => (
               <button key={c.value} onClick={() => setCat(c.value)} aria-pressed={cat === c.value}
-                className={cx('shrink-0 rounded-full px-4 min-h-[40px] font-semibold border', cat === c.value ? 'bg-navy-800 text-white border-navy-800' : 'bg-white text-navy-700 border-sand-200')}>
+                className={cx('shrink-0 rounded-full px-4 min-h-[40px] font-semibold border', cat === c.value ? 'bg-gradient-to-b from-jungle-500 to-jungle-700 text-white shadow-[inset_0_1px_0_rgba(255,255,255,.28),0_8px_20px_-8px_rgba(31,157,107,.75)] border-transparent' : 'glass-chip text-ink-100')}>
                 {c.label}{c.value ? ` ${counts.get(c.value)}` : ` ${current.length}`}
               </button>
             ))}
@@ -62,16 +62,16 @@ export default function Wallet() {
           {shown.length === 0 ? (
             <Card><EmptyState icon={<FileText className="h-8 w-8" />} title={current.length === 0 ? 'No documents yet' : 'No matches'} hint={current.length === 0 ? 'Upload tickets, confirmations and insurance. Only trip members can open them.' : 'Try a different search or category.'} /></Card>
           ) : (
-            <Card className="divide-y divide-sand-200/70 overflow-hidden">
+            <Card className="divide-y divide-white/10 overflow-hidden">
               {shown.map((d) => (
-                <button key={d.id} onClick={() => setOpen(d)} className="w-full text-left flex items-center gap-3 px-4 py-3 min-h-[68px] hover:bg-sand-50">
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-sand-100 text-navy-600">{isImage(d.mime_type) ? <FileImage className="h-5 w-5" /> : <FileText className="h-5 w-5" />}</span>
+                <button key={d.id} onClick={() => setOpen(d)} className="w-full text-left flex items-center gap-3 px-4 py-3 min-h-[68px] hover:bg-white/[.04]">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/[.07] text-ink-200">{isImage(d.mime_type) ? <FileImage className="h-5 w-5" /> : <FileText className="h-5 w-5" />}</span>
                   <span className="min-w-0 flex-1">
-                    <span className="block font-semibold text-navy-800 truncate">{d.name}</span>
-                    <span className="block text-sm text-navy-500 truncate">{categoryLabel(d.category)}{d.related_date ? ` · ${fmtDate(d.related_date)}` : ''} · {memberName(d.uploaded_by)}</span>
+                    <span className="block font-semibold text-ink-50 truncate">{d.name}</span>
+                    <span className="block text-sm text-ink-300 truncate">{categoryLabel(d.category)}{d.related_date ? ` · ${fmtDate(d.related_date)}` : ''} · {memberName(d.uploaded_by)}</span>
                   </span>
-                  {d.version > 1 && <span className="rounded-full bg-navy-100 text-navy-600 px-2 py-0.5 text-sm font-semibold">v{d.version}</span>}
-                  {d.visibility === 'private' && <Lock className="h-4 w-4 text-navy-400 shrink-0" aria-label="Only you" />}
+                  {d.version > 1 && <span className="rounded-full bg-white/10 text-ink-200 px-2 py-0.5 text-sm font-semibold">v{d.version}</span>}
+                  {d.visibility === 'private' && <Lock className="h-4 w-4 text-ink-400 shrink-0" aria-label="Only you" />}
                 </button>
               ))}
             </Card>

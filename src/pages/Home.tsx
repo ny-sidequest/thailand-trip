@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Bed, Bell, Bus, CalendarClock, CheckSquare, FileText, Map as MapIcon, MapPin, Plane, Ship, Sparkles } from 'lucide-react'
+import { Bed, Bell, Bus, CalendarClock, CheckSquare, FileText, Map as MapIcon, MapPin, Plane, Ship, Sparkles } from 'lucide-react'
 import { supabase, unwrap } from '@/lib/supabase'
 import { useAuth } from '@/context/AuthContext'
 import { useTrip } from '@/context/TripContext'
@@ -7,8 +7,12 @@ import { useAsync } from '@/hooks/useAsync'
 import { useAnnouncements } from '@/hooks/useSocial'
 import { AnnouncementCard } from '@/components/social/Announcements'
 import { useRealtime } from '@/hooks/useRealtime'
+import { useNow } from '@/hooks/useNow'
+import CityScene from '@/components/CityScene'
+import JourneyMap from '@/components/JourneyMap'
+import { buildJourney, currentStopIndex, isoToday } from '@/lib/journey'
 import { Avatar, Card, EmptyState, ErrorState, ProgressBar, SectionTitle, Skeleton, StatusBadge } from '@/components/ui'
-import { cityRuns, daysUntil, fmtDate, fmtDateLong, fmtTime, mapsDirectionsUrl, safeUrl, timeAgo } from '@/lib/format'
+import { cityRuns, tripClock, fmtDate, fmtDateLong, fmtTime, mapsDirectionsUrl, safeUrl, timeAgo } from '@/lib/format'
 import type { Accommodation, Activity, Day, FeedItem, Transport } from '@/lib/types'
 
 interface Progress { user_id: string; completed: number; total: number }
@@ -38,27 +42,43 @@ export default function Home() {
 
   useRealtime(tripId, ['itinerary_activities', 'itinerary_days', 'accommodation_bookings', 'transport_bookings', 'activity_feed', 'checklist_pings', 'checklist_items'], q.reload)
 
-  const left = daysUntil(trip!.start_date)
-  const over = daysUntil(trip!.end_date) < 0
-  const countdown = over ? 'Trip complete' : left > 0 ? `${left}` : left === 0 ? 'Today' : 'On the trip'
+  const clock = tripClock(trip!.start_date, trip!.end_date, useNow())
 
   return (
     <div className="space-y-8">
-      {/* Hero */}
-      <section className="relative overflow-hidden rounded-3xl bg-navy-800 text-white p-6 sm:p-8"
-        style={trip!.hero_image_url ? { backgroundImage: `linear-gradient(rgba(11,31,58,.72),rgba(11,31,58,.85)), url(${safeUrl(trip!.hero_image_url)})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}>
-        <div className="absolute -top-16 -right-10 h-56 w-56 rounded-full bg-ember-500 opacity-30 blur-3xl" />
-        <p className="relative text-sand-300 text-sm font-semibold uppercase tracking-widest">{fmtDate(trip!.start_date, { day: 'numeric', month: 'short' })} – {fmtDate(trip!.end_date, { day: 'numeric', month: 'short', year: 'numeric' })}</p>
-        <h1 className="relative font-display text-4xl sm:text-5xl font-bold mt-2">{trip!.name}</h1>
-        {trip!.tagline && <p className="relative text-navy-100 mt-2 max-w-xl text-lg">{trip!.tagline}</p>}
-        <div className="relative mt-6 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="font-display text-6xl font-bold leading-none">{countdown}</p>
-            {!over && left > 0 && <p className="text-navy-100 mt-1">{left === 1 ? 'day' : 'days'} until departure</p>}
+      {/* Hero: aurora glass over destination art, live countdown */}
+      <section className="relative overflow-hidden rounded-[32px] glass-dark text-white min-h-[22rem]"
+        style={safeUrl(trip!.hero_image_url) ? { backgroundImage: `linear-gradient(rgba(11,31,58,.55),rgba(11,31,58,.8)), url(${safeUrl(trip!.hero_image_url)})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}>
+        {!trip!.hero_image_url && <CityScene city={trip!.route_stops[1] ?? trip!.route_stops[0] ?? 'Bangkok'} className="absolute inset-0 h-full w-full opacity-90" />}
+        <div className="absolute inset-0 bg-gradient-to-b from-navy-900/80 via-navy-900/35 to-navy-900/10" />
+        <div className="absolute -top-20 -right-12 h-64 w-64 rounded-full bg-ember-500/40 blur-3xl animate-float" />
+        <div className="relative p-6 sm:p-8 flex flex-col min-h-[22rem]">
+          <p className="eyebrow !text-sand-200">{fmtDate(trip!.start_date, { day: 'numeric', month: 'short' })} – {fmtDate(trip!.end_date, { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+          <h1 className="font-display text-[2.1rem] sm:text-5xl font-medium tracking-[-0.03em] mt-2 leading-[1.06]">{trip!.name}</h1>
+          {trip!.tagline && <p className="text-white/80 mt-2 max-w-xl text-lg">{trip!.tagline}</p>}
+
+          <div className="mt-auto pt-8 flex flex-wrap items-end justify-between gap-4">
+            {clock.state === 'before' ? (
+              <div className="grid grid-cols-3 gap-2 w-full max-w-[19rem]" role="timer" aria-label={`${clock.days} days, ${clock.hours} hours, ${clock.minutes} minutes until departure`}>
+                {([['days', clock.days], ['hrs', clock.hours], ['min', clock.minutes]] as const).map(([l, v]) => (
+                  <div key={l} className="glass-chip-dark rounded-2xl py-2.5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,.25)]">
+                    <p className="font-display text-3xl sm:text-4xl font-light leading-none num">{String(v).padStart(2, '0')}</p>
+                    <p className="mt-1 text-xs font-semibold uppercase tracking-[.14em] text-white/70">{l}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="glass-chip-dark rounded-2xl px-5 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,.25)]">
+                <p className="font-display text-3xl font-medium leading-none">{clock.state === 'during' ? `Day ${clock.day} of ${clock.total}` : 'Trip complete'}</p>
+                <p className="mt-1 text-xs font-semibold uppercase tracking-[.14em] text-white/70">{clock.state === 'during' ? 'Enjoy it' : 'See you next time'}</p>
+              </div>
+            )}
+            <div className="glass-chip-dark rounded-full pl-1.5 pr-4 py-1.5 flex items-center gap-3">
+              <div className="flex -space-x-2">{members.map((m) => <Avatar key={m.user_id} profile={m.profile} size={32} />)}</div>
+              <span className="text-sm font-semibold text-white/90">Hi, {profile?.display_name.split(' ')[0]}</span>
+            </div>
           </div>
-          <div className="flex -space-x-2">{members.map((m) => <Avatar key={m.user_id} profile={m.profile} size={44} />)}</div>
         </div>
-        <p className="relative mt-4 text-navy-200 text-sm">Hi {profile?.display_name.split(' ')[0]} 👋</p>
       </section>
 
       {q.error && <ErrorState message={q.error} onRetry={q.reload} />}
@@ -71,10 +91,14 @@ export default function Home() {
 
 function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodation[]; tr: Transport[]; feed: FeedItem[]; prog: Progress[] } }) {
   const { session } = useAuth()
-  const { trip } = useTrip()
+  const { trip, members } = useTrip()
   const ann = useAnnouncements(trip!.id)
   const runs = cityRuns(d.days)
   const stops = trip!.route_stops.length ? trip!.route_stops : runs.map((r) => r.city)
+  const journey = buildJourney(stops, runs)
+  const todayIso = isoToday()
+  const currentIdx = currentStopIndex(journey, trip!.start_date, trip!.end_date, todayIso)
+  const phase = todayIso < trip!.start_date ? 'before' : todayIso > trip!.end_date ? 'after' : 'during'
   const dayById = new Map(d.days.map((x) => [x.id, x]))
 
   // next activity
@@ -110,39 +134,18 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
           { to: '/checklist', icon: CheckSquare, label: 'My checklist' },
           { to: '/feed', icon: Sparkles, label: 'Group feed' },
         ].map(({ to, icon: I, label }) => (
-          <Link key={to} to={to} className="flex items-center gap-3 rounded-2xl bg-white border border-sand-200/60 shadow-card px-4 min-h-[60px] font-semibold text-navy-800 hover:border-jungle-400 transition">
-            <I className="h-5 w-5 text-jungle-600" />{label}
+          <Link key={to} to={to} className="glass hover-lift flex items-center gap-3 rounded-2xl px-3.5 min-h-[64px] font-semibold text-ink-50 active:scale-[.98] transition">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-jungle-400/30 to-jungle-600/15 text-jungle-300 ring-1 ring-inset ring-jungle-500/20"><I className="h-5 w-5" aria-hidden="true" /></span>{label}
           </Link>
         ))}
       </div>
 
-      {/* Route */}
+      {/* Route: a quiet road map, the group's car where they are right now */}
       <section>
-        <SectionTitle>Route</SectionTitle>
-        <Card className="p-5">
-          <ol className="flex flex-wrap items-center gap-x-2 gap-y-3">
-            {stops.map((s, i) => (
-              <li key={i} className="flex items-center gap-2">
-                <span className="rounded-full bg-navy-800 text-white px-3.5 py-1.5 font-semibold">{s}</span>
-                {i < stops.length - 1 && <ArrowRight className="h-4 w-4 text-ember-500" />}
-              </li>
-            ))}
-          </ol>
-          {runs.length > 0 && (
-            <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 [&>*]:min-w-0">
-              {runs.map((r, i) => (
-                <div key={i} className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-jungle-700 to-navy-700 text-white p-4 min-h-[96px]"
-                  style={safeUrl(r.image_url) ? { backgroundImage: `linear-gradient(rgba(11,31,58,.55),rgba(11,31,58,.8)), url(${safeUrl(r.image_url)})`, backgroundSize: 'cover' } : undefined}>
-                  <p className="font-display text-xl font-bold">{r.city}</p>
-                  <p className="text-sm text-navy-100">{r.from === r.to ? fmtDate(r.from) : `${fmtDate(r.from)} – ${fmtDate(r.to)}`}</p>
-                </div>
-              ))}
-            </div>
-          )}
-          <a className="mt-4 inline-flex items-center gap-2 text-jungle-700 font-semibold min-h-[44px]" target="_blank" rel="noopener noreferrer"
-            href={mapsDirectionsUrl([...new Set(runs.map((r) => r.city))].map((c) => `${c}, Thailand`).filter((c) => !c.startsWith('Bangalore')))}>
-            <MapPin className="h-4 w-4" /> Open route in Google Maps
-          </a>
+        <SectionTitle>The journey</SectionTitle>
+        <Card className="overflow-hidden">
+          <JourneyMap journey={journey} current={currentIdx} phase={phase} members={members}
+            mapsHref={mapsDirectionsUrl([...new Set(runs.map((r) => r.city))].map((c) => `${c}, Thailand`)) } />
         </Card>
       </section>
 
@@ -153,12 +156,12 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
           <Card className="p-5">
             {next ? (
               <>
-                <div className="flex items-center gap-2 text-sm font-semibold text-ember-600"><CalendarClock className="h-4 w-4" />Day {next.day.day_number} · {fmtDateLong(next.day.day_date)}</div>
-                <Link to={`/itinerary/activity/${next.a.id}`}><h3 className="font-display text-2xl font-bold text-navy-800 mt-1 hover:underline">{next.a.title}</h3></Link>
-                <p className="text-navy-600 mt-1">{[fmtTime(next.a.start_time) ?? next.a.time_note, next.a.location_name].filter(Boolean).join(' · ')}</p>
+                <div className="flex items-center gap-2 text-sm font-semibold text-ember-300"><CalendarClock className="h-4 w-4" />Day {next.day.day_number} · {fmtDateLong(next.day.day_date)}</div>
+                <Link to={`/itinerary/activity/${next.a.id}`}><h3 className="font-display text-2xl font-medium text-ink-50 mt-1 hover:underline">{next.a.title}</h3></Link>
+                <p className="text-ink-200 mt-1">{[fmtTime(next.a.start_time) ?? next.a.time_note, next.a.location_name].filter(Boolean).join(' · ')}</p>
                 <div className="mt-3 flex items-center gap-3 flex-wrap">
                   <StatusBadge status={next.a.status} />
-                  {safeUrl(next.a.maps_url) && <a className="text-jungle-700 font-semibold inline-flex items-center gap-1 min-h-[44px]" href={safeUrl(next.a.maps_url)!} target="_blank" rel="noopener noreferrer"><MapPin className="h-4 w-4" />Directions</a>}
+                  {safeUrl(next.a.maps_url) && <a className="text-jungle-300 font-semibold inline-flex items-center gap-1 min-h-[44px]" href={safeUrl(next.a.maps_url)!} target="_blank" rel="noopener noreferrer"><MapPin className="h-4 w-4" />Directions</a>}
                 </div>
               </>
             ) : <EmptyState title="Nothing scheduled" hint="The admin can add activities in the itinerary." />}
@@ -167,12 +170,12 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
 
         {/* Checklist */}
         <section>
-          <SectionTitle action={<Link to="/checklist" className="text-jungle-700 font-semibold min-h-[44px] inline-flex items-center">Open</Link>}>Preparation</SectionTitle>
+          <SectionTitle action={<Link to="/checklist" className="text-jungle-300 font-semibold min-h-[44px] inline-flex items-center">Open</Link>}>Preparation</SectionTitle>
           <Card className="p-5 space-y-4">
             {totalPossible === 0 ? <EmptyState title="No checklist items yet" /> : (
               <>
-                <div><div className="flex justify-between font-semibold text-navy-800 mb-1.5"><span>You</span><span>{Math.round(myPct)}%</span></div><ProgressBar value={myPct} /></div>
-                <div><div className="flex justify-between font-semibold text-navy-800 mb-1.5"><span>Whole group</span><span>{Math.round(groupPct)}%</span></div><ProgressBar value={groupPct} /></div>
+                <div><div className="flex justify-between font-semibold text-ink-50 mb-1.5"><span>You</span><span>{Math.round(myPct)}%</span></div><ProgressBar value={myPct} /></div>
+                <div><div className="flex justify-between font-semibold text-ink-50 mb-1.5"><span>Whole group</span><span>{Math.round(groupPct)}%</span></div><ProgressBar value={groupPct} /></div>
               </>
             )}
           </Card>
@@ -181,7 +184,7 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
 
       {/* Announcements */}
       <section>
-        <SectionTitle action={<Link to="/feed/announcements" className="text-jungle-700 font-semibold min-h-[44px] inline-flex items-center">All</Link>}><span className="inline-flex items-center gap-2"><Bell className="h-5 w-5 text-ember-500" />Announcements</span></SectionTitle>
+        <SectionTitle action={<Link to="/feed/announcements" className="text-jungle-300 font-semibold min-h-[44px] inline-flex items-center">All</Link>}><span className="inline-flex items-center gap-2"><Bell className="h-5 w-5 text-ember-500" />Announcements</span></SectionTitle>
         {!ann.data ? <Skeleton className="h-24" /> : ann.data.items.length === 0 ? <Card><EmptyState title="No announcements" hint="Important updates from the admin appear here." /></Card> : (
           <div className="space-y-3">{ann.data.items.slice(0, 3).map((a) => <AnnouncementCard key={a.id} a={a} data={ann.data!} reload={ann.reload} compact />)}</div>
         )}
@@ -191,11 +194,11 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
         {/* Bookings */}
         <section>
           <SectionTitle>Upcoming bookings</SectionTitle>
-          <Card className="divide-y divide-sand-200/70">
+          <Card className="divide-y divide-white/10">
             {bookings.length === 0 ? <EmptyState title="No upcoming bookings" /> : bookings.map((b) => (
               <div key={b.key} className="flex items-center gap-3 p-4">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-sand-100 text-navy-700"><b.icon className="h-5 w-5" /></span>
-                <div className="min-w-0 flex-1"><p className="font-semibold text-navy-800 truncate">{b.title}</p><p className="text-sm text-navy-500">{fmtDate(b.date)}{b.sub ? ` · ${b.sub}` : ''}</p></div>
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/[.07] text-ink-100"><b.icon className="h-5 w-5" /></span>
+                <div className="min-w-0 flex-1"><p className="font-semibold text-ink-50 truncate">{b.title}</p><p className="text-sm text-ink-300">{fmtDate(b.date)}{b.sub ? ` · ${b.sub}` : ''}</p></div>
                 <StatusBadge status={b.status} />
               </div>
             ))}
@@ -204,13 +207,13 @@ function Dashboard({ d }: { d: { days: Day[]; acts: Activity[]; acc: Accommodati
 
         {/* Feed */}
         <section>
-          <SectionTitle action={<Link to="/feed" className="text-jungle-700 font-semibold min-h-[44px] inline-flex items-center">All</Link>}>Recent activity</SectionTitle>
-          <Card className="divide-y divide-sand-200/70">
+          <SectionTitle action={<Link to="/feed" className="text-jungle-300 font-semibold min-h-[44px] inline-flex items-center">All</Link>}>Recent activity</SectionTitle>
+          <Card className="divide-y divide-white/10">
             {d.feed.length === 0 ? <EmptyState title="Quiet for now" hint="Uploads, expenses and posts show up here live." /> : d.feed.map((f) => (
               <div key={f.id} className="flex items-start gap-3 p-4">
                 <Avatar profile={f.actor} size={36} />
-                <div className="min-w-0 flex-1"><p className="text-navy-800">{f.summary}</p>{f.body && <p className="text-navy-500 truncate">{f.body}</p>}</div>
-                <span className="text-sm text-navy-400 shrink-0">{timeAgo(f.created_at)}</span>
+                <div className="min-w-0 flex-1"><p className="text-ink-50">{f.summary}</p>{f.body && <p className="text-ink-300 truncate">{f.body}</p>}</div>
+                <span className="text-sm text-ink-400 shrink-0">{timeAgo(f.created_at)}</span>
               </div>
             ))}
           </Card>

@@ -10,7 +10,7 @@ export default function OfflineBanner() {
   }, [])
   if (online) return null
   return (
-    <div role="status" className="bg-amber-100 text-amber-900 px-4 py-2 text-center font-semibold flex items-center justify-center gap-2">
+    <div role="status" className="bg-amber-500/15 text-amber-100 px-4 py-2 text-center font-semibold flex items-center justify-center gap-2">
       <WifiOff className="h-4 w-4" />You're offline. The itinerary shows your last saved copy; other sections need a connection.
     </div>
   )

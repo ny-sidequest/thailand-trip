@@ -11,13 +11,13 @@ const statusOptions = (Object.keys(STATUS_LABEL) as BookingStatus[]).map((s) => 
 const isPhone = (s: string) => /^[+\d][\d\s()-]{6,}$/.test(s.trim())
 
 function Line({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
-  return <div className="flex gap-3 py-2"><span className="mt-0.5 text-navy-300 shrink-0">{icon}</span><div className="min-w-0"><p className="text-sm font-semibold text-navy-400">{label}</p><div className="text-navy-800 break-words whitespace-pre-wrap">{children}</div></div></div>
+  return <div className="flex gap-3 py-2"><span className="mt-0.5 text-ink-400 shrink-0">{icon}</span><div className="min-w-0"><p className="text-sm font-semibold text-ink-400">{label}</p><div className="text-ink-50 break-words whitespace-pre-wrap">{children}</div></div></div>
 }
 function Docs({ docs, onOpen, onAdd }: { docs: DocumentRow[]; onOpen: (d: DocumentRow) => void; onAdd: () => void }) {
   return (
     <div className="mt-3 flex flex-wrap gap-2">
-      {docs.map((d) => <button key={d.id} onClick={() => onOpen(d)} className="inline-flex items-center gap-1.5 rounded-xl bg-sand-100 px-3 min-h-[40px] text-sm font-semibold text-navy-800 max-w-full"><FileText className="h-4 w-4 shrink-0 text-jungle-600" /><span className="truncate">{d.name}</span></button>)}
-      <button onClick={onAdd} className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-sand-300 px-3 min-h-[40px] text-sm font-semibold text-navy-600"><Plus className="h-4 w-4" />Add document</button>
+      {docs.map((d) => <button key={d.id} onClick={() => onOpen(d)} className="inline-flex items-center gap-1.5 rounded-xl bg-white/[.07] px-3 min-h-[40px] text-sm font-semibold text-ink-50 max-w-full"><FileText className="h-4 w-4 shrink-0 text-jungle-400" /><span className="truncate">{d.name}</span></button>)}
+      <button onClick={onAdd} className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-white/15 px-3 min-h-[40px] text-sm font-semibold text-ink-200"><Plus className="h-4 w-4" />Add document</button>
     </div>
   )
 }
@@ -59,15 +59,15 @@ export function StayList({ stays, docs, onOpen, onAdd, reload }: { stays: StayFu
         return (
           <Card key={s.id} className="p-5">
             <div className="flex items-start gap-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-jungle-50 text-jungle-700"><Bed className="h-5 w-5" /></span>
-              <div className="min-w-0 flex-1"><h3 className="font-bold text-navy-800 text-lg leading-snug">{s.name}</h3>
-                <p className="text-navy-500">{s.city}{s.check_in ? `${s.city ? ' · ' : ''}${fmtDate(s.check_in)}${s.check_out ? ` → ${fmtDate(s.check_out)}` : ''}${nights ? ` (${nights} night${nights === 1 ? '' : 's'})` : ''}` : ''}</p></div>
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-jungle-500/10 text-jungle-300"><Bed className="h-5 w-5" /></span>
+              <div className="min-w-0 flex-1"><h3 className="font-bold text-ink-50 text-lg leading-snug">{s.name}</h3>
+                <p className="text-ink-300">{s.city}{s.check_in ? `${s.city ? ' · ' : ''}${fmtDate(s.check_in)}${s.check_out ? ` → ${fmtDate(s.check_out)}` : ''}${nights ? ` (${nights} night${nights === 1 ? '' : 's'})` : ''}` : ''}</p></div>
               <StatusBadge status={s.status} />
             </div>
-            <div className="mt-2 divide-y divide-sand-200/60">
+            <div className="mt-2 divide-y divide-white/10">
               {s.address && <Line icon={<MapPin className="h-5 w-5" />} label="Address">{s.address}</Line>}
               {s.confirmation_ref && <Line icon={<Hash className="h-5 w-5" />} label="Confirmation">{s.confirmation_ref}</Line>}
-              {s.contact && <Line icon={<Phone className="h-5 w-5" />} label="Contact">{isPhone(s.contact) ? <a className="text-jungle-700 font-semibold" href={`tel:${s.contact.replace(/[^+\d]/g, '')}`}>{s.contact}</a> : s.contact}</Line>}
+              {s.contact && <Line icon={<Phone className="h-5 w-5" />} label="Contact">{isPhone(s.contact) ? <a className="text-jungle-300 font-semibold" href={`tel:${s.contact.replace(/[^+\d]/g, '')}`}>{s.contact}</a> : s.contact}</Line>}
               {s.checkin_instructions && <Line icon={<KeyRound className="h-5 w-5" />} label="Check-in instructions">{s.checkin_instructions}</Line>}
               {s.notes && <Line icon={<Users className="h-5 w-5" />} label="Notes">{s.notes}</Line>}
             </div>
@@ -99,12 +99,12 @@ export function TransportList({ items, docs, onOpen, onAdd, reload }: { items: T
         return (
           <Card key={t.id} className="p-5">
             <div className="flex items-start gap-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-jungle-50 text-jungle-700"><I className="h-5 w-5" /></span>
-              <div className="min-w-0 flex-1"><h3 className="font-bold text-navy-800 text-lg leading-snug">{t.origin} → {t.destination}</h3>
-                <p className="text-navy-500">{[t.travel_date && fmtDate(t.travel_date, { weekday: 'short', day: 'numeric', month: 'short' }), t.operator ?? t.mode].filter(Boolean).join(' · ')}</p></div>
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-jungle-500/10 text-jungle-300"><I className="h-5 w-5" /></span>
+              <div className="min-w-0 flex-1"><h3 className="font-bold text-ink-50 text-lg leading-snug">{t.origin} → {t.destination}</h3>
+                <p className="text-ink-300">{[t.travel_date && fmtDate(t.travel_date, { weekday: 'short', day: 'numeric', month: 'short' }), t.operator ?? t.mode].filter(Boolean).join(' · ')}</p></div>
               <StatusBadge status={t.status} />
             </div>
-            <div className="mt-2 divide-y divide-sand-200/60">
+            <div className="mt-2 divide-y divide-white/10">
               {times && <Line icon={<Bus className="h-5 w-5" />} label="Times">{times}</Line>}
               {t.booking_ref && <Line icon={<Hash className="h-5 w-5" />} label="Booking reference">{t.booking_ref}</Line>}
               {t.meeting_point && <Line icon={<MapPin className="h-5 w-5" />} label="Meeting point">{t.meeting_point}</Line>}

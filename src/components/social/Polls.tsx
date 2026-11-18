@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Lock, Plus, Trash2, X } from 'lucide-react'
+import { Lock, Plus, Trash2, Trophy, X } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/context/AuthContext'
 import { useTrip } from '@/context/TripContext'
@@ -36,10 +36,10 @@ function PollCard({ poll, options, votes, reload }: { poll: PollRow; options: Po
   return (
     <Card className="p-5">
       <div className="flex items-start justify-between gap-3">
-        <h3 className="font-bold text-navy-800 text-lg leading-snug">{poll.question}</h3>
-        {closed && <span className="inline-flex items-center gap-1 rounded-full bg-navy-100 text-navy-600 px-2.5 py-0.5 text-sm font-semibold shrink-0"><Lock className="h-3.5 w-3.5" />Closed</span>}
+        <h3 className="font-bold text-ink-50 text-lg leading-snug">{poll.question}</h3>
+        {closed && <span className="inline-flex items-center gap-1 rounded-full bg-white/10 text-ink-200 px-2.5 py-0.5 text-sm font-semibold shrink-0"><Lock className="h-3.5 w-3.5" />Closed</span>}
       </div>
-      <p className="text-sm text-navy-500 mt-1">{poll.multiple_choice ? 'Pick any' : 'Pick one'} · {r.voters} of {members.length} voted{poll.closes_at && !closed ? ` · closes ${fmtDate(poll.closes_at.slice(0, 10))} ${new Date(poll.closes_at).toTimeString().slice(0, 5)}` : ''}</p>
+      <p className="text-sm text-ink-300 mt-1">{poll.multiple_choice ? 'Pick any' : 'Pick one'} · {r.voters} of {members.length} voted{poll.closes_at && !closed ? ` · closes ${fmtDate(poll.closes_at.slice(0, 10))} ${new Date(poll.closes_at).toTimeString().slice(0, 5)}` : ''}</p>
 
       <ul className="mt-3 space-y-2">
         {options.map((o) => {
@@ -47,12 +47,12 @@ function PollCard({ poll, options, votes, reload }: { poll: PollRow; options: Po
           return (
             <li key={o.id}>
               <button onClick={() => void cast(o.id)} disabled={closed || busy} aria-pressed={on}
-                className={cx('relative w-full overflow-hidden rounded-2xl border-2 text-left px-4 py-3 min-h-[56px] disabled:cursor-default', on ? 'border-jungle-500' : 'border-sand-200 hover:border-jungle-400')}>
-                <span className={cx('absolute inset-y-0 left-0 transition-all', on ? 'bg-jungle-100' : 'bg-sand-100')} style={{ width: `${r.percent[o.id]}%` }} />
+                className={cx('relative w-full overflow-hidden rounded-2xl border-2 text-left px-4 py-3 min-h-[56px] disabled:cursor-default', on ? 'border-jungle-500' : 'border-white/10 hover:border-jungle-400')}>
+                <span className={cx('absolute inset-y-0 left-0 transition-all', on ? 'bg-jungle-500/20' : 'bg-white/[.07]')} style={{ width: `${r.percent[o.id]}%` }} />
                 <span className="relative flex items-center gap-3">
-                  <span className={cx('grid h-5 w-5 shrink-0 place-items-center border-2', poll.multiple_choice ? 'rounded-md' : 'rounded-full', on ? 'bg-jungle-500 border-jungle-500 text-white' : 'border-navy-200 bg-white')}>{on && <span className="text-xs leading-none">✓</span>}</span>
-                  <span className={cx('flex-1 font-semibold', closed && n === top && n > 0 ? 'text-jungle-800' : 'text-navy-800')}>{o.label}{closed && n === top && n > 0 ? ' 🏆' : ''}</span>
-                  <span className="tabular-nums text-navy-600 font-semibold">{n} · {r.percent[o.id]}%</span>
+                  <span className={cx('grid h-5 w-5 shrink-0 place-items-center border-2', poll.multiple_choice ? 'rounded-md' : 'rounded-full', on ? 'bg-jungle-500 border-jungle-500 text-white' : 'border-white/25 bg-white/10')}>{on && <span className="text-xs leading-none">✓</span>}</span>
+                  <span className={cx('flex-1 font-semibold', closed && n === top && n > 0 ? 'text-jungle-200' : 'text-ink-50')}>{o.label}{closed && n === top && n > 0 && <Trophy className="inline h-4 w-4 ml-1.5 -mt-0.5 text-ember-300" aria-label="Winner" />}</span>
+                  <span className="tabular-nums text-ink-200 font-semibold">{n} · {r.percent[o.id]}%</span>
                 </span>
               </button>
               {voters.length > 0 && <div className="flex -space-x-1.5 mt-1.5 pl-1" aria-label={`Voted: ${voters.map((v) => memberName(v.user_id)).join(', ')}`}>
@@ -61,12 +61,12 @@ function PollCard({ poll, options, votes, reload }: { poll: PollRow; options: Po
           )
         })}
       </ul>
-      {err && <p role="alert" className="mt-2 text-red-700">{err}</p>}
+      {err && <p role="alert" className="mt-2 text-red-300">{err}</p>}
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <ReactionBar targetType="poll" targetId={poll.id} />
-        <span className="text-sm text-navy-400 ml-auto">{timeAgo(poll.created_at)}</span>
+        <span className="text-sm text-ink-400 ml-auto">{timeAgo(poll.created_at)}</span>
         {isAdmin && !closed && <Button variant="soft" onClick={() => confirm('Close this poll? Nobody can vote after this.') && void patch({ closed_at: new Date().toISOString() })}>Close poll</Button>}
-        {isAdmin && <button onClick={() => confirm('Delete this poll?') && void patch({ deleted_at: new Date().toISOString() })} aria-label="Delete poll" className="p-2 text-navy-300 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>}
+        {isAdmin && <button onClick={() => confirm('Delete this poll?') && void patch({ deleted_at: new Date().toISOString() })} aria-label="Delete poll" className="p-2 text-ink-400 hover:text-red-400"><Trash2 className="h-4 w-4" /></button>}
       </div>
     </Card>
   )
@@ -88,21 +88,21 @@ function CreatePoll({ onClose, onDone }: { onClose: () => void; onDone: () => vo
     onDone(); onClose()
   }
   return (
-    <div className="fixed inset-0 z-50 bg-navy-900/50 flex items-end sm:items-center justify-center" onClick={onClose}>
-      <form onSubmit={submit} role="dialog" aria-label="New poll" onClick={(e) => e.stopPropagation()} className="bg-white w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
-        <div className="flex items-center justify-between"><h2 className="font-display text-xl font-bold text-navy-800">New poll</h2><button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button></div>
+    <div className="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
+      <form onSubmit={submit} role="dialog" aria-label="New poll" onClick={(e) => e.stopPropagation()} className="glass-sheet w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
+        <div className="flex items-center justify-between"><h2 className="font-display text-xl font-medium text-ink-50">New poll</h2><button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button></div>
         <Field label="Question"><input className={inputCls} maxLength={200} value={q} onChange={(e) => setQ(e.target.value)} placeholder="Which New Year's Eve party?" required /></Field>
         <div className="space-y-2">
-          <span className="block text-sm font-semibold text-navy-700">Options</span>
+          <span className="block text-sm font-semibold text-ink-100">Options</span>
           {opts.map((o, i) => (
             <div key={i} className="flex gap-2"><input className={inputCls} aria-label={`Option ${i + 1}`} maxLength={160} value={o} onChange={(e) => setOpts(opts.map((x, j) => (j === i ? e.target.value : x)))} placeholder={`Option ${i + 1}`} />
-              {opts.length > 2 && <button type="button" aria-label={`Remove option ${i + 1}`} onClick={() => setOpts(opts.filter((_, j) => j !== i))} className="p-2 text-navy-300 hover:text-red-600"><X className="h-5 w-5" /></button>}</div>
+              {opts.length > 2 && <button type="button" aria-label={`Remove option ${i + 1}`} onClick={() => setOpts(opts.filter((_, j) => j !== i))} className="p-2 text-ink-400 hover:text-red-400"><X className="h-5 w-5" /></button>}</div>
           ))}
           {opts.length < 10 && <Button type="button" variant="ghost" onClick={() => setOpts([...opts, ''])}><Plus className="h-4 w-4" />Add option</Button>}
         </div>
-        <div className="grid grid-cols-2 gap-2">{[{ v: false, l: 'Single choice' }, { v: true, l: 'Multiple choice' }].map((o) => <button type="button" key={o.l} aria-pressed={multi === o.v} onClick={() => setMulti(o.v)} className={cx('min-h-[48px] rounded-xl border-2 font-semibold', multi === o.v ? 'border-jungle-500 bg-jungle-50' : 'border-sand-200 text-navy-600')}>{o.l}</button>)}</div>
+        <div className="grid grid-cols-2 gap-2">{[{ v: false, l: 'Single choice' }, { v: true, l: 'Multiple choice' }].map((o) => <button type="button" key={o.l} aria-pressed={multi === o.v} onClick={() => setMulti(o.v)} className={cx('min-h-[48px] rounded-xl border-2 font-semibold', multi === o.v ? 'border-jungle-500 bg-jungle-500/10' : 'border-white/10 text-ink-200')}>{o.l}</button>)}</div>
         <Field label="Closes (optional)" hint="You can also close it manually any time."><input type="datetime-local" className={inputCls} value={closes} onChange={(e) => setCloses(e.target.value)} /></Field>
-        {err && <p role="alert" className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-red-800">{err}</p>}
+        {err && <p role="alert" className="rounded-xl bg-red-500/10 border border-red-400/30 px-4 py-3 text-red-200">{err}</p>}
         <div className="flex gap-3"><Button type="submit" busy={busy} className="flex-1">Create poll</Button><Button type="button" variant="ghost" onClick={onClose}>Cancel</Button></div>
       </form>
     </div>
@@ -119,7 +119,7 @@ export default function PollsTab({ data, reload }: { data: { polls: PollRow[]; o
       {isAdmin && <Button onClick={() => setCreate(true)}><Plus className="h-4 w-4" />New poll</Button>}
       {data.polls.length === 0 && <Card><EmptyState title="No polls yet" hint="Group decisions (parties, restaurants, timings) show up here." /></Card>}
       {open.map(card)}
-      {closed.length > 0 && <h2 className="font-display text-xl font-bold text-navy-800 pt-2">Closed</h2>}
+      {closed.length > 0 && <h2 className="font-display text-xl font-medium text-ink-50 pt-2">Closed</h2>}
       {closed.map(card)}
       {create && <CreatePoll onClose={() => setCreate(false)} onDone={reload} />}
     </div>

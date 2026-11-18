@@ -37,23 +37,23 @@ export default function AdminHome() {
 
   return (
     <div className="space-y-6">
-      <div><h1 className="font-display text-3xl font-bold text-navy-800">Admin</h1><p className="text-navy-500">{trip!.name} · {members.length} travellers. Changes are shared with everyone instantly.</p></div>
+      <div><h1 className="font-display text-[1.75rem] sm:text-[2rem] font-medium tracking-tight text-ink-50">Admin</h1><p className="text-ink-300">{trip!.name} · {members.length} travellers. Changes are shared with everyone instantly.</p></div>
       <div className="grid gap-3 sm:grid-cols-2">
         {TILES.map(({ to, icon: I, title, desc }) => (
-          <Link key={to} to={to} className="flex items-start gap-3 rounded-3xl bg-white border border-sand-200/60 shadow-card p-4 hover:border-jungle-400 transition">
-            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-jungle-50 text-jungle-700"><I className="h-5 w-5" /></span>
-            <span><span className="block font-bold text-navy-800">{title}</span><span className="block text-navy-500 text-sm">{desc}</span></span>
+          <Link key={to} to={to} className="flex items-start gap-3 glass rounded-3xl p-4 hover:border-jungle-400 transition">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-jungle-500/10 text-jungle-300"><I className="h-5 w-5" /></span>
+            <span><span className="block font-bold text-ink-50">{title}</span><span className="block text-ink-300 text-sm">{desc}</span></span>
           </Link>
         ))}
       </div>
       <section>
         <SectionTitle><span className="inline-flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-ember-500" />Needs attention</span></SectionTitle>
-        <Card className="divide-y divide-sand-200/70">
-          {!d ? <p className="p-4 text-navy-400">Loading…</p> : d.acts.length + d.stays.length + d.tr.length === 0 ? <p className="p-4 text-navy-500">Nothing pending. Every booking is confirmed or completed.</p> : (
+        <Card className="divide-y divide-white/10">
+          {!d ? <p className="p-4 text-ink-400">Loading…</p> : d.acts.length + d.stays.length + d.tr.length === 0 ? <p className="p-4 text-ink-300">Nothing pending. Every booking is confirmed or completed.</p> : (
             <>
-              {d.tr.map((t) => <Link key={t.id} to="/admin/bookings/transport" className="flex items-center justify-between gap-3 p-4 hover:bg-sand-50"><span className="font-semibold text-navy-800">{t.origin} → {t.destination}</span><StatusBadge status={t.status} /></Link>)}
-              {d.stays.map((s) => <Link key={s.id} to="/admin/bookings" className="flex items-center justify-between gap-3 p-4 hover:bg-sand-50"><span className="font-semibold text-navy-800">{s.name}</span><StatusBadge status={s.status} /></Link>)}
-              {d.acts.map((a) => <Link key={a.id} to={`/itinerary/activity/${a.id}`} className="flex items-center justify-between gap-3 p-4 hover:bg-sand-50"><span className="min-w-0"><span className="block font-semibold text-navy-800 truncate">{a.title}</span>{a.day && <span className="text-sm text-navy-400">Day {a.day}</span>}</span><StatusBadge status={a.status} /></Link>)}
+              {d.tr.map((t) => <Link key={t.id} to="/admin/bookings/transport" className="flex items-center justify-between gap-3 p-4 hover:bg-white/[.04]"><span className="font-semibold text-ink-50">{t.origin} → {t.destination}</span><StatusBadge status={t.status} /></Link>)}
+              {d.stays.map((s) => <Link key={s.id} to="/admin/bookings" className="flex items-center justify-between gap-3 p-4 hover:bg-white/[.04]"><span className="font-semibold text-ink-50">{s.name}</span><StatusBadge status={s.status} /></Link>)}
+              {d.acts.map((a) => <Link key={a.id} to={`/itinerary/activity/${a.id}`} className="flex items-center justify-between gap-3 p-4 hover:bg-white/[.04]"><span className="min-w-0"><span className="block font-semibold text-ink-50 truncate">{a.title}</span>{a.day && <span className="text-sm text-ink-400">Day {a.day}</span>}</span><StatusBadge status={a.status} /></Link>)}
             </>
           )}
         </Card>

@@ -10,8 +10,8 @@ export default defineConfig(({ mode }) => {
   // Content-Security-Policy (GitHub Pages cannot send headers, so it is a <meta> tag; production build only).
   const sb = env.VITE_SUPABASE_URL ? new URL(env.VITE_SUPABASE_URL).origin : ''
   const csp = [
-    "default-src 'self'", "script-src 'self'", "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    'font-src https://fonts.gstatic.com', "img-src 'self' data: blob: https:",
+    "default-src 'self'", "script-src 'self'", "style-src 'self' 'unsafe-inline'",
+    "font-src 'self'", "img-src 'self' data: blob: https:",
     `connect-src 'self' ${sb} ${sb.replace(/^https/, 'wss')}`.trim(), `frame-src ${sb || "'none'"}`,
     "worker-src 'self'", "manifest-src 'self'", "object-src 'none'", "base-uri 'self'", "form-action 'self'",
   ].join('; ')
@@ -31,8 +31,8 @@ export default defineConfig(({ mode }) => {
           name: 'Thailand Trip HQ',
           short_name: 'Trip HQ',
           description: 'Private group workspace for our Thailand trip',
-          theme_color: '#0b1f3a',
-          background_color: '#f6efe3',
+          theme_color: '#060b19',
+          background_color: '#060b19',
           display: 'standalone',
           orientation: 'portrait',
           start_url: base,
@@ -46,6 +46,8 @@ export default defineConfig(({ mode }) => {
         workbox: {
           navigateFallback: `${base}index.html`,
           globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+          // precache only the Latin font subsets (smaller offline cache)
+          globIgnores: ['**/*-latin-ext-*', '**/*cyrillic*', '**/*greek*', '**/*vietnamese*'],
           // Never cache Supabase API / storage responses in the SW: private data.
           runtimeCaching: [],
         },

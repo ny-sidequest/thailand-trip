@@ -18,7 +18,7 @@ function Seg<T extends string>({ value, onChange, options }: { value: T; onChang
     <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0,1fr))` }} role="group">
       {options.map((o) => (
         <button type="button" key={o.v} aria-pressed={value === o.v} onClick={() => onChange(o.v)}
-          className={cx('min-h-[48px] rounded-xl border-2 px-2 font-semibold inline-flex items-center justify-center gap-1.5', value === o.v ? 'border-jungle-500 bg-jungle-50 text-navy-800' : 'border-sand-200 text-navy-600')}>{o.icon}{o.label}</button>
+          className={cx('min-h-[48px] rounded-xl border-2 px-2 font-semibold inline-flex items-center justify-center gap-1.5', value === o.v ? 'border-jungle-500 bg-jungle-500/10 text-ink-50' : 'border-white/10 text-ink-200')}>{o.icon}{o.label}</button>
       ))}
     </div>
   )
@@ -126,11 +126,11 @@ export default function ExpenseSheet({ expense, onClose, onDone }: { expense?: E
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-navy-900/50 flex items-end sm:items-center justify-center" onClick={onClose}>
+    <div className="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
       <form onSubmit={submit} role="dialog" aria-label={editing ? 'Edit expense' : 'Add expense'} onClick={(e) => e.stopPropagation()}
-        className="bg-white w-full sm:max-w-lg max-h-[94vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
+        className="glass-sheet w-full sm:max-w-lg max-h-[94vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-xl font-bold text-navy-800">{editing ? 'Correct expense' : 'Add expense'}</h2>
+          <h2 className="font-display text-xl font-medium text-ink-50">{editing ? 'Correct expense' : 'Add expense'}</h2>
           <button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button>
         </div>
 
@@ -140,14 +140,14 @@ export default function ExpenseSheet({ expense, onClose, onDone }: { expense?: E
           <Field label="Amount"><input className={inputCls} inputMode="decimal" value={amountStr} onChange={(e) => setAmountStr(e.target.value)} placeholder="0.00" required aria-invalid={amountStr !== '' && Number.isNaN(amount)} /></Field>
           <div className="w-[132px]"><Seg value={currency} onChange={changeCurrency} options={[{ v: 'THB', label: '฿ THB' }, { v: 'INR', label: '₹ INR' }]} /></div>
         </div>
-        {amountStr !== '' && Number.isNaN(amount) && <p className="text-red-700 text-sm -mt-2">Use numbers only, up to 2 decimals.</p>}
+        {amountStr !== '' && Number.isNaN(amount) && <p className="text-red-300 text-sm -mt-2">Use numbers only, up to 2 decimals.</p>}
 
         {needsRate && (
-          <div className="rounded-2xl bg-sand-100 p-4 space-y-2">
+          <div className="rounded-2xl bg-white/[.07] p-4 space-y-2">
             <Field label={`Exchange rate: 1 ${currency} = ? ${base}`} hint="Recorded with this expense. Change it if you paid at a different rate.">
               <input className={inputCls} inputMode="decimal" value={rateStr} onChange={(e) => setRateStr(e.target.value)} />
             </Field>
-            {Number.isFinite(baseAmount) && <p className="font-semibold text-navy-800">= {formatMoney(baseAmount, base)}</p>}
+            {Number.isFinite(baseAmount) && <p className="font-semibold text-ink-50">= {formatMoney(baseAmount, base)}</p>}
           </div>
         )}
 
@@ -159,7 +159,7 @@ export default function ExpenseSheet({ expense, onClose, onDone }: { expense?: E
         </div>
 
         {!editing && <Seg value={personal ? 'p' : 's'} onChange={(v) => setPersonal(v === 'p')} options={[{ v: 's', label: 'Shared', icon: <Users className="h-4 w-4" /> }, { v: 'p', label: 'Personal', icon: <Lock className="h-4 w-4" /> }]} />}
-        {personal && <p className="text-sm text-navy-500 -mt-2">Personal expenses are visible only to you and never affect group balances.</p>}
+        {personal && <p className="text-sm text-ink-300 -mt-2">Personal expenses are visible only to you and never affect group balances.</p>}
 
         {!personal && (
           <>
@@ -169,16 +169,16 @@ export default function ExpenseSheet({ expense, onClose, onDone }: { expense?: E
 
             <fieldset>
               <div className="flex items-center justify-between mb-1.5">
-                <legend className="text-sm font-semibold text-navy-700">Split between</legend>
-                <button type="button" className="text-jungle-700 font-semibold min-h-[40px]" onClick={() => setSelected(selected.length === members.length ? [] : members.map((m) => m.user_id))}>{selected.length === members.length ? 'Clear' : 'Select all'}</button>
+                <legend className="text-sm font-semibold text-ink-100">Split between</legend>
+                <button type="button" className="text-jungle-300 font-semibold min-h-[40px]" onClick={() => setSelected(selected.length === members.length ? [] : members.map((m) => m.user_id))}>{selected.length === members.length ? 'Clear' : 'Select all'}</button>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 {members.map((m) => {
                   const on = selected.includes(m.user_id)
                   return (
                     <button type="button" key={m.user_id} role="checkbox" aria-checked={on} onClick={() => toggle(m.user_id)}
-                      className={cx('flex items-center gap-2 rounded-xl border-2 px-3 min-h-[52px] text-left', on ? 'border-jungle-500 bg-jungle-50' : 'border-sand-200')}>
-                      <Avatar profile={m.profile} size={28} /><span className="font-semibold text-navy-800 truncate">{m.profile.display_name}</span>
+                      className={cx('flex items-center gap-2 rounded-xl border-2 px-3 min-h-[52px] text-left', on ? 'border-jungle-500 bg-jungle-500/10' : 'border-white/10')}>
+                      <Avatar profile={m.profile} size={28} /><span className="font-semibold text-ink-50 truncate">{m.profile.display_name}</span>
                     </button>
                   )
                 })}
@@ -190,35 +190,35 @@ export default function ExpenseSheet({ expense, onClose, onDone }: { expense?: E
         )}
 
         {people.length > 0 && Number.isFinite(amount) && (
-          <ul className="rounded-2xl border border-sand-200 divide-y divide-sand-200">
+          <ul className="rounded-2xl border border-white/10 divide-y divide-white/10">
             {people.map((id) => {
               const m = members.find((x) => x.user_id === id)!
               return (
                 <li key={id} className="flex items-center gap-3 px-4 py-2 min-h-[52px]">
-                  <span className="flex-1 font-semibold text-navy-800 truncate">{m.profile.display_name}</span>
+                  <span className="flex-1 font-semibold text-ink-50 truncate">{m.profile.display_name}</span>
                   {!personal && type === 'custom' && <input aria-label={`${m.profile.display_name} amount`} className={`${inputCls} !w-28 !min-h-[40px] text-right`} inputMode="decimal" value={custom[id] ?? ''} onChange={(e) => setCustom({ ...custom, [id]: e.target.value })} placeholder="0.00" />}
-                  {!personal && type === 'percentage' && <span className="inline-flex items-center gap-1"><input aria-label={`${m.profile.display_name} percent`} className={`${inputCls} !w-20 !min-h-[40px] text-right`} inputMode="decimal" value={pcts[id] ?? ''} onChange={(e) => setPcts({ ...pcts, [id]: e.target.value })} placeholder="0" /><span className="text-navy-500">%</span></span>}
-                  <span className="w-24 text-right text-navy-600 tabular-nums">{calc.shares ? formatMoney(calc.shares[id] / 100, currency) : '—'}</span>
+                  {!personal && type === 'percentage' && <span className="inline-flex items-center gap-1"><input aria-label={`${m.profile.display_name} percent`} className={`${inputCls} !w-20 !min-h-[40px] text-right`} inputMode="decimal" value={pcts[id] ?? ''} onChange={(e) => setPcts({ ...pcts, [id]: e.target.value })} placeholder="0" /><span className="text-ink-300">%</span></span>}
+                  <span className="w-24 text-right text-ink-200 tabular-nums">{calc.shares ? formatMoney(calc.shares[id] / 100, currency) : '—'}</span>
                 </li>
               )
             })}
           </ul>
         )}
-        {calc.problem && <p role="status" className="text-amber-800 bg-amber-50 rounded-xl px-4 py-2">{calc.problem}</p>}
+        {calc.problem && <p role="status" className="text-amber-200 bg-amber-500/10 rounded-xl px-4 py-2">{calc.problem}</p>}
 
         <div>
-          <span className="block text-sm font-semibold text-navy-700 mb-1.5">Receipt (optional)</span>
-          <label className="flex items-center gap-3 rounded-2xl border-2 border-dashed border-sand-300 bg-sand-50 px-4 min-h-[56px] cursor-pointer">
-            <Camera className="h-5 w-5 text-navy-400" />
-            <span className="flex-1 truncate text-navy-700 font-semibold">{receipt ? receipt.name : keepReceipt ? 'Current receipt kept. Tap to replace' : 'Take a photo or choose a file'}</span>
+          <span className="block text-sm font-semibold text-ink-100 mb-1.5">Receipt (optional)</span>
+          <label className="flex items-center gap-3 rounded-2xl border-2 border-dashed border-white/15 bg-white/[.04] px-4 min-h-[56px] cursor-pointer">
+            <Camera className="h-5 w-5 text-ink-400" />
+            <span className="flex-1 truncate text-ink-100 font-semibold">{receipt ? receipt.name : keepReceipt ? 'Current receipt kept. Tap to replace' : 'Take a photo or choose a file'}</span>
             <input type="file" accept="image/*,application/pdf" capture={undefined} hidden onChange={(e) => pickReceipt(e.target.files?.[0])} />
           </label>
-          {(receipt || keepReceipt) && <button type="button" className="text-red-600 font-semibold min-h-[40px]" onClick={() => { setReceipt(null); setKeepReceipt(false) }}>Remove receipt</button>}
+          {(receipt || keepReceipt) && <button type="button" className="text-red-400 font-semibold min-h-[40px]" onClick={() => { setReceipt(null); setKeepReceipt(false) }}>Remove receipt</button>}
         </div>
 
         <Field label="Notes (optional)"><textarea className={`${inputCls} min-h-[72px] py-3`} maxLength={1000} value={notes} onChange={(e) => setNotes(e.target.value)} /></Field>
-        {editing && <p className="text-sm text-navy-500">Corrections are saved with a full audit trail: the old values stay on record.</p>}
-        {err && <p role="alert" className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-red-800">{err}</p>}
+        {editing && <p className="text-sm text-ink-300">Corrections are saved with a full audit trail: the old values stay on record.</p>}
+        {err && <p role="alert" className="rounded-xl bg-red-500/10 border border-red-400/30 px-4 py-3 text-red-200">{err}</p>}
         <div className="flex gap-3"><Button type="submit" busy={busy} className="flex-1">{editing ? 'Save correction' : 'Add expense'}</Button><Button type="button" variant="ghost" onClick={onClose}>Cancel</Button></div>
       </form>
     </div>

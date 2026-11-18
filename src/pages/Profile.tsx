@@ -65,19 +65,19 @@ export default function Profile() {
     } finally { setPwBusy(false) }
   }
 
-  const note = (m: { ok: boolean; text: string } | null) => m && <p role="status" className={m.ok ? 'text-jungle-700 font-semibold' : 'text-red-700 font-semibold'}>{m.text}</p>
+  const note = (m: { ok: boolean; text: string } | null) => m && <p role="status" className={m.ok ? 'text-jungle-300 font-semibold' : 'text-red-300 font-semibold'}>{m.text}</p>
 
   return (
     <div className="max-w-xl space-y-6">
-      <h1 className="font-display text-3xl font-bold text-navy-800">My profile</h1>
+      <h1 className="font-display text-[1.75rem] sm:text-[2rem] font-medium tracking-tight text-ink-50">My profile</h1>
       <Card className="p-5">
         <div className="flex items-center gap-4 mb-5">
           <div className="relative">
             <Avatar profile={profile} size={72} />
-            <button onClick={() => fileRef.current?.click()} aria-label="Change photo" className="absolute -bottom-1 -right-1 grid h-9 w-9 place-items-center rounded-full bg-navy-800 text-white shadow"><Camera className="h-4 w-4" /></button>
+            <button onClick={() => fileRef.current?.click()} aria-label="Change photo" className="absolute -bottom-1 -right-1 grid h-9 w-9 place-items-center rounded-full bg-night-700 border border-white/25 text-white shadow"><Camera className="h-4 w-4" /></button>
             <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={(e) => void onAvatar(e.target.files?.[0])} />
           </div>
-          <div><p className="font-bold text-navy-800 text-lg">{profile?.display_name}</p><p className="text-navy-400">@{profile?.username}</p></div>
+          <div><p className="font-bold text-ink-50 text-lg">{profile?.display_name}</p><p className="text-ink-400">@{profile?.username}</p></div>
         </div>
         <form onSubmit={save} className="space-y-4">
           <Field label="Display name"><input className={inputCls} value={name} maxLength={60} onChange={(e) => setName(e.target.value)} required /></Field>
@@ -89,7 +89,7 @@ export default function Profile() {
       </Card>
 
       <Card className="p-5">
-        <h2 className="font-display text-xl font-bold text-navy-800 mb-4">Change password</h2>
+        <h2 className="font-display text-xl font-medium text-ink-50 mb-4">Change password</h2>
         <form onSubmit={changePw} className="space-y-4">
           <Field label="Current password"><input className={inputCls} type="password" autoComplete="current-password" value={cur} onChange={(e) => setCur(e.target.value)} required /></Field>
           <Field label="New password" hint="At least 10 characters."><input className={inputCls} type="password" autoComplete="new-password" value={pw} onChange={(e) => setPw(e.target.value)} required /></Field>
@@ -97,7 +97,7 @@ export default function Profile() {
           {note(pwMsg)}
           <Button type="submit" busy={pwBusy}>Update password</Button>
         </form>
-        <p className="text-sm text-navy-400 mt-3">Forgot your password? Ask the trip admin to reset it.</p>
+        <p className="text-sm text-ink-400 mt-3">Forgot your password? Ask the trip admin to reset it.</p>
       </Card>
       <Button variant="soft" onClick={() => void signOut()} className="w-full lg:hidden">Sign out</Button>
     </div>

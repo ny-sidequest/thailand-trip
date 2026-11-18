@@ -13,7 +13,7 @@ export default function Admin() {
   const atRoot = /\/admin\/?$/.test(pathname)
   return (
     <div className="space-y-4">
-      {!atRoot && <Link to="/admin" className="inline-flex items-center gap-1 text-jungle-700 font-semibold min-h-[44px]"><ArrowLeft className="h-4 w-4" />Admin</Link>}
+      {!atRoot && <Link to="/admin" className="inline-flex items-center gap-1 text-jungle-300 font-semibold min-h-[44px]"><ArrowLeft className="h-4 w-4" />Admin</Link>}
       <Routes>
         <Route index element={<AdminHome />} />
         <Route path="trip" element={<TripSettings />} />

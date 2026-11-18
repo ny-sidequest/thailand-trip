@@ -58,19 +58,19 @@ export default function BookingsAdmin() {
 
   return (
     <div className="space-y-4 max-w-2xl">
-      <div className="flex items-center justify-between gap-3"><h1 className="font-display text-3xl font-bold text-navy-800">Bookings</h1><Button onClick={() => setEdit('new')}><Plus className="h-4 w-4" />Add</Button></div>
-      <nav className="flex gap-2 rounded-2xl bg-white p-1.5 border border-sand-200/60 shadow-card">
-        {TABS.map((t) => <Link key={t.key} to={t.key === 'stays' ? '/admin/bookings' : `/admin/bookings/${t.key}`} aria-current={kind === t.key ? 'page' : undefined} className={cx('flex-1 text-center rounded-xl min-h-[44px] grid place-items-center font-semibold', kind === t.key ? 'bg-navy-800 text-white' : 'text-navy-600 hover:bg-sand-100')}>{t.label}</Link>)}
+      <div className="flex items-center justify-between gap-3"><h1 className="font-display text-[1.75rem] sm:text-[2rem] font-medium tracking-tight text-ink-50">Bookings</h1><Button onClick={() => setEdit('new')}><Plus className="h-4 w-4" />Add</Button></div>
+      <nav className="flex gap-2 glass rounded-2xl p-1.5">
+        {TABS.map((t) => <Link key={t.key} to={t.key === 'stays' ? '/admin/bookings' : `/admin/bookings/${t.key}`} aria-current={kind === t.key ? 'page' : undefined} className={cx('flex-1 text-center rounded-xl min-h-[44px] grid place-items-center font-semibold', kind === t.key ? 'bg-gradient-to-b from-jungle-500 to-jungle-700 text-white shadow-[inset_0_1px_0_rgba(255,255,255,.28),0_8px_20px_-8px_rgba(31,157,107,.75)]' : 'text-ink-200 hover:bg-white/[.07]')}>{t.label}</Link>)}
       </nav>
-      {err && <p role="alert" className="text-red-700">{err}</p>}
+      {err && <p role="alert" className="text-red-300">{err}</p>}
       {!q.data ? <Skeleton className="h-48" /> : q.data.rows.length === 0 ? <Card><EmptyState title="Nothing here yet" /></Card> : (
-        <Card className="divide-y divide-sand-200/70">
+        <Card className="divide-y divide-white/10">
           {q.data.rows.map((r) => (
             <div key={r.id} className="flex items-center gap-2 p-3 min-h-[64px]">
-              <div className="min-w-0 flex-1"><p className="font-semibold text-navy-800 truncate">{cfg.title(r)}</p><p className="text-sm text-navy-500 truncate">{cfg.sub(r)}</p></div>
+              <div className="min-w-0 flex-1"><p className="font-semibold text-ink-50 truncate">{cfg.title(r)}</p><p className="text-sm text-ink-300 truncate">{cfg.sub(r)}</p></div>
               <StatusBadge status={r.status} />
-              <button onClick={() => setEdit(r)} aria-label="Edit" className="p-2 text-navy-400 hover:text-navy-800"><Pencil className="h-4 w-4" /></button>
-              <button onClick={() => void del(r)} aria-label="Delete" className="p-2 text-navy-300 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>
+              <button onClick={() => setEdit(r)} aria-label="Edit" className="p-2 text-ink-400 hover:text-ink-50"><Pencil className="h-4 w-4" /></button>
+              <button onClick={() => void del(r)} aria-label="Delete" className="p-2 text-ink-400 hover:text-red-400"><Trash2 className="h-4 w-4" /></button>
             </div>
           ))}
         </Card>

@@ -68,20 +68,20 @@ export default function Expenses() {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="font-display text-3xl font-bold text-navy-800">Expenses</h1>
+        <h1 className="font-display text-[1.75rem] sm:text-[2rem] font-medium tracking-tight text-ink-50">Expenses</h1>
         <Button onClick={() => setAdding(true)}><Plus className="h-4 w-4" />Add</Button>
       </div>
-      <nav className="flex gap-2 rounded-2xl bg-white p-1.5 border border-sand-200/60 shadow-card" aria-label="Expense sections">
-        {TABS.map((t) => <Link key={t.key} to={t.to} aria-current={tab === t.key ? 'page' : undefined} className={cx('flex-1 text-center rounded-xl min-h-[44px] grid place-items-center font-semibold', tab === t.key ? 'bg-navy-800 text-white' : 'text-navy-600 hover:bg-sand-100')}>{t.label}</Link>)}
+      <nav className="flex gap-2 glass rounded-2xl p-1.5" aria-label="Expense sections">
+        {TABS.map((t) => <Link key={t.key} to={t.to} aria-current={tab === t.key ? 'page' : undefined} className={cx('flex-1 text-center rounded-xl min-h-[44px] grid place-items-center font-semibold', tab === t.key ? 'bg-gradient-to-b from-jungle-500 to-jungle-700 text-white shadow-[inset_0_1px_0_rgba(255,255,255,.28),0_8px_20px_-8px_rgba(31,157,107,.75)]' : 'text-ink-200 hover:bg-white/[.07]')}>{t.label}</Link>)}
       </nav>
 
       {tab === '' && (
         <>
-          <Card className={cx('p-5', myNet > 0 ? 'bg-jungle-50 border-jungle-200' : myNet < 0 ? 'bg-ember-50 border-ember-100' : '')}>
-            <p className="font-semibold text-navy-600">Your balance</p>
-            <p className={cx('font-display text-4xl font-bold mt-1', myNet > 0 ? 'text-jungle-700' : myNet < 0 ? 'text-ember-600' : 'text-navy-800')}>{myNet === 0 ? 'All settled' : formatMinor(Math.abs(myNet), base)}</p>
-            <p className="text-navy-600">{myNet > 0 ? 'The group owes you' : myNet < 0 ? 'You owe the group' : 'Nothing owed either way'}</p>
-            {calc.personal > 0 && <p className="mt-2 text-sm text-navy-500 inline-flex items-center gap-1"><Lock className="h-3.5 w-3.5" />Your personal spending (private): {formatMinor(calc.personal, base)}</p>}
+          <Card className={cx('p-5', myNet > 0 ? 'bg-jungle-500/10 border-jungle-400/30' : myNet < 0 ? 'bg-ember-500/10 border-ember-400/20' : '')}>
+            <p className="font-semibold text-ink-200">Your balance</p>
+            <p className={cx('font-display text-4xl font-bold mt-1', myNet > 0 ? 'text-jungle-300' : myNet < 0 ? 'text-ember-300' : 'text-ink-50')}>{myNet === 0 ? 'All settled' : formatMinor(Math.abs(myNet), base)}</p>
+            <p className="text-ink-200">{myNet > 0 ? 'The group owes you' : myNet < 0 ? 'You owe the group' : 'Nothing owed either way'}</p>
+            {calc.personal > 0 && <p className="mt-2 text-sm text-ink-300 inline-flex items-center gap-1"><Lock className="h-3.5 w-3.5" />Your personal spending (private): {formatMinor(calc.personal, base)}</p>}
           </Card>
 
           <section>
@@ -89,10 +89,10 @@ export default function Expenses() {
             <Card className="p-5">
               {calc.count === 0 ? <EmptyState title="No shared expenses yet" hint="Tap Add to record the first one." /> : (
                 <>
-                  <p className="font-display text-3xl font-bold text-navy-800">{formatMinor(calc.totalBase, base)}</p>
-                  <p className="text-navy-500">{calc.count} shared expense{calc.count === 1 ? '' : 's'}, converted using each expense's recorded rate</p>
+                  <p className="font-display text-[1.75rem] sm:text-[2rem] font-medium tracking-tight text-ink-50">{formatMinor(calc.totalBase, base)}</p>
+                  <p className="text-ink-300">{calc.count} shared expense{calc.count === 1 ? '' : 's'}, converted using each expense's recorded rate</p>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {(Object.entries(calc.byCcy) as [Currency, number][]).map(([c, v]) => <span key={c} className="rounded-full bg-sand-100 px-3 py-1 font-semibold text-navy-800">{formatMinor(v, c)} spent in {c}</span>)}
+                    {(Object.entries(calc.byCcy) as [Currency, number][]).map(([c, v]) => <span key={c} className="rounded-full bg-white/[.07] px-3 py-1 font-semibold text-ink-50">{formatMinor(v, c)} spent in {c}</span>)}
                   </div>
                 </>
               )}
@@ -101,34 +101,36 @@ export default function Expenses() {
 
           <section>
             <SectionTitle>Suggested settlements</SectionTitle>
-            <Card className="divide-y divide-sand-200/70">
+            <Card className="divide-y divide-white/10">
               {calc.transfers.length === 0 ? <EmptyState icon={<HandCoins className="h-8 w-8" />} title="Everyone is settled up" /> : calc.transfers.map((t, i) => {
                 const canRecord = t.from === uid || t.to === uid || isAdmin
                 return (
-                  <div key={i} className="p-4 flex items-center gap-3 flex-wrap">
-                    <div className="flex items-center gap-2 min-w-0 flex-1">
-                      <span className="font-semibold text-navy-800">{memberName(t.from)}</span><ArrowRight className="h-4 w-4 text-ember-500 shrink-0" /><span className="font-semibold text-navy-800">{memberName(t.to)}</span>
+                  <div key={i} className="p-4 flex items-center gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-semibold text-ink-50">{memberName(t.from)}</span><ArrowRight className="h-4 w-4 text-ember-500 shrink-0" aria-label="pays" /><span className="font-semibold text-ink-50">{memberName(t.to)}</span>
+                      </div>
+                      <p className="mt-0.5"><span className="font-display text-xl font-medium text-ink-50 num">{formatMinor(t.amount, base)}</span>{base === 'INR' && <span className="ml-2 text-xs text-ink-300">≈ {formatMoney(t.amount / 100 * thbPerBase, 'THB')} at {trip!.default_thb_to_inr}/฿</span>}</p>
                     </div>
-                    <div className="text-right"><p className="font-bold text-navy-800 tabular-nums">{formatMinor(t.amount, base)}</p>{base === 'INR' && <p className="text-xs text-navy-400">≈ {formatMoney(t.amount / 100 * thbPerBase, 'THB')} at {trip!.default_thb_to_inr}/฿</p>}</div>
                     {canRecord && <Button variant="soft" onClick={() => setSettle({ from: t.from, to: t.to, amount: t.amount / 100 })}>Record</Button>}
                   </div>
                 )
               })}
             </Card>
-            <p className="text-sm text-navy-400 mt-2">This is the smallest number of payments that settles everyone. Paid already? Tap Record so balances update.</p>
+            <p className="text-sm text-ink-400 mt-2">This is the smallest number of payments that settles everyone. Paid already? Tap Record so balances update.</p>
             <Button variant="ghost" className="mt-1" onClick={() => setSettle('blank')}>Record a different payment</Button>
           </section>
 
           <section>
             <SectionTitle>Everyone</SectionTitle>
-            <Card className="divide-y divide-sand-200/70">
+            <Card className="divide-y divide-white/10">
               {members.map((m) => {
                 const r = calc.ledger[m.user_id]
                 return (
                   <div key={m.user_id} className="p-4">
-                    <div className="flex items-center gap-3"><Avatar profile={m.profile} size={36} /><span className="flex-1 font-semibold text-navy-800 truncate">{m.profile.display_name}</span>
-                      <span className={cx('font-bold tabular-nums', r.net > 0 ? 'text-jungle-700' : r.net < 0 ? 'text-ember-600' : 'text-navy-500')}>{r.net > 0 ? '+' : r.net < 0 ? '−' : ''}{formatMinor(Math.abs(r.net), base)}</span></div>
-                    <p className="mt-1 text-sm text-navy-500 pl-12">Paid {formatMinor(r.paid, base)} · Share {formatMinor(r.owed, base)}{r.sent || r.received ? ` · Settled out ${formatMinor(r.sent, base)}, in ${formatMinor(r.received, base)}` : ''}</p>
+                    <div className="flex items-center gap-3"><Avatar profile={m.profile} size={36} /><span className="flex-1 font-semibold text-ink-50 truncate">{m.profile.display_name}</span>
+                      <span className={cx('font-bold tabular-nums', r.net > 0 ? 'text-jungle-300' : r.net < 0 ? 'text-ember-300' : 'text-ink-300')}>{r.net > 0 ? '+' : r.net < 0 ? '−' : ''}{formatMinor(Math.abs(r.net), base)}</span></div>
+                    <p className="mt-1 text-sm text-ink-300 pl-12">Paid {formatMinor(r.paid, base)} · Share {formatMinor(r.owed, base)}{r.sent || r.received ? ` · Settled out ${formatMinor(r.sent, base)}, in ${formatMinor(r.received, base)}` : ''}</p>
                   </div>
                 )
               })}
@@ -137,13 +139,13 @@ export default function Expenses() {
 
           <section>
             <SectionTitle>Payments made</SectionTitle>
-            <Card className="divide-y divide-sand-200/70">
+            <Card className="divide-y divide-white/10">
               {settlements.length === 0 ? <EmptyState title="No payments recorded yet" /> : settlements.map((s) => (
                 <div key={s.id} className="p-4 flex items-center gap-3">
-                  <div className="min-w-0 flex-1"><p className="text-navy-800"><span className="font-semibold">{memberName(s.from_user)}</span> paid <span className="font-semibold">{memberName(s.to_user)}</span></p>
-                    <p className="text-sm text-navy-500">{fmtDate(s.settled_on)}{s.note ? ` · ${s.note}` : ''}{s.currency !== base ? ` · at ${s.fx_rate_to_base}` : ''}</p></div>
-                  <span className="font-bold tabular-nums text-navy-800">{formatMoney(s.amount, s.currency)}</span>
-                  {(s.created_by === uid || isAdmin) && <button onClick={() => void undoSettlement(s.id)} aria-label="Remove payment" className="p-2 text-navy-300 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>}
+                  <div className="min-w-0 flex-1"><p className="text-ink-50"><span className="font-semibold">{memberName(s.from_user)}</span> paid <span className="font-semibold">{memberName(s.to_user)}</span></p>
+                    <p className="text-sm text-ink-300">{fmtDate(s.settled_on)}{s.note ? ` · ${s.note}` : ''}{s.currency !== base ? ` · at ${s.fx_rate_to_base}` : ''}</p></div>
+                  <span className="font-bold tabular-nums text-ink-50">{formatMoney(s.amount, s.currency)}</span>
+                  {(s.created_by === uid || isAdmin) && <button onClick={() => void undoSettlement(s.id)} aria-label="Remove payment" className="p-2 text-ink-400 hover:text-red-400"><Trash2 className="h-4 w-4" /></button>}
                 </div>
               ))}
             </Card>
@@ -154,23 +156,23 @@ export default function Expenses() {
       {tab === 'history' && (
         <>
           <div className="flex gap-2">{([['all', 'All'], ['mine', 'Involving me'], ['personal', 'Personal']] as const).map(([k, l]) => (
-            <button key={k} aria-pressed={filter === k} onClick={() => setFilter(k)} className={cx('rounded-full px-4 min-h-[40px] font-semibold border', filter === k ? 'bg-navy-800 text-white border-navy-800' : 'bg-white text-navy-700 border-sand-200')}>{l}</button>))}</div>
+            <button key={k} aria-pressed={filter === k} onClick={() => setFilter(k)} className={cx('rounded-full px-4 min-h-[40px] font-semibold border', filter === k ? 'bg-gradient-to-b from-jungle-500 to-jungle-700 text-white shadow-[inset_0_1px_0_rgba(255,255,255,.28),0_8px_20px_-8px_rgba(31,157,107,.75)] border-transparent' : 'glass-chip text-ink-100')}>{l}</button>))}</div>
           {list.length === 0 ? <Card><EmptyState title="No expenses here yet" /></Card> : Object.entries(byDate).map(([d, items]) => (
             <section key={d}>
-              <h2 className="text-sm font-semibold text-navy-500 mb-2">{fmtDateLong(d)}</h2>
-              <Card className="divide-y divide-sand-200/70 overflow-hidden">
+              <h2 className="text-sm font-semibold text-ink-300 mb-2">{fmtDateLong(d)}</h2>
+              <Card className="divide-y divide-white/10 overflow-hidden">
                 {items.map((e) => {
                   const c = categoryMeta(e.category); const share = mineShare(e)
                   return (
-                    <button key={e.id} onClick={() => setOpen(e)} className="w-full text-left flex items-center gap-3 px-4 py-3 min-h-[68px] hover:bg-sand-50">
-                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-sand-100 text-navy-600"><c.icon className="h-5 w-5" /></span>
+                    <button key={e.id} onClick={() => setOpen(e)} className="w-full text-left flex items-center gap-3 px-4 py-3 min-h-[68px] hover:bg-white/[.04]">
+                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/[.07] text-ink-200"><c.icon className="h-5 w-5" /></span>
                       <span className="min-w-0 flex-1">
-                        <span className="block font-semibold text-navy-800 truncate">{e.description}</span>
-                        <span className="block text-sm text-navy-500 truncate">{e.is_personal ? 'Personal' : `${memberName(e.payer_id)} paid`}{share != null && !e.is_personal ? ` · your share ${formatMoney(share, e.currency)}` : ''}</span>
+                        <span className="block font-semibold text-ink-50 truncate">{e.description}</span>
+                        <span className="block text-sm text-ink-300 truncate">{e.is_personal ? 'Personal' : `${memberName(e.payer_id)} paid`}{share != null && !e.is_personal ? ` · your share ${formatMoney(share, e.currency)}` : ''}</span>
                       </span>
-                      {e.receipt_path && <Paperclip className="h-4 w-4 text-navy-300" aria-label="Has receipt" />}
-                      {e.is_personal && <Lock className="h-4 w-4 text-navy-300" aria-label="Personal" />}
-                      <span className="text-right"><span className="block font-bold tabular-nums text-navy-800">{formatMoney(e.amount, e.currency)}</span>{e.currency !== base && <span className="block text-xs text-navy-400 tabular-nums">{formatMoney(e.amount_base, base)}</span>}</span>
+                      {e.receipt_path && <Paperclip className="h-4 w-4 text-ink-400" aria-label="Has receipt" />}
+                      {e.is_personal && <Lock className="h-4 w-4 text-ink-400" aria-label="Personal" />}
+                      <span className="text-right"><span className="block font-bold tabular-nums text-ink-50">{formatMoney(e.amount, e.currency)}</span>{e.currency !== base && <span className="block text-xs text-ink-400 tabular-nums">{formatMoney(e.amount_base, base)}</span>}</span>
                     </button>
                   )
                 })}

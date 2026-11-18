@@ -40,14 +40,14 @@ export default function EditActivitySheet({ activity, onClose, onSaved }: { acti
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-navy-900/50 flex items-end sm:items-center justify-center" onClick={onClose}>
+    <div className="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
       <form onSubmit={save} role="dialog" aria-label="Edit activity" onClick={(e) => e.stopPropagation()}
-        className="bg-white w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
+        className="glass-sheet w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 space-y-4 safe-bottom">
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-xl font-bold text-navy-800">Edit activity</h2>
+          <h2 className="font-display text-xl font-medium text-ink-50">Edit activity</h2>
           <button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2"><X className="h-5 w-5" /></button>
         </div>
-        <p className="text-navy-500 -mt-2">{activity.title}</p>
+        <p className="text-ink-300 -mt-2">{activity.title}</p>
         <Field label="Booking status" hint="Only mark Confirmed when it is actually booked.">
           <select className={inputCls} value={f.status} onChange={set('status')}>
             {(Object.keys(STATUS_LABEL) as BookingStatus[]).map((s) => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
@@ -65,7 +65,7 @@ export default function EditActivitySheet({ activity, onClose, onSaved }: { acti
         <Field label="Pickup / drop-off"><input className={inputCls} value={f.pickup_info} onChange={set('pickup_info')} /></Field>
         <Field label="Booking reference"><input className={inputCls} maxLength={80} value={f.booking_ref} onChange={set('booking_ref')} /></Field>
         <Field label="Reminders"><textarea className={`${inputCls} min-h-[72px] py-3`} value={f.reminders} onChange={set('reminders')} /></Field>
-        {err && <p role="alert" className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-red-800">{err}</p>}
+        {err && <p role="alert" className="rounded-xl bg-red-500/10 border border-red-400/30 px-4 py-3 text-red-200">{err}</p>}
         <div className="flex gap-3"><Button type="submit" busy={busy} className="flex-1">Save</Button><Button type="button" variant="ghost" onClick={onClose}>Cancel</Button></div>
       </form>
     </div>
