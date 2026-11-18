@@ -14,6 +14,9 @@ transport) · Expenses (THB/INR with a stored rate per expense, equal / amount /
 minimum-transfer settlement suggestions, audit trail, personal expenses) · Feed (posts, photos, reactions, comments) ·
 Polls · Announcements with read receipts · Notifications · Admin panel · Installable PWA.
 
+Design: dark glass theme, Outfit + Inter fonts bundled with the app (no external font requests), hand-drawn destination art,
+a journey map on Home that follows the trip dates.
+
 ## Setup (one time, about 20 minutes)
 
 ### 1. Supabase project

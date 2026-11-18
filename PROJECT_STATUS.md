@@ -196,3 +196,11 @@ which becomes the containing block for `position: fixed`, so popup sheets could 
 Fixed here by using `animation-fill-mode: backwards`. The same `both` fill exists on `main` (tailwind.config.js); the merge brings the fix.
 **Checks:** unit 68; DB 159; browser smoke test 24 routes x 5 viewports on mocked data (no crash / console / CSP / overflow).
 **Before merging:** user finishes the live TEST_PLAN round on `main`, then merge `ui-polish`, re-run all checks, push + deploy.
+
+## Phases 4-8 + UI redesign: verified and merged (2026-11-18)
+- User completed the live manual test round (`docs/TEST_PLAN.md`, Phases 4-8) against the live project: all steps passed.
+- `ui-polish` merged into `main` (merge commit `43ab849`); merged result re-verified from a clean `npm ci`: typecheck clean, unit 68,
+  DB 159, production build OK, built bundle in a real browser: fonts load (Outfit / Inter), 0 CSP violations, 0 third-party requests.
+- Pushed to GitHub; CI (tests + build + Pages deploy) runs on push.
+- Design worktree removed. Third-party design skill remains local-only (git-ignored).
+**Next:** nothing pending. Ideas: real destination photos, trip switcher UI, "save documents for offline", optional login throttling.
