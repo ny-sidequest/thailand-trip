@@ -12,3 +12,6 @@ supabase/.env
 
 # third-party design skill (MIT, installed locally; not part of the app)
 .claude/skills/ui-ux-pro-max/
+
+# PRIVATE travel documents (passports, tickets, insurance): never commit
+travel_docs/
